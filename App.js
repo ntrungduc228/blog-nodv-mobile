@@ -1,18 +1,39 @@
 import {StyleSheet, Text, View} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import MainStackNavigator from './src/navigations/MainStackNavigator';
+import {BottomTabNavigator, AuthStackNavigator} from './src/navigations';
+import {store} from './src/redux/store';
+import {Provider, useSelector} from 'react-redux';
+import {QueryClient, QueryClientProvider} from 'react-query';
+const queryClient = new QueryClient();
 
-export default function App() {
+function AppScreen() {
+  const isLogin = useSelector(state => state.user.data.isLogin);
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to fucking start working on your !</Text>
-    </View>
+    <NavigationContainer>
+      {/* <MainStackNavigator /> */}
+      {/* <BottomTabNavigator /> */}
+      {isLogin ? <BottomTabNavigator /> : <AuthStackNavigator />}
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default function App() {
+  return (
+    <Provider store={store}>
+      <QueryClientProvider client={queryClient}>
+        <AppScreen />
+      </QueryClientProvider>
+    </Provider>
+  );
+}
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: '#fff',
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//   },
+// });
