@@ -2,7 +2,7 @@ import {Text, View, Button} from 'react-native';
 import {logout} from '../redux/slices/userSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import axiosClient from '../api/axiosClient';
-// import {useState} from 'react';
+// import {useState, useEffect} from 'react';
 import {useQuery} from 'react-query';
 
 function HomeScreen() {
@@ -22,10 +22,11 @@ function HomeScreen() {
 
   const callApi = async () => {
     let res = await axiosClient.get(
-      `https://jsonplaceholder.typicode.com/todos/1`,
+      // `https://jsonplaceholder.typicode.com/todos/1`,
+      `/posts/639edd8db5fd877917ab4423`,
     );
-    console.log('res ', res.data);
-    return res.data;
+    console.log('res ', res ? res : 'fucking no data');
+    return res;
     // setData(res.data);
   };
 
@@ -41,7 +42,7 @@ function HomeScreen() {
         <Button className="bg-emerald-500" title="Call api" onPress={callApi} />
       </View>
 
-      <Text>{data ? JSON.stringify(data) : ''}</Text>
+      <Text>{data ? JSON.stringify(data) : 'fucking no data'}</Text>
     </View>
   );
 }
