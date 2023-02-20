@@ -5,6 +5,9 @@ import {BottomTabNavigator, AuthStackNavigator} from './src/navigations';
 import {store} from './src/redux/store';
 import {Provider, useSelector} from 'react-redux';
 import {QueryClient, QueryClientProvider} from 'react-query';
+import {Provider as PaperProvider} from 'react-native-paper';
+// import SocketClient from './src/websocket/SocketClient';
+
 const queryClient = new QueryClient();
 
 function AppScreen() {
@@ -13,8 +16,14 @@ function AppScreen() {
   return (
     <NavigationContainer>
       {/* <MainStackNavigator /> */}
-      {/* <BottomTabNavigator /> */}
-      {isLogin ? <BottomTabNavigator /> : <AuthStackNavigator />}
+      <BottomTabNavigator />
+      {/* {isLogin ? (
+        <View>
+          <BottomTabNavigator />
+        </View>
+      ) : (
+        <AuthStackNavigator />
+      )} */}
     </NavigationContainer>
   );
 }
@@ -22,9 +31,11 @@ function AppScreen() {
 export default function App() {
   return (
     <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <AppScreen />
-      </QueryClientProvider>
+      <PaperProvider>
+        <QueryClientProvider client={queryClient}>
+          <AppScreen />
+        </QueryClientProvider>
+      </PaperProvider>
     </Provider>
   );
 }
