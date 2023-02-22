@@ -14,8 +14,8 @@ const queryClient = new QueryClient();
 function AppScreen() {
   const isLogin = useSelector(state => state.user.data.isLogin);
 
-  const {data} = useQuery({queryKey: ['test'], queryFn: () => callApi()});
-  console.log('data from useQuery', data);
+  // const {data} = useQuery({queryKey: ['test'], queryFn: () => callApi()});
+  // console.log('data from useQuery', data);
 
   const callApi = async () => {
     let res = await axiosClient.get(
@@ -29,15 +29,15 @@ function AppScreen() {
 
   return (
     <NavigationContainer>
-      {/* <MainStackNavigator /> */}
+      <MainStackNavigator />
       {/* <BottomTabNavigator /> */}
-      {isLogin ? (
+      {/* {isLogin ? (
         <View>
-          <BottomTabNavigator />
+          <MainStackNavigator />
         </View>
       ) : (
         <AuthStackNavigator />
-      )}
+      )} */}
     </NavigationContainer>
   );
 }
