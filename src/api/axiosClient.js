@@ -28,7 +28,6 @@ axiosClient.interceptors.response.use(
   },
   function (error) {
     console.log('error axios ', error, error?.response);
-    console.log('base URL', baseURL, Config.REACT_APP_NAME);
     if (error.response.data.status === 404) {
       // window.location.href = '/404';
     }
