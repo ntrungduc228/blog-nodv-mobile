@@ -2,10 +2,10 @@ import React from 'react';
 import {View, Text, Button, Linking} from 'react-native';
 import {setUser} from '../redux/slices/userSlice';
 import {useDispatch, useSelector} from 'react-redux';
-import {GITHUB_LOGIN_URL, GOOGLE_LOGIN_URL} from '../config/socialLink';
-import axiosClient from '../api/axiosClient';
+import {GOOGLE_LOGIN_URL} from '../config/socialLink';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
+import {LoginManager, AccessToken, Profile} from 'react-native-fbsdk-next';
 
 const LoginScreen = () => {
   GoogleSignin.configure({
@@ -25,7 +25,6 @@ const LoginScreen = () => {
   console.log('GOOGLE_LOGIN_URL ', GOOGLE_LOGIN_URL);
 
   const loginByGoogle = async () => {
-    // await GoogleSignin.revokeAccess();
     // Check if your device supports Google Play
     await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
     // Get the users ID token
@@ -52,18 +51,45 @@ const LoginScreen = () => {
   };
 
   const logout = async () => {
-    // auth()
-    //   .signOut()
-    //   .then(info => {
-    //     console.log('user log out ', info);
-    //   })
-    //   .catch(err => {
-    //     console.log('error: ', err);
-    //   });
     await GoogleSignin.signOut()
       .then(alo => console.log('aloalo ', alo))
       .catch(err => console.log('error: ', err));
   };
+
+  async function onFacebookButtonPress() {
+    // Attempt login with permissions
+    const result = await LoginManager.logInWithPermissions([
+      'public_profile',
+      'email',
+    ]);
+
+    if (result.isCancelled) {
+      throw 'User cancelled the login process';
+    }
+
+    // Once signed in, get the users AccesToken
+    const data = await AccessToken.getCurrentAccessToken();
+    console.log('user data ', data);
+
+    if (!data) {
+      throw 'Something went wrong obtaining access token';
+    }
+
+    // // Create a Firebase credential with the AccessToken
+    // const facebookCredential = auth.FacebookAuthProvider.credential(
+    //   data.accessToken,
+    // );
+
+    // // Sign-in the user with the credential
+    // const userSignin = auth().signInWithCredential(facebookCredential);
+    // console.log('User signed in', userSignin);
+
+    Profile.getCurrentProfile()
+      .then(currentProfile => {
+        console.log('currentProfile', currentProfile);
+      })
+      .catch(err => console.log('err ', err));
+  }
 
   return (
     <View>
@@ -74,7 +100,14 @@ const LoginScreen = () => {
       </View>
 
       <View className="mt-3">
-        <Button title="Logout" onPress={() => logout()} />
+        <Button title="Logout Google" onPress={() => logout()} />
+      </View>
+
+      <View className="mt-5">
+        <Button
+          title="Login By Facebook"
+          onPress={() => onFacebookButtonPress()}
+        />
       </View>
     </View>
   );

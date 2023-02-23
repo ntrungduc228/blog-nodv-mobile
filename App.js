@@ -29,15 +29,15 @@ function AppScreen() {
 
   return (
     <NavigationContainer>
-      <MainStackNavigator />
+      {/* <MainStackNavigator /> */}
       {/* <BottomTabNavigator /> */}
-      {/* {isLogin ? (
+      {isLogin ? (
         <View>
           <MainStackNavigator />
         </View>
       ) : (
         <AuthStackNavigator />
-      )} */}
+      )}
     </NavigationContainer>
   );
 }
