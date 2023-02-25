@@ -1,10 +1,12 @@
-import {StyleSheet, Text, View} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import MainStackNavigator from './src/navigations/MainStackNavigator';
-import {BottomTabNavigator, AuthStackNavigator} from './src/navigations';
-import {store} from './src/redux/store';
+import {AuthStackNavigator, BottomTabNavigator} from './src/navigations';
 import {Provider, useSelector} from 'react-redux';
 import {QueryClient, QueryClientProvider} from 'react-query';
+import {StyleSheet, Text, View} from 'react-native';
+
+import MainStackNavigator from './src/navigations/MainStackNavigator';
+import {NavigationContainer} from '@react-navigation/native';
+import {store} from './src/redux/store';
+
 const queryClient = new QueryClient();
 
 function AppScreen() {
