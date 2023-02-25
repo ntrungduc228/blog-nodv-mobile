@@ -1,10 +1,11 @@
 import axios from 'axios';
-const baseURL = process.env.REACT_APP_API_URL;
+import Config from 'react-native-config';
+const baseURL = Config.REACT_APP_API_URL;
 const axiosClient = axios.create({
   baseURL,
   headers: {
     'Content-Type': 'multipart/form-data',
-    'content-type': 'application/json',
+    'Content-type': 'application/json',
   },
   credentials: 'include',
   withCredentials: true,
@@ -20,5 +21,18 @@ export const axiosClientPrivate = axios.create({
   timeout: 60000,
   withCredentials: true,
 });
+
+axiosClient.interceptors.response.use(
+  function (response) {
+    return response.data;
+  },
+  function (error) {
+    console.log('error axios ', error, error?.response);
+    if (error.response.data.status === 404) {
+      // window.location.href = '/404';
+    }
+    return Promise.reject(error?.response.data);
+  },
+);
 
 export default axiosClient;

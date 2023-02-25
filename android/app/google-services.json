@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "820939351695",
+    "project_id": "mobile-auth-test-7952b",
+    "storage_bucket": "mobile-auth-test-7952b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:820939351695:android:b9061ee745bd8bf3fd72fa",
+        "android_client_info": {
+          "package_name": "com.blognodvmobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "820939351695-ok1bqj060a8queq9kjmipg9k9jfir8g3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.blognodvmobile",
+            "certificate_hash": "49062d3306cc31a56e5fe03315fb239349545a17"
+          }
+        },
+        {
+          "client_id": "820939351695-m65vhduc0penk7daq7g98t80ucr7brav.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4DKmqCDQdCPXR5v6z8bI5FT-lDPsU4KY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "820939351695-m65vhduc0penk7daq7g98t80ucr7brav.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
