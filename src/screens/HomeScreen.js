@@ -1,21 +1,11 @@
 import {Text, View, Button} from 'react-native';
-import {logout} from '../redux/slices/userSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import axiosClient from '../api/axiosClient';
-// import {useState, useEffect} from 'react';
 import {useQuery} from 'react-query';
+import useSocialAuth from '../hooks/useSocialAuth';
 
 function HomeScreen({navigation}) {
-  const isLogin = useSelector(state => state.user.data.isLogin);
-  // const [data, setData] = useState('');
-
-  const dispatch = useDispatch();
-
-  const logoutUser = () => {
-    if (isLogin) {
-      dispatch(logout());
-    }
-  };
+  const {handleLogoutBySocial} = useSocialAuth();
 
   // const {data} = useQuery({queryKey: ['test'], queryFn: () => callApi()});
   // console.log('data from useQuery', data);
@@ -38,11 +28,8 @@ function HomeScreen({navigation}) {
       <Button
         className="bg-amber-300 mt-3"
         title="Logout"
-        onPress={logoutUser}
+        onPress={handleLogoutBySocial}
       />
-      <View className="my-3">
-        <Button className="bg-emerald-500" title="Call api" onPress={callApi} />
-      </View>
 
       <View className="my-3">
         <Button
