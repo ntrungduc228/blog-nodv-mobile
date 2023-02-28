@@ -1,19 +1,19 @@
-import {NavigationContainer} from '@react-navigation/native';
 import {
-  BottomTabNavigator,
   AuthStackNavigator,
+  BottomTabNavigator,
   MainStackNavigator,
 } from './src/navigations';
-import {Provider, useSelector, useDispatch} from 'react-redux';
+import {Provider, useDispatch, useSelector} from 'react-redux';
 import {QueryClient, QueryClientProvider, useQuery} from 'react-query';
+import {logout, setUser} from './src/redux/slices/userSlice';
+import {useCallback, useEffect, useMemo} from 'react';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {NavigationContainer} from '@react-navigation/native';
 import {Provider as PaperProvider} from 'react-native-paper';
 import axiosClient from './src/api/axiosClient';
-import {setUser, logout} from './src/redux/slices/userSlice';
 import {getAuthInfo} from './src/api/authApi';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {store} from './src/redux/store';
-import {useEffect, useMemo, useCallback} from 'react';
 
 // import SocketClient from './src/websocket/SocketClient';
 
@@ -61,12 +61,11 @@ function AppScreen() {
 export default function App() {
   return (
     <Provider store={store}>
-      <PaperProvider>
-        {' '}
-        <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <PaperProvider>
           <AppScreen />
-        </QueryClientProvider>
-      </PaperProvider>
+        </PaperProvider>
+      </QueryClientProvider>
     </Provider>
   );
 }
