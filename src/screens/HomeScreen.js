@@ -42,7 +42,7 @@ function HomeScreen({navigation}) {
         title="Post detail"
         onPress={() =>
           navigation.push('PostDetail', {
-            id: '63ac87238e2d5012247a505f',
+            id: '63fdb6ea7f76265e3ee0dcd3',
           })
         }
       />

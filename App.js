@@ -1,6 +1,7 @@
 import {Provider, useSelector} from 'react-redux';
-import {QueryClient, QueryClientProvider} from 'react-query';
+import {QueryClient, QueryClientProvider, useQuery} from 'react-query';
 
+import {AuthStackNavigator} from './src/navigations';
 import MainStackNavigator from './src/navigations/MainStackNavigator';
 import {NavigationContainer} from '@react-navigation/native';
 import {Provider as PaperProvider} from 'react-native-paper';

@@ -1,8 +1,10 @@
 import Config from 'react-native-config';
 import axios from 'axios';
+import jwt_decode from 'jwt-decode';
+import {logout} from '../redux/slices/userSlice';
+import {store} from '../redux/store';
 
 const baseURL = Config.REACT_APP_API_URL;
-console.log('baseURL', baseURL);
 const axiosClient = axios.create({
   baseURL,
   headers: {
@@ -23,6 +25,35 @@ export const axiosClientPrivate = axios.create({
   timeout: 60000,
   withCredentials: true,
 });
+axiosClientPrivate.interceptors.request.use(
+  async config => {
+    const accessToken = store.getState().user.data.accessToken.accessToken;
+    config.headers.Authorization = `Bearer ${accessToken}`;
+    if (accessToken === null) {
+      // store.dispatch(setIsCallLogin(true));
+    } else {
+      const decodeToken = jwt_decode(accessToken);
+      const today = new Date();
+      if (decodeToken.exp < today.getTime() / 1000) {
+        store.dispatch(logout());
+      }
+    }
+
+    return config;
+  },
+  error => {
+    return Promise.reject(error.response.data);
+  },
+);
+
+axiosClientPrivate.interceptors.response.use(
+  function (response) {
+    return response.data;
+  },
+  function (error) {
+    return Promise.reject(error.response.data);
+  },
+);
 
 axiosClient.interceptors.response.use(
   function (response) {

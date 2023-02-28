@@ -90,7 +90,9 @@ function MainContent({data}) {
             <FollowButton />
           </View>
         </View>
+
         <RichEditor initialContentHTML={content} disabled={true} />
+
         <View className="w-[95%] h-[1px] bg-slate-300 mx-auto my-2" />
         <View className="flex-row items-center pb-4 px-2">
           {topics.map(topic => {
