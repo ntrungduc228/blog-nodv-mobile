@@ -32,6 +32,11 @@ const Styles = StyleSheet.create({
         fontSize: 14,
         color: "#8A8383",
     },
+    textAddTopic:{
+        fontSize: 18,
+        fontWeight: '500',
+        color: '#000'
+    },
     imageProfile: {
         width: 40,
         height: 40,

@@ -10,14 +10,26 @@ import IconFeather from 'react-native-vector-icons/Feather'
 import IconFontAwesomer from 'react-native-vector-icons/FontAwesome'
 import IconAntDesign from 'react-native-vector-icons/AntDesign'
 import axiosClient from '../../api/axiosClient.js';
-
+import {useMutation} from '@apollo/react-hooks';
+// import { useMutation, useQueryClient } from 'react-query';
 function Post({post}){
     const currentUser = useSelector(state => state.user.data.info);
-    const [isBookmark, seIsBookmark] = useState(false)
+    const [isBookmark, setIsBookmark] = useState(false)
+        
     const handleBookmark = async (id)=>{
         await axiosClient.patch(`/bookmarks/${id}`);
-        seIsBookmark(!isBookmark);
+        console.log(id)
+        setIsBookmark(!isBookmark);
+        const colorBookmark = isBookmark? color="#A09898": color="#000" 
     }
+    // const hidePost = async (id)=>{
+    //     await axiosClient.patch(`/blackLists/${id}`)     
+    // }
+
+    // const handleHidePost = useMutation(hidePost, {
+    //     onSuccess: (Data)
+    // })
+ 
     return (
         <View style={Styles.body}>
                         <View style={Styles.bodyTop}>
@@ -58,7 +70,8 @@ function Post({post}){
                             </View>
                         </View>
                         <View style={Styles.Icon}>
-                            <IconFontAwesomer name="bookmark-o" size={24} color="#A09898" solid="#A09898" onPress={()=> handleBookmark(post.id)}/>
+                           
+                            <IconFontAwesomer name="bookmark-o" size={24} color="#A09898" solid="#A09898" onPress={()=> handleBookmark(post.id)} />
                             <IconAntDesign name="minuscircleo" size={24} color="#A09898" solid="#A09898" style={Styles.titleIcon} />
                             <IconFeather name="more-vertical" size={24} color="#A09898" solid="#A09898" style={Styles.titleIcon} />
                         </View>

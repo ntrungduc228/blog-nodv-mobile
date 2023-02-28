@@ -17,38 +17,43 @@ function Home() {
     // console.log('new'+lists)
     const [posts, setPosts] = useState([]);
     const [page, setPage] = useState(0);
+    const [limit, setLimit] = useState(5);
     useEffect(()=>{
         async function fetchData() {
           // get list post
-          const postList = await axiosClient.get(`/posts?page=${page}&limit=5&topic=&title=`)
+          const postList = await axiosClient.get(`/posts?page=${page}&limit=${limit}&topic=&title=`)
           setPosts(postList);
+        // setPosts(...posts, postList);
         //   console.log(posts)
           //get list topic
           // const topicList =  await axiosClient.get('/users/topics')
           // setTopics(topicList)
         }
         fetchData();
-      },[])
+      },[posts])
 
-    const handleScroll = (event) => {
+    const handleScroll = async (event) => {
         const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
         const isCloseToBottom = layoutMeasurement.height + contentOffset.y >= contentSize.height - 20;
         if (isCloseToBottom) {
           // Thực hiện hàm khi scroll đến cuối trang
-          setPage(page+1);
+        //   setPage(page+1);
+          setLimit(limit+5)
           console.log('Đã scroll đến cuối trang' + page);
-          useEffect(()=>{
-            async function fetchData() {
-              // get list post
-              const postList = await axiosClient.get(`/posts?page=${page}&limit=5&topic=&title=`)
-              setPosts(...posts, postList);
-            //   console.log(posts)
-              //get list topic
-              // const topicList =  await axiosClient.get('/users/topics')
-              // setTopics(topicList)
-            }
-            fetchData();
-          },[posts])
+            // const postList = await axiosClient.get(`/posts?page=${page}&limit=5&topic=&title=`)
+            // setPosts(...posts, postList);
+        //   useEffect(()=>{
+        //     async function fetchData() {
+        //       // get list post
+        //       const postList = await axiosClient.get(`/posts?page=${page}&limit=5&topic=&title=`)
+        //       setPosts(...posts, postList);
+        //     //   console.log(posts)
+        //       //get list topic
+        //       // const topicList =  await axiosClient.get('/users/topics')
+        //       // setTopics(topicList)
+        //     }
+        //     fetchData();
+        //   },[posts])
         }
     };
     const topicList = () =>{
@@ -71,6 +76,7 @@ function Home() {
 
     return (
         <ScrollView onScroll={handleScroll}>
+        {/* // <ScrollView> */}
             <View style={Styles.container}>
                 <View style={Styles.containerSite}>
                     <Text style={Styles.textSite}>Home</Text>
@@ -78,7 +84,7 @@ function Home() {
                 </View>
 
                 <View style={Styles.header}>
-                    <Text style={[Styles.textHeader]}>+</Text>
+                    <Text style={[Styles.textHeader, Styles.textAddTopic]}>+</Text>
                     <Text style={[Styles.textHeader, Styles.textHighline]}>For you</Text>
                     <Text style={Styles.textHeader}>Following</Text>
                     <Text style={Styles.textHeader}>UX</Text>
