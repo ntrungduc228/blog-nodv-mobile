@@ -1,11 +1,18 @@
 import {Button, Dialog, Portal} from 'react-native-paper';
-import {Editor, useCreatePost, useUpdatePost} from '../features/post';
+import {
+  Editor,
+  useCreatePost,
+  useGetPost,
+  useUpdatePost,
+} from '../features/post';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {Topic, TopicInput} from '../features/topic';
 import {extractHtmlToArrayPlaintext, generateReadingTime} from '../utils';
 import {useRef, useState} from 'react';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {ScrollView} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 
 const initialPost = {
@@ -22,10 +29,11 @@ export const postEditorMode = {
 };
 
 export const PostEditorScreen = ({route}) => {
-  const {mode, post = initialPost} = route.params;
+  const {mode, postId} = route.params;
   const {mutate: createPost} = useCreatePost();
   const {mutate: updatePost} = useUpdatePost();
-  const {content, topics} = post;
+  const {data: post = {}} = useGetPost(postId);
+  const {content, topics = []} = post;
 
   const handlePublish = topics => {
     const contentHtml = editorRef.current.getContent();
@@ -51,11 +59,9 @@ export const PostEditorScreen = ({route}) => {
   const editorRef = useRef(null);
 
   return (
-    <View className="h-full bg-white">
+    <View className="flex-1 bg-white">
       <Header onPublish={handlePublish} defaultTopics={topics} mode={mode} />
-      <View className="flex-1">
-        <Editor ref={editorRef} initialContentHTML={content} />
-      </View>
+      <Editor ref={editorRef} initialContentHTML={content} />
     </View>
   );
 };
