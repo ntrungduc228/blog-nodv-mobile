@@ -1,3 +1,4 @@
+
 import {Button, Text, View} from 'react-native';
 
 import {PostCreateTrigger} from '../features/post';

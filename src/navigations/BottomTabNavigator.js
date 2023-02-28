@@ -6,7 +6,10 @@ import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import routesScreen from './routesScreen';
+import {Button} from 'react-native-paper';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 const BottomTab = createMaterialBottomTabNavigator();
 
 function BottomTabNavigator() {
