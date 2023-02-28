@@ -4,13 +4,18 @@ import BookmarkScreen from '../screens/BookmarkScreen';
 import ExploreScreen from '../screens/ExploreScreen';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
-import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import { Button } from 'react-native-paper';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 const BottomTab = createMaterialBottomTabNavigator();
 
 function BottomTabNavigator() {
+
   return (
     <BottomTab.Navigator>
+
       <BottomTab.Screen
         options={{
           tabBarIcon: 'home',
@@ -39,6 +44,7 @@ function BottomTabNavigator() {
         name="Profile"
         component={ProfileScreen}
       />
+
     </BottomTab.Navigator>
   );
 }
