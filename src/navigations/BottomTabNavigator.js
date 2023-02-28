@@ -4,16 +4,20 @@ import ExploreScreen from '../screens/ExploreScreen';
 import BookmarkScreen from '../screens/BookmarkScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import routesScreen from './routesScreen';
 
 const BottomTab = createMaterialBottomTabNavigator();
 
 function BottomTabNavigator() {
   return (
     <BottomTab.Navigator>
-      <BottomTab.Screen name="Home" component={HomeScreen} />
-      <BottomTab.Screen name="Explore" component={ExploreScreen} />
-      <BottomTab.Screen name="Bookmark" component={BookmarkScreen} />
-      <BottomTab.Screen name="Profile" component={ProfileScreen} />
+      <BottomTab.Screen name={routesScreen.Home} component={HomeScreen} />
+      <BottomTab.Screen name={routesScreen.Explore} component={ExploreScreen} />
+      <BottomTab.Screen
+        name={routesScreen.Bookmark}
+        component={BookmarkScreen}
+      />
+      <BottomTab.Screen name={routesScreen.Profile} component={ProfileScreen} />
     </BottomTab.Navigator>
   );
 }

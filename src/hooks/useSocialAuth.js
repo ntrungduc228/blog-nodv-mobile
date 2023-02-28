@@ -53,21 +53,30 @@ const useSocialAuth = () => {
   }, [credential, handleAuthByMobile]);
 
   const handleLogoutBySocial = async () => {
+    console.log('hereeee');
     const userInfo = await AsyncStorage.getItem('user');
-    const {provider} = JSON.parse(userInfo);
-    // console.log('userinfo', JSON.parse(userInfo));
-    switch (provider) {
-      case 'google': {
-        await GoogleSignin.signOut().catch(err => console.error(err));
-        break;
-      }
-      case 'facebok': {
-        break;
-      }
+    const {provider} = userInfo ? JSON.parse(userInfo) : {};
+    console.log('userinfo', JSON.parse(userInfo));
 
-      default: {
+    if (provider) {
+      try {
+        switch (provider) {
+          case 'google': {
+            await GoogleSignin.signOut();
+            break;
+          }
+          case 'facebok': {
+            break;
+          }
+
+          default: {
+          }
+        }
+      } catch (err) {
+        console.error(err);
       }
     }
+
     dispatch(logout());
     setCredential(null);
   };

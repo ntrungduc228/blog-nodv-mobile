@@ -35,7 +35,7 @@ function HomeScreen({navigation}) {
         <Button
           className="bg-emerald-500"
           title="Notification"
-          onPress={() => navigation.push('Notifications')}
+          onPress={() => navigation.navigate('Notifications')}
         />
       </View>
 

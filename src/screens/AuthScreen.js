@@ -8,7 +8,7 @@ import auth from '@react-native-firebase/auth';
 import {LoginManager, AccessToken, Profile} from 'react-native-fbsdk-next';
 import SocialLogin from '../features/auth/SocialLogin';
 
-const LoginScreen = () => {
+const AuthScreen = () => {
   GoogleSignin.configure({
     webClientId:
       '820939351695-m65vhduc0penk7daq7g98t80ucr7brav.apps.googleusercontent.com',
@@ -49,12 +49,6 @@ const LoginScreen = () => {
     //   });
   };
 
-  const logout = async () => {
-    await GoogleSignin.signOut()
-      .then(alo => console.log('aloalo ', alo))
-      .catch(err => console.log('error: ', err));
-  };
-
   async function onFacebookButtonPress() {
     // Attempt login with permissions
     const result = await LoginManager.logInWithPermissions([
@@ -91,11 +85,16 @@ const LoginScreen = () => {
   }
 
   return (
-    <View className="mt-[40]">
-      <Text>LoginScreen</Text>
+    <View className="mt-[40] h-full bg-white">
+      <Text className="text-center font-bold text-black text-2xl">
+        Blog NODV
+      </Text>
+      <View className="mt-12 mb-16">
+        <Text className="text-center text-black text-[40px]">Join Blog</Text>
+      </View>
       <SocialLogin />
     </View>
   );
 };
 
-export default LoginScreen;
+export default AuthScreen;
