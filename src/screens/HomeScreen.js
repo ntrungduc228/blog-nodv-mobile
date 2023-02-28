@@ -1,11 +1,7 @@
-import {Text, View, Button} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import {Button, Text, View} from 'react-native';
 
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {PostCreateTrigger} from '../features/post';
-import auth from '@react-native-firebase/auth';
 import axiosClient from '../api/axiosClient';
-import {useQuery} from 'react-query';
 import useSocialAuth from '../hooks/useSocialAuth';
 
 function HomeScreen({navigation}) {
