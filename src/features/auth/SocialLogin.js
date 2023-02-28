@@ -1,10 +1,10 @@
 import React from 'react';
-import {View, Text, Button} from 'react-native';
-// import {Button} from 'react-native-paper';
+import {View, Text} from 'react-native';
+import {Button, Chip} from 'react-native-paper';
 import useSocialAuth from '../../hooks/useSocialAuth';
 import {styled} from 'nativewind';
 
-const CustomButton = styled(Button);
+const CustomButton = styled(Chip);
 
 const SocialLogin = () => {
   const {handleLoginByGoogle, handleLoginByFacebook} = useSocialAuth();
@@ -12,7 +12,7 @@ const SocialLogin = () => {
   return (
     <View>
       <View className="mt-[30] px-[40]">
-        <CustomButton
+        <Chip
           className="outline-2 outline-rose-700 outline-dashed bg-black"
           mode="outlined"
           onPress={() => handleLoginByGoogle()}

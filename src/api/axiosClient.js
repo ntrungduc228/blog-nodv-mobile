@@ -9,12 +9,16 @@ import {useNavigation} from '@react-navigation/native';
 import routes from '../navigations/routesScreen';
 import useSocialAuth from '../hooks/useSocialAuth';
 import {setIsCallLogin} from '../redux/slices/authSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function ConfigAxiosInterceptor(config) {
+async function ConfigAxiosInterceptor(config) {
   const navigation = useNavigation();
   const {handleLogoutBySocial} = useSocialAuth();
 
-  const accessToken = store.getState().user.data.accessToken;
+  const user = await AsyncStorage.getItem('user');
+  const userInfo = JSON.parse(user);
+
+  const {accessToken} = userInfo;
   config.headers['Authorization'] = `Bearer ${accessToken}`;
   if (accessToken === null) {
     store.dispatch(setIsCallLogin(true));
@@ -74,20 +78,7 @@ export const axiosClientPrivate = axios.create({
 
 axiosClientPrivate.interceptors.request.use(
   async config => {
-    ConfigAxiosInterceptor(config);
-    // const accessToken = store.getState().user.data.accessToken;
-    // config.headers['Authorization'] = `Bearer ${accessToken}`;
-    // if (accessToken === null) {
-    //   // store.dispatch(setIsCallLogin(true));
-    // } else {
-    //   const decodeToken = jwt_decode(accessToken);
-    //   const today = new Date();
-    //   if (decodeToken.exp < today.getTime() / 1000) {
-    //     // store.dispatch(logout());
-    //     // window.location.href = appRoutes.AUTH_LOGIN;
-    //   }
-    // }
-
+    // ConfigAxiosInterceptor(config);
     return config;
   },
   error => {
