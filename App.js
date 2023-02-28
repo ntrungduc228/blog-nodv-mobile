@@ -1,17 +1,22 @@
 import {NavigationContainer} from '@react-navigation/native';
-import MainStackNavigator from './src/navigations/MainStackNavigator';
-import {BottomTabNavigator, AuthStackNavigator} from './src/navigations';
-import {store} from './src/redux/store';
+import {
+  BottomTabNavigator,
+  AuthStackNavigator,
+  MainStackNavigator,
+} from './src/navigations';
 import {Provider, useSelector, useDispatch} from 'react-redux';
 import {QueryClient, QueryClientProvider, useQuery} from 'react-query';
+
 import {Provider as PaperProvider} from 'react-native-paper';
-// import SocketClient from './src/websocket/SocketClient';
 import axiosClient from './src/api/axiosClient';
 import {setUser} from './src/redux/slices/userSlice';
 import {getAuthInfo} from './src/api/authApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {persistStore} from 'redux-persist';
 import {PersistGate} from 'redux-persist/integration/react';
+import {store} from './src/redux/store';
+
+// import SocketClient from './src/websocket/SocketClient';
 
 const queryClient = new QueryClient();
 
@@ -22,7 +27,7 @@ function AppScreen() {
 
   const abc = async () => {
     const user = await AsyncStorage.getItem('user');
-    console.log('wao', JSON.parse(user));
+    console.log('user from AsyncStorage:', user);
   };
 
   abc();
@@ -49,7 +54,7 @@ function AppScreen() {
 }
 
 export default function App() {
-  let persistor = persistStore(store);
+  const persistor = persistStore(store);
   return (
     <Provider store={store}>
       <PaperProvider>

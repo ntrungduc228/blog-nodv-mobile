@@ -1,14 +1,14 @@
-import axios from 'axios';
 import Config from 'react-native-config';
-import {store} from '../redux/store';
-const baseURL = Config.REACT_APP_API_URL;
+import axios from 'axios';
 import jwt_decode from 'jwt-decode';
+import {logout} from '../redux/slices/userSlice';
+import {store} from '../redux/store';
+
+const baseURL = Config.REACT_APP_API_URL;
 import {useNavigation} from '@react-navigation/native';
 import routes from '../navigations/routesScreen';
 import useSocialAuth from '../hooks/useSocialAuth';
 import {setIsCallLogin} from '../redux/slices/authSlice';
-
-// const navigation = useNavigation();
 
 function ConfigAxiosInterceptor(config) {
   const navigation = useNavigation();
@@ -51,6 +51,26 @@ export const axiosClientPrivate = axios.create({
   timeout: 60000,
   withCredentials: true,
 });
+// axiosClientPrivate.interceptors.request.use(
+//   async config => {
+//     const accessToken = store.getState().user.data.accessToken.accessToken;
+//     config.headers.Authorization = `Bearer ${accessToken}`;
+//     if (accessToken === null) {
+//       // store.dispatch(setIsCallLogin(true));
+//     } else {
+//       const decodeToken = jwt_decode(accessToken);
+//       const today = new Date();
+//       if (decodeToken.exp < today.getTime() / 1000) {
+//         store.dispatch(logout());
+//       }
+//     }
+
+//     return config;
+//   },
+//   error => {
+//     return Promise.reject(error.response.data);
+//   },
+// );
 
 axiosClientPrivate.interceptors.request.use(
   async config => {

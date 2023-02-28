@@ -7,7 +7,7 @@ import {styled} from 'nativewind';
 const CustomButton = styled(Button);
 
 const SocialLogin = () => {
-  const {handleLoginByGoogle} = useSocialAuth();
+  const {handleLoginByGoogle, handleLoginByFacebook} = useSocialAuth();
 
   return (
     <View>
@@ -20,7 +20,11 @@ const SocialLogin = () => {
         />
       </View>
       <View className="mt-[30] px-[40]">
-        <Button title="Login by Google" className="outline-dashed" />
+        <Button
+          title="Login by Facebook"
+          className="outline-dashed"
+          onPress={handleLoginByFacebook}
+        />
         {/* <Button mode="outlined" onPress={() => handleLoginByGoogle()}>
           <Text className="text-gray-800 text-base font-normal">
             Login by Facebook
