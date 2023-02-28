@@ -12,8 +12,6 @@ import axiosClient from './src/api/axiosClient';
 import {setUser, logout} from './src/redux/slices/userSlice';
 import {getAuthInfo} from './src/api/authApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {persistStore} from 'redux-persist';
-import {PersistGate} from 'redux-persist/integration/react';
 import {store} from './src/redux/store';
 import {useEffect, useMemo, useCallback} from 'react';
 
@@ -61,15 +59,13 @@ function AppScreen() {
 }
 
 export default function App() {
-  const persistor = persistStore(store);
   return (
     <Provider store={store}>
       <PaperProvider>
-        <PersistGate loading={null} persistor={persistor}>
-          <QueryClientProvider client={queryClient}>
-            <AppScreen />
-          </QueryClientProvider>
-        </PersistGate>
+        {' '}
+        <QueryClientProvider client={queryClient}>
+          <AppScreen />
+        </QueryClientProvider>
       </PaperProvider>
     </Provider>
   );
