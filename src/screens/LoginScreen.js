@@ -6,6 +6,7 @@ import {GOOGLE_LOGIN_URL} from '../config/socialLink';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import {LoginManager, AccessToken, Profile} from 'react-native-fbsdk-next';
+import SocialLogin from '../features/auth/SocialLogin';
 
 const LoginScreen = () => {
   GoogleSignin.configure({
@@ -21,8 +22,6 @@ const LoginScreen = () => {
       dispatch(setUser({username: 'ducnguyen'}));
     }
   };
-
-  console.log('GOOGLE_LOGIN_URL ', GOOGLE_LOGIN_URL);
 
   const loginByGoogle = async () => {
     // Check if your device supports Google Play
@@ -92,23 +91,9 @@ const LoginScreen = () => {
   }
 
   return (
-    <View>
+    <View className="mt-[40]">
       <Text>LoginScreen</Text>
-      <Button title="Cherelick" onPress={loginUser} />
-      <View className="mt-3">
-        <Button title="Login by Google" onPress={() => loginByGoogle()} />
-      </View>
-
-      <View className="mt-3">
-        <Button title="Logout Google" onPress={() => logout()} />
-      </View>
-
-      <View className="mt-5">
-        <Button
-          title="Login By Facebook"
-          onPress={() => onFacebookButtonPress()}
-        />
-      </View>
+      <SocialLogin />
     </View>
   );
 };

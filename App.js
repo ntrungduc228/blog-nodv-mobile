@@ -14,15 +14,14 @@ const queryClient = new QueryClient();
 function AppScreen() {
   const isLogin = useSelector(state => state.user.data.isLogin);
 
-  // const {data} = useQuery({queryKey: ['test'], queryFn: () => callApi()});
-  // console.log('data from useQuery', data);
+  const {data} = useQuery({queryKey: ['test'], queryFn: () => callApi()});
 
   const callApi = async () => {
     let res = await axiosClient.get(
       // `https://jsonplaceholder.typicode.com/todos/1`,
       `/posts/639edd8db5fd877917ab4423`,
     );
-    console.log('res ', res ? res : 'fucking no data');
+    // console.log('res ', res ? res : 'fucking no data');
     return res;
     // setData(res.data);
   };
@@ -31,13 +30,7 @@ function AppScreen() {
     <NavigationContainer>
       {/* <MainStackNavigator /> */}
       {/* <BottomTabNavigator /> */}
-      {isLogin ? (
-        <View>
-          <MainStackNavigator />
-        </View>
-      ) : (
-        <AuthStackNavigator />
-      )}
+      {isLogin ? <MainStackNavigator /> : <AuthStackNavigator />}
     </NavigationContainer>
   );
 }
