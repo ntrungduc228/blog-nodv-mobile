@@ -1,8 +1,9 @@
-import React from 'react';
-import {View, Text} from 'react-native';
 import {Button, Chip} from 'react-native-paper';
-import useSocialAuth from '../../hooks/useSocialAuth';
+import {Text, View} from 'react-native';
+
+import React from 'react';
 import {styled} from 'nativewind';
+import useSocialAuth from '../../hooks/useSocialAuth';
 
 const CustomButton = styled(Chip);
 
@@ -13,11 +14,11 @@ const SocialLogin = () => {
     <View>
       <View className="mt-[30] px-[40]">
         <Chip
-          className="outline-2 outline-rose-700 outline-dashed bg-black"
           mode="outlined"
-          onPress={() => handleLoginByGoogle()}
-          title="Login by Google"
-        />
+          className="justify-center rounded-full"
+          onPress={() => handleLoginByGoogle()}>
+          <Text className="mx-auto"> Login by Google</Text>
+        </Chip>
       </View>
       <View className="mt-[30] px-[40]">
         <Button

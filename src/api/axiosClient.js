@@ -1,15 +1,15 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Config from 'react-native-config';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import {logout} from '../redux/slices/userSlice';
+import routes from '../navigations/routesScreen';
+import {setIsCallLogin} from '../redux/slices/authSlice';
 import {store} from '../redux/store';
+import {useNavigation} from '@react-navigation/native';
+import useSocialAuth from '../hooks/useSocialAuth';
 
 const baseURL = Config.REACT_APP_API_URL;
-import {useNavigation} from '@react-navigation/native';
-import routes from '../navigations/routesScreen';
-import useSocialAuth from '../hooks/useSocialAuth';
-import {setIsCallLogin} from '../redux/slices/authSlice';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 async function ConfigAxiosInterceptor(config) {
   const navigation = useNavigation();
@@ -19,7 +19,12 @@ async function ConfigAxiosInterceptor(config) {
   const userInfo = JSON.parse(user);
 
   const {accessToken} = userInfo;
-  config.headers['Authorization'] = `Bearer ${accessToken}`;
+  console.log(
+    '🚀 ~ file: axiosClient.js:22 ~ ConfigAxiosInterceptor ~ accessToken:',
+    accessToken,
+  );
+  config.headers.Authorization = `Bearer ${accessToken}`;
+
   if (accessToken === null) {
     store.dispatch(setIsCallLogin(true));
     navigation.navigate(routes.Auth);
@@ -55,36 +60,36 @@ export const axiosClientPrivate = axios.create({
   timeout: 60000,
   withCredentials: true,
 });
-// axiosClientPrivate.interceptors.request.use(
-//   async config => {
-//     const accessToken = store.getState().user.data.accessToken.accessToken;
-//     config.headers.Authorization = `Bearer ${accessToken}`;
-//     if (accessToken === null) {
-//       // store.dispatch(setIsCallLogin(true));
-//     } else {
-//       const decodeToken = jwt_decode(accessToken);
-//       const today = new Date();
-//       if (decodeToken.exp < today.getTime() / 1000) {
-//         store.dispatch(logout());
-//       }
-//     }
-
-//     return config;
-//   },
-//   error => {
-//     return Promise.reject(error.response.data);
-//   },
-// );
-
 axiosClientPrivate.interceptors.request.use(
   async config => {
-    // ConfigAxiosInterceptor(config);
+    const accessToken = store.getState().user.data.accessToken.accessToken;
+    config.headers.Authorization = `Bearer ${accessToken}`;
+    if (accessToken === null) {
+      // store.dispatch(setIsCallLogin(true));
+    } else {
+      const decodeToken = jwt_decode(accessToken);
+      const today = new Date();
+      if (decodeToken.exp < today.getTime() / 1000) {
+        store.dispatch(logout());
+      }
+    }
+
     return config;
   },
   error => {
     return Promise.reject(error.response.data);
   },
 );
+
+// axiosClientPrivate.interceptors.request.use(
+//   async config => {
+//     ConfigAxiosInterceptor(config);
+//     return config;
+//   },
+//   error => {
+//     return Promise.reject(error.response.data);
+//   },
+// );
 
 axiosClientPrivate.interceptors.response.use(
   function (response) {
@@ -95,18 +100,18 @@ axiosClientPrivate.interceptors.response.use(
   },
 );
 
-axiosClient.interceptors.request.use(
-  async config => {
-    const accessToken = store.getState()?.user?.data?.accessToken;
-    if (accessToken) {
-      config.headers['Authorization'] = `Bearer ${accessToken}`;
-    }
-    return config;
-  },
-  error => {
-    return Promise.reject(error.response.data);
-  },
-);
+// axiosClient.interceptors.request.use(
+//   async config => {
+//     const accessToken = store.getState()?.user?.data?.accessToken;
+//     if (accessToken) {
+//       config.headers['Authorization'] = `Bearer ${accessToken}`;
+//     }
+//     return config;
+//   },
+//   error => {
+//     return Promise.reject(error.response.data);
+//   },
+// );
 
 axiosClient.interceptors.response.use(
   function (response) {
