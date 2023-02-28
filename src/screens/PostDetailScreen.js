@@ -5,14 +5,14 @@ import {
   PostToolbar,
   useGetPost,
 } from '../features/post';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
-import {Text, View} from 'react-native';
+import {SafeAreaView, Text, View} from 'react-native';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {RichEditor} from 'react-native-pell-rich-editor';
 import {Topic} from '../features/topic/components';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import {format} from 'date-fns';
 import {useMemo} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -24,7 +24,7 @@ export const PostDetailScreen = ({route}) => {
   const {data = {}, isLoading, isSuccess} = useGetPost(id);
 
   return (
-    <View className="bg-white">
+    <View className="bg-white h-full">
       <View className="h-14 flex-row items-center justify-between border-b px-4 border-slate-200 absolute top-0 bg-white w-full z-10">
         <TouchableOpacity>
           <AntDesign
@@ -44,7 +44,7 @@ export const PostDetailScreen = ({route}) => {
                 onPress={() => {}}
               />
             </TouchableOpacity>
-            <PostMenu />
+            <PostMenu postId={id} />
           </View>
         )}
       </View>
@@ -69,42 +69,40 @@ function MainContent({data}) {
     return format(new Date(createdDate), 'MMM, d');
   }, [createdDate]);
   return (
-    <>
-      <ScrollView className="pt-14 bg-white">
-        <View className="flex-row items-center mt-4 px-2">
-          <Avatar.Image
-            size={48}
-            source={{
-              uri: author.avatar,
-            }}
-          />
-          <View className="ml-4">
-            <View className="flex-row gap-2">
-              <Text className="text-lg mr-2">{author.username}</Text>
+    <SafeAreaView className="flex-1 pt-14">
+      <View className="flex-row items-center mt-4 px-2">
+        <Avatar.Image
+          size={48}
+          source={{
+            uri: author.avatar,
+          }}
+        />
+        <View className="ml-4">
+          <View className="flex-row gap-2">
+            <Text className="text-lg mr-2">{author.username}</Text>
+          </View>
+          <Text className="text-sm text-slate-500">
+            {createdDateFormatted} . {timeRead} min read
+          </Text>
+        </View>
+        <View className="ml-4">
+          <FollowButton />
+        </View>
+      </View>
+
+      <RichEditor disabled className="flex-1" initialContentHTML={content} />
+
+      <View className="w-[95%] h-[1px] bg-slate-300 mx-auto my-2" />
+      <View className="flex-row items-center pb-4 px-2">
+        {topics.map(topic => {
+          return (
+            <View className="p-1" key={topic.id}>
+              <Topic topic={topic} key={topic.id} />
             </View>
-            <Text className="text-sm text-slate-500">
-              {createdDateFormatted} . {timeRead} min read
-            </Text>
-          </View>
-          <View className="ml-4">
-            <FollowButton />
-          </View>
-        </View>
-
-        <RichEditor initialContentHTML={content} disabled={true} />
-
-        <View className="w-[95%] h-[1px] bg-slate-300 mx-auto my-2" />
-        <View className="flex-row items-center pb-4 px-2">
-          {topics.map(topic => {
-            return (
-              <View className="p-1" key={topic.id}>
-                <Topic topic={topic} key={topic.id} />
-              </View>
-            );
-          })}
-        </View>
-        <View className="h-14" />
-      </ScrollView>
+          );
+        })}
+      </View>
+      <View className="h-14" />
       <PostToolbar>
         <PostToolbar.Item
           icon={
@@ -118,7 +116,7 @@ function MainContent({data}) {
           100
         </PostToolbar.Item>
       </PostToolbar>
-    </>
+    </SafeAreaView>
   );
 }
 
