@@ -1,6 +1,8 @@
-import axios from 'axios';
 import Config from 'react-native-config';
+import axios from 'axios';
+
 const baseURL = Config.REACT_APP_API_URL;
+console.log('baseURL', baseURL);
 const axiosClient = axios.create({
   baseURL,
   headers: {

@@ -1,8 +1,8 @@
-import {Text, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
 import {Avatar, Button} from 'react-native-paper';
+import {Text, View} from 'react-native';
 
 import Notification from '../features/notification/Notification';
+import {ScrollView} from 'react-native-gesture-handler';
 
 function NotificationScreen() {
   const notifications = [

@@ -1,5 +1,9 @@
 import {Text, View, Button} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
+
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {PostCreateTrigger} from '../features/post';
+import auth from '@react-native-firebase/auth';
 import axiosClient from '../api/axiosClient';
 import {useQuery} from 'react-query';
 import useSocialAuth from '../hooks/useSocialAuth';
@@ -22,9 +26,7 @@ function HomeScreen({navigation}) {
 
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text className="text-2xl dark:text-white text-orange-500">
-        Home!fsdf
-      </Text>
+      <Text className="text-2xl dark:text-white text-orange-500">Home!</Text>
       <Button
         className="bg-amber-300 mt-3"
         title="Logout"
@@ -38,8 +40,16 @@ function HomeScreen({navigation}) {
           onPress={() => navigation.push('Notifications')}
         />
       </View>
-
-      {/* <Text>{data ? JSON.stringify(data) : 'fucking no data'}</Text> */}
+      <PostCreateTrigger />
+      <Button
+        className="bg-emerald-500"
+        title="Post detail"
+        onPress={() =>
+          navigation.push('PostDetail', {
+            id: '63ac87238e2d5012247a505f',
+          })
+        }
+      />
     </View>
   );
 }
