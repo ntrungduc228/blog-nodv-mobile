@@ -3,8 +3,9 @@
 // import SockJS from 'sockjs-client';
 // import {over} from 'stompjs';
 // import {setSocket} from '../redux/slices/socketSlice';
+// import Config from 'react-native-config';
 
-// const SOCKET_URL = process.env.REACT_APP_API_URL + '/ws';
+// const SOCKET_URL = Config.REACT_APP_API_URL + '/ws';
 
 // const SocketClient = () => {
 //   const id = useSelector(state => state.user.data?.info?.id);

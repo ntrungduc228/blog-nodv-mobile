@@ -7,6 +7,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 function NotificationScreen() {
   const notifications = [
     {
+      id: 1,
       type: 'REPLYCOMMENT',
       sender: {
         username: 'Đức Nguyễnn',
@@ -15,6 +16,7 @@ function NotificationScreen() {
       createdDate: new Date(),
     },
     {
+      id: 2,
       type: 'LIKECOMMENT',
       sender: {
         username: 'Đức Nguyễn',
@@ -23,6 +25,7 @@ function NotificationScreen() {
       createdDate: new Date(),
     },
     {
+      id: 3,
       type: 'COMMENT',
       sender: {
         username: 'Đức Nguyễnnn',
@@ -35,7 +38,9 @@ function NotificationScreen() {
     <ScrollView>
       <View>
         {notifications.map(notification => {
-          return <Notification notification={notification} />;
+          return (
+            <Notification key={notification.id} notification={notification} />
+          );
         })}
       </View>
     </ScrollView>

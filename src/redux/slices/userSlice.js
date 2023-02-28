@@ -7,6 +7,7 @@ const initialState = {
     info: null,
     accessToken: null,
     isLogin: false,
+    provider: null,
   },
   error: undefined,
 };

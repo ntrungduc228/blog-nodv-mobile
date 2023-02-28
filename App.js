@@ -1,31 +1,53 @@
-import {Provider, useSelector} from 'react-redux';
+import {NavigationContainer} from '@react-navigation/native';
+import {
+  BottomTabNavigator,
+  AuthStackNavigator,
+  MainStackNavigator,
+} from './src/navigations';
+import {Provider, useSelector, useDispatch} from 'react-redux';
 import {QueryClient, QueryClientProvider, useQuery} from 'react-query';
 
-import {AuthStackNavigator} from './src/navigations';
-import MainStackNavigator from './src/navigations/MainStackNavigator';
-import {NavigationContainer} from '@react-navigation/native';
 import {Provider as PaperProvider} from 'react-native-paper';
 import axiosClient from './src/api/axiosClient';
+import {setUser, logout} from './src/redux/slices/userSlice';
+import {getAuthInfo} from './src/api/authApi';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {store} from './src/redux/store';
+import {useEffect, useMemo, useCallback} from 'react';
 
 // import SocketClient from './src/websocket/SocketClient';
 
 const queryClient = new QueryClient();
 
 function AppScreen() {
-  const isLogin = useSelector(state => state.user.data.isLogin);
+  const {isLogin} = useSelector(state => state.user.data);
+  const dispatch = useDispatch();
+  console.log('islogin ', isLogin);
 
-  const {data} = useQuery({queryKey: ['test'], queryFn: () => callApi()});
+  useEffect(() => {
+    checkIsLogin();
+  }, [isLogin, checkIsLogin]);
 
-  const callApi = async () => {
-    let res = await axiosClient.get(
-      // `https://jsonplaceholder.typicode.com/todos/1`,
-      `/posts/639edd8db5fd877917ab4423`,
-    );
-    // console.log('res ', res ? res : 'fucking no data');
-    return res;
-    // setData(res.data);
-  };
+  const checkIsLogin = useCallback(async () => {
+    const user = await AsyncStorage.getItem('user');
+    const userInfo = JSON.parse(user);
+    if (!userInfo) {
+      dispatch(logout());
+    }
+  }, [dispatch]);
+
+  useQuery('user', getAuthInfo, {
+    // enabled: checkIsLogin,
+    enabled: isLogin,
+    onSuccess: data => {
+      if (!data?.topics || !data?.topics.length) {
+        // if user has no topics, redirect to topic page
+        // navigate(appRoutes.TOPIC_PICK);
+        console.log('get user info', data);
+      }
+      dispatch(setUser(data));
+    },
+  });
 
   return (
     <NavigationContainer>
@@ -39,11 +61,12 @@ function AppScreen() {
 export default function App() {
   return (
     <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <PaperProvider>
+      <PaperProvider>
+        {' '}
+        <QueryClientProvider client={queryClient}>
           <AppScreen />
-        </PaperProvider>
-      </QueryClientProvider>
+        </QueryClientProvider>
+      </PaperProvider>
     </Provider>
   );
 }
