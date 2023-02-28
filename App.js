@@ -1,13 +1,14 @@
-import {StyleSheet, Text, View} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import MainStackNavigator from './src/navigations/MainStackNavigator';
-import {BottomTabNavigator, AuthStackNavigator} from './src/navigations';
-import {store} from './src/redux/store';
 import {Provider, useSelector} from 'react-redux';
 import {QueryClient, QueryClientProvider, useQuery} from 'react-query';
+
+import {AuthStackNavigator} from './src/navigations';
+import MainStackNavigator from './src/navigations/MainStackNavigator';
+import {NavigationContainer} from '@react-navigation/native';
 import {Provider as PaperProvider} from 'react-native-paper';
-// import SocketClient from './src/websocket/SocketClient';
 import axiosClient from './src/api/axiosClient';
+import {store} from './src/redux/store';
+
+// import SocketClient from './src/websocket/SocketClient';
 
 const queryClient = new QueryClient();
 
@@ -38,20 +39,11 @@ function AppScreen() {
 export default function App() {
   return (
     <Provider store={store}>
-      <PaperProvider>
-        <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <PaperProvider>
           <AppScreen />
-        </QueryClientProvider>
-      </PaperProvider>
+        </PaperProvider>
+      </QueryClientProvider>
     </Provider>
   );
 }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// });
