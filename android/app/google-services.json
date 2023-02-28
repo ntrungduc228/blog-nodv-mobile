@@ -1,41 +1,42 @@
 {
   "project_info": {
-    "project_number": "820939351695",
-    "project_id": "mobile-auth-test-7952b",
-    "storage_bucket": "mobile-auth-test-7952b.appspot.com"
+    "project_number": "255721291089",
+    "firebase_url": "https://blog-nodv-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "blog-nodv",
+    "storage_bucket": "blog-nodv.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:820939351695:android:b9061ee745bd8bf3fd72fa",
+        "mobilesdk_app_id": "1:255721291089:android:678c143e96c58cfa84a770",
         "android_client_info": {
           "package_name": "com.blognodvmobile"
         }
       },
       "oauth_client": [
         {
-          "client_id": "820939351695-ok1bqj060a8queq9kjmipg9k9jfir8g3.apps.googleusercontent.com",
+          "client_id": "255721291089-ek4dbe5qdl22li7hfkot3d06929s04pc.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.blognodvmobile",
-            "certificate_hash": "49062d3306cc31a56e5fe03315fb239349545a17"
+            "certificate_hash": "f7e079c4cef08df668054c45c42cf69d7b3afae5"
           }
         },
         {
-          "client_id": "820939351695-m65vhduc0penk7daq7g98t80ucr7brav.apps.googleusercontent.com",
+          "client_id": "255721291089-vprprohj4eolh2ae93qdfegb1aa9cumv.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD4DKmqCDQdCPXR5v6z8bI5FT-lDPsU4KY"
+          "current_key": "AIzaSyAuzCDlu04Gq72ZdOsHND_r7GuxcW6t3jk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "820939351695-m65vhduc0penk7daq7g98t80ucr7brav.apps.googleusercontent.com",
+              "client_id": "255721291089-frc8oi0m58ar3aj0bin7s0dra2jsoudv.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

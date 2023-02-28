@@ -1,7 +1,8 @@
 // import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import HomeScreen from '../screens/HomeScreen';
-import ExploreScreen from '../screens/ExploreScreen';
+
 import BookmarkScreen from '../screens/BookmarkScreen';
+import ExploreScreen from '../screens/ExploreScreen';
+import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import { Button } from 'react-native-paper';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
@@ -14,32 +15,35 @@ function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator>
-      <BottomTab.Screen name="home" component={HomeScreen} options={{
-        tabBarLabel: '',
-        tabBarIcon: ({ color }) => (
-          <FontAwesome name="home" color={color} size={26} />
-        ),
-      }} />
-      <BottomTab.Screen name="Explore" component={ExploreScreen}
-        options={{
-          tabBarLabel: '',
-          tabBarIcon: ({ color }) => (
-            <FontAwesome name="search" color={color} size={26} />
-          ),
-        }}
-      />
-      <BottomTab.Screen name="Bookmark" component={BookmarkScreen}
-        options={{
-          tabBarLabel: '',
-          tabBarIcon: ({ color }) => (
-            <FontAwesome name="bookmark" color={color} size={26} />
-          ),
-        }}
-      />
-      <BottomTab.Screen name="Profile" component={ProfileScreen}>
 
-      </BottomTab.Screen>
-
+      <BottomTab.Screen
+        options={{
+          tabBarIcon: 'home',
+        }}
+        name="Home"
+        component={HomeScreen}
+      />
+      <BottomTab.Screen
+        options={{
+          tabBarIcon: 'magnify',
+        }}
+        name="Explore"
+        component={ExploreScreen}
+      />
+      <BottomTab.Screen
+        options={{
+          tabBarIcon: 'bookmark-multiple-outline',
+        }}
+        name="Bookmark"
+        component={BookmarkScreen}
+      />
+      <BottomTab.Screen
+        options={{
+          tabBarIcon: 'account-circle-outline',
+        }}
+        name="Profile"
+        component={ProfileScreen}
+      />
 
     </BottomTab.Navigator>
   );
