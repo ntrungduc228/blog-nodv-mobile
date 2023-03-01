@@ -1,5 +1,5 @@
 import { Text, View, StyleSheet, Image, Alert,  } from 'react-native';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useMutation } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Styles from './Styles';
 import { Avatar } from 'react-native-paper';
@@ -10,24 +10,32 @@ import IconFeather from 'react-native-vector-icons/Feather'
 import IconFontAwesomer from 'react-native-vector-icons/FontAwesome'
 import IconAntDesign from 'react-native-vector-icons/AntDesign'
 import axiosClient from '../../api/axiosClient.js';
-import {useMutation} from '@apollo/react-hooks';
+import { axiosClientPrivate } from '../../api/axiosClient.js';
+import { useQueryClient } from 'react-query';
+// import {useMutation} from '@apollo/react-hooks';
 // import { useMutation, useQueryClient } from 'react-query';
 function Post({post}){
-    const currentUser = useSelector(state => state.user.data.info);
+    const currentUser = useSelector(state => state.user.data);
     const [isBookmark, setIsBookmark] = useState(false)
-        
+ 
+    
     const handleBookmark = async (id)=>{
-        await axiosClient.patch(`/bookmarks/${id}`);
-        console.log(id)
+       
+        await axiosClientPrivate.patch(`/bookmarks/${id}`);
+        // console.log('test'+id)
         setIsBookmark(!isBookmark);
-        const colorBookmark = isBookmark? color="#A09898": color="#000" 
+        // console.log(isBookmark)
+        // const colorBookmark = isBookmark? color="#A09898": color="#000" 
     }
-    // const hidePost = async (id)=>{
-    //     await axiosClient.patch(`/blackLists/${id}`)     
-    // }
+  
+    const handleHidePost = async (id)=>{
+        // console.log(id)
+        await axiosClientPrivate.patch(`/blackLists/${id}`)   
+        
+    }
 
     // const handleHidePost = useMutation(hidePost, {
-    //     onSuccess: (Data)
+    //     onSuccess: (data)
     // })
  
     return (
@@ -71,8 +79,8 @@ function Post({post}){
                         </View>
                         <View style={Styles.Icon}>
                            
-                            <IconFontAwesomer name="bookmark-o" size={24} color="#A09898" solid="#A09898" onPress={()=> handleBookmark(post.id)} />
-                            <IconAntDesign name="minuscircleo" size={24} color="#A09898" solid="#A09898" style={Styles.titleIcon} />
+                            <IconFontAwesomer name="bookmark-o" size={24} color={isBookmark?"#000":"#A09898"} solid="#A09898" onPress={()=> handleBookmark(post.id)} />
+                            <IconAntDesign name="minuscircleo" size={24} color="#A09898" solid="#A09898" style={Styles.titleIcon} onPress={()=> handleHidePost(post.id)}/>
                             <IconFeather name="more-vertical" size={24} color="#A09898" solid="#A09898" style={Styles.titleIcon} />
                         </View>
                         <View
