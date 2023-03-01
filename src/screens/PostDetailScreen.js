@@ -8,6 +8,7 @@ import {
 import {SafeAreaView, Text, View} from 'react-native';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import {FollowUserButton} from '../features/user/components/FollowUserButton';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {RichEditor} from 'react-native-pell-rich-editor';
@@ -86,7 +87,7 @@ function MainContent({data}) {
           </Text>
         </View>
         <View className="ml-4">
-          <FollowButton />
+          <FollowUserButton followerId={author.id} />
         </View>
       </View>
 
