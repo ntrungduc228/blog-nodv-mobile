@@ -1,8 +1,9 @@
-import {PostDetailScreen, PostEditorScreen} from '../screens';
+import {PostDetailScreen, PostEditorScreen, CommentScreen} from '../screens';
 
 import BottomTabNavigator from './BottomTabNavigator';
 import NotificationScreen from '../screens/NotificationScreen';
 import {createStackNavigator} from '@react-navigation/stack';
+import routesScreen from './routesScreen';
 
 const MainStack = createStackNavigator();
 
@@ -10,27 +11,32 @@ function MainStackNavigator() {
   return (
     <MainStack.Navigator>
       <MainStack.Screen
-        name="BottomTab"
+        name={routesScreen.BottomTab}
         component={BottomTabNavigator}
         options={{headerShown: false}}
       />
-      <MainStack.Screen name="Notifications" component={NotificationScreen} />
+      <MainStack.Screen
+        name="Notifications"
+        component={NotificationScreen}
+        options={{headerShown: false}}
+      />
       <MainStack.Screen
         options={{
           headerShown: false,
         }}
-        name="PostEditor"
+        name={routesScreen.PostEditor}
         component={PostEditorScreen}
       />
       <MainStack.Screen
         options={{headerShown: false}}
-        name="PostDetail"
+        name={routesScreen.PostDetail}
         component={PostDetailScreen}
       />
-
-      {/* <MainStack.Screen name="Home" component={HomeScreen} /> */}
-      {/* <MainStack.Screen name="Explore" component={ExploreScreen} /> */}
-      {/* <MainStack.Screen name="Bookmark" component={BookmarkScreen} /> */}
+      <MainStack.Screen
+        options={{headerShown: false}}
+        name={routesScreen.Comment}
+        component={CommentScreen}
+      />
     </MainStack.Navigator>
   );
 }

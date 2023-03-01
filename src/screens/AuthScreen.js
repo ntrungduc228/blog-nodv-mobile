@@ -48,11 +48,11 @@ const AuthScreen = () => {
   }
 
   return (
-    <View className="mt-[40] h-full bg-white">
-      <Text className="text-center font-bold text-black text-2xl">
+    <View className="h-full bg-white">
+      <Text className="mt-[60] text-center font-bold text-black text-2xl">
         Blog NODV
       </Text>
-      <View className="mt-12 mb-16">
+      <View className="mt-12 mb-12">
         <Text className="text-center text-black text-[40px]">Join Blog</Text>
       </View>
       <SocialLogin />

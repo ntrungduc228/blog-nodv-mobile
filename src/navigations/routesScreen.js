@@ -5,7 +5,11 @@ const routesScreen = {
   Profile: 'Profile',
   Auth: 'Auth',
   Notifications: 'Notifications',
-  Topic: 'Topic',
+  PickTopic: 'PickTopic',
+  BottomTab: 'BottomTab',
+  PostEditor: 'PostEditor',
+  PostDetail: 'PostDetail',
+  Comment: 'Comment',
 };
 
 export default routesScreen;
