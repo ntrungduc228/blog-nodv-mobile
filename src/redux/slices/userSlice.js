@@ -19,11 +19,18 @@ const userSlice = createSlice({
     setUser: (state, action) => {
       state.data.info = action.payload;
       state.data.isLogin = true;
+      AsyncStorage.mergeItem(
+        'user',
+        JSON.stringify({
+          info: action.payload,
+        }),
+      );
     },
     setAccessToken: (state, action) => {
-      state.data.accessToken = action.payload;
+      state.data.accessToken = action.payload.accessToken;
       state.data.isLogin = true;
-      AsyncStorage.setItem(
+      state.data.provider = action.payload.provider;
+      AsyncStorage.mergeItem(
         'user',
         JSON.stringify({
           accessToken: action.payload.accessToken,
