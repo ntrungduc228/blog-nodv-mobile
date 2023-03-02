@@ -1,4 +1,4 @@
-import {PostDetailScreen, PostEditorScreen} from '../screens';
+import {NotFoundScreen, PostDetailScreen, PostEditorScreen} from '../screens';
 
 import BottomTabNavigator from './BottomTabNavigator';
 import NotificationScreen from '../screens/NotificationScreen';
@@ -26,6 +26,11 @@ function MainStackNavigator() {
         options={{headerShown: false}}
         name="PostDetail"
         component={PostDetailScreen}
+      />
+      <MainStack.Screen
+        options={{headerShown: false}}
+        name="NotFound"
+        component={NotFoundScreen}
       />
 
       {/* <MainStack.Screen name="Home" component={HomeScreen} /> */}
