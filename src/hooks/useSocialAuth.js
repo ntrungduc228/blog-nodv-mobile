@@ -8,6 +8,11 @@ import {setAccessToken, logout} from '../redux/slices/userSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {LoginManager, AccessToken, Profile} from 'react-native-fbsdk-next';
 
+const PROVIDER = {
+  GOOGLE: 'google',
+  FACEBOOK: 'facebook',
+};
+
 const useSocialAuth = () => {
   const [credential, setCredential] = useState(null);
   const dispatch = useDispatch();
@@ -32,9 +37,9 @@ const useSocialAuth = () => {
   useEffect(() => {
     if (credential) {
       switch (credential?.provider) {
-        case 'google': {
+        case PROVIDER.GOOGLE: {
           handleAuthByMobile.mutate({
-            provider: 'google',
+            provider: PROVIDER.GOOGLE,
             providerId: credential?.user.id,
             username: credential?.user.familyName,
             email: credential?.user.email,
@@ -43,9 +48,9 @@ const useSocialAuth = () => {
           setCredential(null);
           break;
         }
-        case 'facebok': {
+        case PROVIDER.FACEBOOK: {
           handleAuthByMobile.mutate({
-            provider: 'facebook',
+            provider: PROVIDER.FACEBOOK,
             providerId: credential?.user.userID,
             username: credential?.user.name,
             email: credential?.user.email,
@@ -62,7 +67,6 @@ const useSocialAuth = () => {
   }, [credential, handleAuthByMobile]);
 
   const handleLogoutBySocial = async () => {
-    console.log('hereeee');
     const userInfo = await AsyncStorage.getItem('user');
     const {provider} = userInfo ? JSON.parse(userInfo) : {};
     console.log('userinfo', JSON.parse(userInfo));
@@ -70,11 +74,11 @@ const useSocialAuth = () => {
     if (provider) {
       try {
         switch (provider) {
-          case 'google': {
+          case PROVIDER.GOOGLE: {
             await GoogleSignin.signOut();
             break;
           }
-          case 'facebok': {
+          case PROVIDER.FACEBOOK: {
             break;
           }
 
@@ -85,6 +89,7 @@ const useSocialAuth = () => {
         console.error(err);
       }
     }
+    await GoogleSignin.signOut();
 
     dispatch(logout());
     setCredential(null);
@@ -98,7 +103,7 @@ const useSocialAuth = () => {
       const account = await GoogleSignin.signIn();
       console.log('account', account.user);
 
-      setCredential({user: account?.user, provider: 'google'});
+      setCredential({user: account?.user, provider: PROVIDER.GOOGLE});
 
       // Create a Google credential with the token
       // const googleCredential = auth.GoogleAuthProvider.credential(
@@ -152,7 +157,7 @@ const useSocialAuth = () => {
 
       Profile.getCurrentProfile().then(currentProfile => {
         console.log('currentProfile', currentProfile);
-        setCredential({user: currentProfile, provider: 'facebook'});
+        setCredential({user: currentProfile, provider: PROVIDER.FACEBOOK});
       });
     } catch (err) {
       console.log('error: ', err);
