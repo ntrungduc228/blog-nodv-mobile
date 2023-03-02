@@ -1,41 +1,41 @@
-// import {useEffect} from 'react';
-// import {useDispatch, useSelector} from 'react-redux';
-// import SockJS from 'sockjs-client';
-// import {over} from 'stompjs';
-// import {setSocket} from '../redux/slices/socketSlice';
-// import Config from 'react-native-config';
+import {useDispatch, useSelector} from 'react-redux';
 
-// const SOCKET_URL = Config.REACT_APP_API_URL + '/ws';
+import Config from 'react-native-config';
+import SockJS from 'sockjs-client';
+import {setSocket} from '../redux/slices/socketSlice';
+import {useEffect} from 'react';
 
-// const SocketClient = () => {
-//   const id = useSelector(state => state.user.data?.info?.id);
-//   const dispatch = useDispatch();
+var Stomp = require('stompjs/lib/stomp.js').Stomp;
 
-//   useEffect(() => {
-//     const sock = new SockJS(SOCKET_URL);
-//     const stomp = over(sock);
-//     if (id) {
-//       stomp.debug = false;
-//       stomp.connect({}, () => onSuccessConnect(stomp), onError);
-//     }
+const SOCKET_URL = Config.REACT_APP_API_URL + '/ws';
 
-//     return () => {
-//       if (id) {
-//         stomp.disconnect();
-//       }
-//     };
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//   }, [id]);
+export const SocketClient = () => {
+  const id = useSelector(state => state.user.data?.info?.id);
+  const dispatch = useDispatch();
 
-//   const onError = err => {
-//     console.log(err);
-//   };
+  useEffect(() => {
+    const sock = new SockJS(SOCKET_URL);
+    const stomp = Stomp.over(sock);
+    if (id) {
+      stomp.debug = false;
+      stomp.connect({}, () => onSuccessConnect(stomp), onError);
+    }
 
-//   const onSuccessConnect = stomp => {
-//     dispatch(setSocket(stomp));
-//   };
+    return () => {
+      if (id) {
+        stomp.disconnect();
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
-//   return <></>;
-// };
+  const onError = err => {
+    console.log(err);
+  };
 
-// export default SocketClient;
+  const onSuccessConnect = stomp => {
+    dispatch(setSocket(stomp));
+  };
+
+  return <></>;
+};
