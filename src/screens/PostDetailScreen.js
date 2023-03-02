@@ -19,6 +19,7 @@ import {format} from 'date-fns';
 import {useEffect} from 'react';
 import {useMemo} from 'react';
 import {useNavigation} from '@react-navigation/native';
+import {useQueryClient} from 'react-query';
 import {useSelector} from 'react-redux';
 
 export const PostDetailScreen = ({route}) => {
@@ -64,13 +65,8 @@ export const PostDetailScreen = ({route}) => {
 };
 
 function MainContent({data}) {
+  const queryClient = useQueryClient();
   const socket = useSelector(state => state.socket.data);
-  const handleReceiveLikePostSocket = payload => {
-    // console.log(payload);
-    const {userLikeIds} = JSON.parse(payload.body);
-    // updateLocalPost({userLikeIds: userLikeIds});
-    console.log('userLikeIds', userLikeIds);
-  };
 
   const {
     content,
@@ -103,6 +99,13 @@ function MainContent({data}) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, socket]);
 
+  const handleReceiveLikePostSocket = payload => {
+    const {userLikeIds: newUserLikeIds} = JSON.parse(payload.body);
+    queryClient.setQueryData(['post', id], prev => ({
+      ...prev,
+      userLikeIds: newUserLikeIds,
+    }));
+  };
   return (
     <SafeAreaView className="flex-1 pt-14">
       <View className="flex-row items-center mt-4 px-2">

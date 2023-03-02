@@ -1,6 +1,7 @@
 import {cloneElement, useState} from 'react';
 
 import {Chip} from 'react-native-paper';
+import {useEffect} from 'react';
 import {useLikePost} from '../../hooks/useLikePost';
 import {useQueryClient} from 'react-query';
 import {useSelector} from 'react-redux';
@@ -10,6 +11,10 @@ export const LikePostButton = ({userLikeIds = [], postId, children}) => {
   const queryClient = useQueryClient();
   const userId = useSelector(state => state.user.data.info.id);
   const [liked, setLiked] = useState(userLikeIds?.includes(userId));
+  useEffect(() => {
+    setLiked(userLikeIds?.includes(userId));
+  }, [userId, userLikeIds]);
+
   const handleUpdateLocalLike = isLiked => {
     let newUserLikeIds = [...userLikeIds];
     if (isLiked) {
