@@ -1,4 +1,9 @@
-import {PostDetailScreen, PostEditorScreen, CommentScreen} from '../screens';
+import {
+  CommentScreen,
+  NotFoundScreen,
+  PostDetailScreen,
+  PostEditorScreen,
+} from '../screens';
 
 import BottomTabNavigator from './BottomTabNavigator';
 import NotificationScreen from '../screens/NotificationScreen';
@@ -34,9 +39,14 @@ function MainStackNavigator() {
       />
       <MainStack.Screen
         options={{headerShown: false}}
-        name={routesScreen.Comment}
-        component={CommentScreen}
+        name="NotFound"
+        component={NotFoundScreen}
       />
+
+      {/* <MainStack.Screen name="Home" component={HomeScreen} /> */}
+      {/* <MainStack.Screen name="Explore" component={ExploreScreen} /> */}
+      {/* <MainStack.Screen name="Bookmark" component={BookmarkScreen} /> */}
+      <MainStack.Screen name={routesScreen.Comment} component={CommentScreen} />
     </MainStack.Navigator>
   );
 }

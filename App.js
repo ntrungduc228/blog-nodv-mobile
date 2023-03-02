@@ -1,13 +1,13 @@
 import {AuthStackNavigator, MainStackNavigator} from './src/navigations';
 import {Provider, useDispatch, useSelector} from 'react-redux';
 import {QueryClient, QueryClientProvider, useQuery} from 'react-query';
-import {logout, setUser, setAccessToken} from './src/redux/slices/userSlice';
+import {logout, setAccessToken, setUser} from './src/redux/slices/userSlice';
 import {useCallback, useEffect} from 'react';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NavigationContainer} from '@react-navigation/native';
 import {Provider as PaperProvider} from 'react-native-paper';
-import axiosClient from './src/api/axiosClient';
+import {SocketClient} from './src/websocket';
 import {getAuthInfo} from './src/api/authApi';
 import {store} from './src/redux/store';
 import useSocialAuth from './src/hooks/useSocialAuth';
@@ -19,7 +19,6 @@ const queryClient = new QueryClient();
 function AppScreen() {
   const {isLogin} = useSelector(state => state.user.data);
   const dispatch = useDispatch();
-  console.log('islogin ', isLogin);
 
   const {handleLogoutBySocial} = useSocialAuth();
 
@@ -55,6 +54,7 @@ function AppScreen() {
   return (
     <NavigationContainer>
       {isLogin ? <MainStackNavigator /> : <AuthStackNavigator />}
+      {isLogin && <SocketClient />}
     </NavigationContainer>
   );
 }
