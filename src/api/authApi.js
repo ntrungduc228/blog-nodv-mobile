@@ -7,7 +7,6 @@ const authApi = {
     return axiosClient.post(`${url}/mobile/auth-by-mobile`, info);
   },
   getAuthInfo: () => {
-    console.log('getAuthInfo');
     return axiosClientPrivate.get(url + '/info');
   },
 };
