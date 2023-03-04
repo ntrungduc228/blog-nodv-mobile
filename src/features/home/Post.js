@@ -2,13 +2,13 @@ import { Text, View, StyleSheet, Image, Alert,  } from 'react-native';
 import { useMemo, useState, useMutation, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Styles from './Styles';
-import { Avatar } from 'react-native-paper';
+import {Avatar} from 'react-native-paper';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { NotificationType } from '../../config/dataType.js';
-import IconFeather from 'react-native-vector-icons/Feather'
-import IconFontAwesomer from 'react-native-vector-icons/FontAwesome'
-import IconAntDesign from 'react-native-vector-icons/AntDesign'
+import {NotificationType} from '../../config/dataType.js';
+import IconFeather from 'react-native-vector-icons/Feather';
+import IconFontAwesomer from 'react-native-vector-icons/FontAwesome';
+import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import axiosClient from '../../api/axiosClient.js';
 import { axiosClientPrivate } from '../../api/axiosClient.js';
 import { useQueryClient } from 'react-query';
@@ -51,7 +51,7 @@ function Post({post}){
                         <View style={Styles.bodyTop}>
                             <Image
                                 source={{
-                                    uri: post.user.avatar,
+                                    uri: post.user.avatar ? post.user.avatar :'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pinterest.com%2Fpin%2F540994973993086717%2F&psig=AOvVaw1Mrgp1Bdc9w_gq7PTOt3hx&ust=1677994074144000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCMDe5JfFwf0CFQAAAAAdAAAAABAE',
                                     method: 'POST',
                                     headers: {
                                         Pragma: 'no-cache',

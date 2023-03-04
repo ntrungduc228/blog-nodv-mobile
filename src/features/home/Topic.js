@@ -7,30 +7,31 @@ import { useEffect, useMemo, useState } from 'react';
 import { axiosClientPrivate } from '../../api/axiosClient';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Chip } from 'react-native-paper';
+import { addTopics, followTopic, getUserProfile } from '../../api/userApi';
+import { useSelector } from 'react-redux';
+import TopicItem from './TopicItem';
 
 
 
  function Topic({navigation}) {
   const [topics, setTopics] = useState([])
   const [isTopic, setIsTopic] = useState(false)
+  const currentUserEmail = useSelector(state => state.user.data.info.email);
+  const accessToken = useSelector(state => state.user.data.accessToken)
+  // console.log(accessToken)
   async function fetchData(){
+    const currentUser = await getUserProfile(currentUserEmail)
+    // console.log(currentUser)
     const topicLists =  await axiosClientPrivate.get(`/topics`)
      setTopics(topicLists)
-    //  console.log(topicLists)
+     addTopics()
   }
   fetchData();
-  const handleFollowTopic = async (id)=>{
-    setIsTopic(!isTopic)
-    await axiosClientPrivate.patch(`user/topics, {topics: id}`)
-    console.log(id)
-  }
+  
   const topicListRender = ()=>{
     return topics.map((topic, index)=>{
         return(
-          <View style={Styles.topics}>
-            <Text style={Styles.textTopic}>{topic.name}</Text>
-            <Chip icon="information" mode="outlined" onPress={()=> handleFollowTopic(topic.id)}>Follow</Chip>
-          </View>
+          <TopicItem key={index} topic={topic} />
 
         )
     })

@@ -6,7 +6,7 @@ const url = '/posts';
 
 const postApi = {
   getPosts: ({page = 0, limit = 5, topic, title}) =>
-    axiosClient.get(url, {
+    axiosClientPrivate.get(url, {
       params: {
         page,
         limit,
@@ -16,10 +16,10 @@ const postApi = {
     }),
 
   getPostsTrending: (limit = 6) =>
-    axiosClient.get(`${url}/trending?limit=${limit}`),
+    axiosClientPrivate.get(`${url}/trending?limit=${limit}`),
 
-  getPostById: id => axiosClient.get(`${url}/${id}`),
-  getPostsByUserId: id => axiosClient.get(`${url}/user/${id}`),
+  getPostById: id => axiosClientPrivate.get(`${url}/${id}`),
+  getPostsByUserId: id => axiosClientPrivate.get(`${url}/user/${id}`),
 
   getOwnedPosts: isPublish =>
     axiosClientPrivate.get(

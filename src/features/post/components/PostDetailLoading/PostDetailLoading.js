@@ -10,7 +10,7 @@ export const PostDetailLoading = () => {
           <SkeletonPlaceholder.Item marginTop={6} width={80} height={20} />
         </SkeletonPlaceholder.Item>
       </SkeletonPlaceholder.Item>
-      <SkeletonPlaceholder.Item marginTop={20}>
+      <SkeletonPlaceholder.Item marginTop={10}>
         <SkeletonPlaceholder.Item>
           <SkeletonPlaceholder.Item marginTop={10} width={'100%'} height={20} />
           <SkeletonPlaceholder.Item marginTop={10} width={'80%'} height={20} />

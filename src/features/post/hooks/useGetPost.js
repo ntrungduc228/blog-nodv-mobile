@@ -1,11 +1,12 @@
 import {getPostById} from '../../../api/postApi';
-
-const {useQuery} = require('react-query');
+import {useNavigation} from '@react-navigation/native';
+import {useQuery} from 'react-query';
 
 export const useGetPost = postId => {
+  const navigate = useNavigation();
   return useQuery(['post', postId], () => getPostById(postId), {
     onError: error => {
-      console.log('🚀 ~ file: useGetPost.js:16 ~ useGetPost ~ error:', error);
+      navigate.navigate('NotFound');
     },
     enabled: !!postId,
   });

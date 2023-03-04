@@ -44,7 +44,7 @@ function HomeScreen({navigation}) {
           headerShown: false
           // tabBarIcon: 'home',
         }}
-      />
+        />
     </HomeStack.Navigator>
   );
 }

@@ -62,10 +62,11 @@ export const axiosClientPrivate = axios.create({
 });
 axiosClientPrivate.interceptors.request.use(
   async config => {
-    const accessToken = store.getState().user.data.accessToken.accessToken;
+    const accessToken = store.getState().user.data.accessToken;
     config.headers.Authorization = `Bearer ${accessToken}`;
     if (accessToken === null) {
       // store.dispatch(setIsCallLogin(true));
+      store.dispatch(logout());
     } else {
       const decodeToken = jwt_decode(accessToken);
       const today = new Date();

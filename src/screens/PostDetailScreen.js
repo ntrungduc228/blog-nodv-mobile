@@ -1,5 +1,6 @@
 import {Avatar, Chip} from 'react-native-paper';
 import {
+  LikePostButton,
   PostDetailLoading,
   PostMenu,
   PostToolbar,
@@ -15,8 +16,11 @@ import {RichEditor} from 'react-native-pell-rich-editor';
 import {Topic} from '../features/topic/components';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {format} from 'date-fns';
+import {useEffect} from 'react';
 import {useMemo} from 'react';
 import {useNavigation} from '@react-navigation/native';
+import {useQueryClient} from 'react-query';
+import {useSelector} from 'react-redux';
 
 export const PostDetailScreen = ({route}) => {
   const {id} = route.params;
@@ -50,7 +54,7 @@ export const PostDetailScreen = ({route}) => {
         )}
       </View>
       {isLoading ? (
-        <View className="pt-20 px-4 bg-white h-screen">
+        <View className="pt-[68px] px-2 bg-white h-screen">
           <PostDetailLoading />
         </View>
       ) : (
@@ -61,14 +65,47 @@ export const PostDetailScreen = ({route}) => {
 };
 
 function MainContent({data}) {
-  const {content, user: author, createdDate, timeRead, topics} = data;
+  const queryClient = useQueryClient();
+  const socket = useSelector(state => state.socket.data);
 
+  const {
+    content,
+    user: author,
+    createdDate,
+    timeRead,
+    topics,
+    id,
+    userLikeIds = [],
+  } = data;
+  const userId = useSelector(state => state.user.data.info.id);
   const createdDateFormatted = useMemo(() => {
     if (!createdDate) {
       return null;
     }
     return format(new Date(createdDate), 'MMM, d');
   }, [createdDate]);
+
+  useEffect(() => {
+    const topic = `/topic/posts/${id}/like`;
+    if (socket) {
+      socket.subscribe(topic, handleReceiveLikePostSocket, {id: topic});
+    }
+    return () => {
+      if (socket) {
+        console.log('unsubscribing');
+        socket.unsubscribe(topic);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, socket]);
+
+  const handleReceiveLikePostSocket = payload => {
+    const {userLikeIds: newUserLikeIds} = JSON.parse(payload.body);
+    queryClient.setQueryData(['post', id], prev => ({
+      ...prev,
+      userLikeIds: newUserLikeIds,
+    }));
+  };
   return (
     <SafeAreaView className="flex-1 pt-14">
       <View className="flex-row items-center mt-4 px-2">
@@ -87,7 +124,13 @@ function MainContent({data}) {
           </Text>
         </View>
         <View className="ml-4">
-          <FollowUserButton followerId={author.id} />
+          {userId === author.id ? (
+            <Chip className="rounded-full bg-slate-300">
+              <Text className="text-slate-600">Owner</Text>
+            </Chip>
+          ) : (
+            <FollowUserButton followerId={author.id} />
+          )}
         </View>
       </View>
 
@@ -105,30 +148,29 @@ function MainContent({data}) {
       </View>
       <View className="h-14" />
       <PostToolbar>
-        <PostToolbar.Item
-          icon={
-            <MaterialCommunityIcons name="hand-clap" size={20} color="black" />
-          }>
-          200
-        </PostToolbar.Item>
+        <LikePostButton postId={id} userLikeIds={userLikeIds || []}>
+          {({liked, handleLike}) => {
+            return (
+              <PostToolbar.Item
+                onPress={handleLike}
+                icon={
+                  <MaterialCommunityIcons
+                    name="hand-clap"
+                    size={20}
+                    color={liked ? 'green' : 'gray'}
+                  />
+                }>
+                {userLikeIds ? userLikeIds.length : 0}
+              </PostToolbar.Item>
+            );
+          }}
+        </LikePostButton>
         <PostToolbar.Divider />
         <PostToolbar.Item
-          icon={<FontAwesome name="comment-o" size={18} color="black" />}>
+          icon={<FontAwesome name="comment-o" size={18} color="gray" />}>
           100
         </PostToolbar.Item>
       </PostToolbar>
     </SafeAreaView>
-  );
-}
-
-function FollowButton({}) {
-  return (
-    <Chip
-      textStyle={{
-        color: '#fff',
-      }}
-      className="rounded-full bg-emerald-600 h-8">
-      Follow
-    </Chip>
   );
 }
