@@ -13,6 +13,7 @@ import axiosClient, { axiosClientPrivate } from '../../api/axiosClient.js';
 import Post from './Post.js';
 import { FlatList } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import Topic from './Topic.js';
 
 function Home({navigation}) {
 
@@ -72,6 +73,13 @@ function Home({navigation}) {
         })
     }
 
+    const topic=()=>{
+        console.log('onPress')
+        return( 
+            <Topic/>
+        )
+    }
+
     return (
         <ScrollView onScroll={handleScroll}>
         {/* // <ScrollView> */}
@@ -82,7 +90,7 @@ function Home({navigation}) {
                 </View>
 
                 <View style={Styles.header}>
-                    <Text style={[Styles.textHeader, Styles.textAddTopic]}>+</Text>
+                <IconFeather name="plus" size={25} color="#A09898" solid="#A09898" onPress={()=>{navigation.navigate("Customize your interests")}}/>
                     <Text style={[Styles.textHeader, Styles.textHighline]}>For you</Text>
                     <Text style={Styles.textHeader}>Following</Text>
                     {/* {topicListRender()} */}

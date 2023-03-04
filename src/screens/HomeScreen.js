@@ -4,7 +4,10 @@ import {PostCreateTrigger} from '../features/post';
 import axiosClient from '../api/axiosClient';
 import useSocialAuth from '../hooks/useSocialAuth';
 import Home from '../features/home/Home';
+import { createStackNavigator } from '@react-navigation/stack';
+import Topic from '../features/home/Topic';
 
+const HomeStack = createStackNavigator();
 function HomeScreen({navigation}) {
   const {handleLogoutBySocial} = useSocialAuth();
 
@@ -22,33 +25,27 @@ function HomeScreen({navigation}) {
   };
 
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      {/* <Text className="text-2xl dark:text-white text-orange-500">Home!</Text> */}
-      {/* <Button
-        className="bg-amber-300 mt-3"
-        title="Logout"
-        onPress={handleLogoutBySocial}
+    <HomeStack.Navigator>
+      <HomeStack.Screen
+        name='Home'
+        component={Home}
+        options={{
+          // title:""
+          headerShown: false
+          // tabBarIcon: 'home',
+        }}
       />
-
-      <View className="my-3">
-        <Button
-          className="bg-emerald-500"
-          title="Notification"
-          onPress={() => navigation.navigate('Notifications')}
-        />
-      </View>
-      <PostCreateTrigger />
-      <Button
-        className="bg-emerald-500"
-        title="Post detail"
-        onPress={() =>
-          navigation.push('PostDetail', {
-            id: '63fdacae7f76265e3ee0dcd2',
-          })
-        }
-      /> */}
-      <Home/>
-    </View>
+      {/* <Home /> */}
+      <HomeStack.Screen
+        name='Customize your interests'
+        component={Topic}
+        options={{
+          // title:""
+          headerShown: false
+          // tabBarIcon: 'home',
+        }}
+      />
+    </HomeStack.Navigator>
   );
 }
 
