@@ -13,6 +13,7 @@ export const PostCreateTrigger = () => {
     <FAB
       icon="plus"
       color="#fff"
+      size="medium"
       className="bg-emerald-600 rounded-full absolute right-4 bottom-4"
       onPress={() =>
         navigation.push('PostEditor', {

@@ -35,7 +35,7 @@ export const PostMenu = ({postId}) => {
         }}
         onDismiss={closeMenu}
         anchor={
-          <TouchableOpacity onPress={openMenu} className="mt-2 ml-2">
+          <TouchableOpacity onPress={openMenu} className="ml-2">
             <MaterialCommunityIcons
               name="dots-vertical"
               size={24}
@@ -60,9 +60,6 @@ export const PostMenu = ({postId}) => {
           }}
           title="Delete"
         />
-        <Menu.Item onPress={() => {}} title="Follow this author" />
-        <Menu.Item onPress={() => {}} title="Block author" />
-        <Menu.Item onPress={() => {}} title="Report" />
       </Menu>
       <Portal>
         <Dialog
