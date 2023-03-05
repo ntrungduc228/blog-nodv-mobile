@@ -14,7 +14,7 @@ import {useSelector} from 'react-redux';
 export const AboutTab = () => {
   const [showForm, setShowForm] = useState(false);
   const profile = useSelector(state => state?.profile?.data);
-  const user = useSelector(state => state?.user?.data.info);
+  const user = useSelector(state => state?.user?.data?.info);
   const classMarginBottom = !showForm ? 'mb-7' : 'mb-0';
 
   const onPress = () => {
@@ -28,7 +28,7 @@ export const AboutTab = () => {
       ) : !user.bio ? (
         <AboutStarted onPress={onPress} />
       ) : (
-        <AboutDescription onPress={onPress} userBio={user.bio} />
+        <AboutDescription onPress={onPress} userBio={user?.bio} />
       )}
       <View
         className={`${classMarginBottom} flex flex-row items-center justify-center gap-x-3`}>
