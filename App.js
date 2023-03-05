@@ -13,6 +13,7 @@ import {getBookmarkByUserId} from './src/api/bookmarkApi';
 import {setBookmark} from './src/redux/slices/bookmarkSlice';
 import {store} from './src/redux/store';
 import useSocialAuth from './src/hooks/useSocialAuth';
+import {setProfile} from './src/redux/slices/profileSlice';
 
 // import SocketClient from './src/websocket/SocketClient';
 
@@ -32,7 +33,6 @@ function AppScreen() {
   const checkIsLogin = useCallback(async () => {
     const user = await AsyncStorage.getItem('user');
     const userInfo = JSON.parse(user);
-    console.log('get user info', userInfo);
 
     if (!userInfo?.hasOwnProperty('accessToken')) {
       handleLogoutBySocial();
@@ -50,6 +50,7 @@ function AppScreen() {
         // navigate(appRoutes.TOPIC_PICK);
       }
       dispatch(setUser(data));
+      dispatch(setProfile(data));
     },
   });
   useQuery(['bookmark', isLogin], getBookmarkByUserId, {
@@ -64,6 +65,7 @@ function AppScreen() {
 
   return (
     <NavigationContainer>
+      {/* <MainStackNavigator /> */}
       {isLogin ? <MainStackNavigator /> : <AuthStackNavigator />}
       {isLogin && <SocketClient />}
     </NavigationContainer>

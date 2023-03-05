@@ -10,6 +10,8 @@ const routesScreen = {
   PostEditor: 'PostEditor',
   PostDetail: 'PostDetail',
   Comment: 'Comment',
+  Settings: 'Settings',
+  ProfileEdit: 'ProfileEdit',
 };
 
 export default routesScreen;
