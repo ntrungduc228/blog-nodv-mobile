@@ -1,9 +1,9 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
+
+import {AboutTab} from './AboutTab';
+import {ListsTab} from './ListsTab';
 import React from 'react';
 import {StoryTab} from './StoryTab';
-import {ListsTab} from './ListsTab';
-import {AboutTab} from './AboutTab';
-
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
 const Tab = createMaterialTopTabNavigator();
