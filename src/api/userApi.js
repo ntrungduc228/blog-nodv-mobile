@@ -10,6 +10,7 @@ const userApi = {
   followUser: id => axiosClientPrivate.patch(`${url}/follow/${id}`, {}),
   unFollowUser: id => axiosClientPrivate.patch(`${url}/unFollow/${id}`),
   addTopics: topics => axiosClientPrivate.patch(`${url}/topics`, {topics}),
+  followTopic: (id)=> axiosClientPrivate.patch(`${url}/topics/${id}`),
   getOwnTopics: () => axiosClientPrivate.get(`${url}/topics`),
   getAllUnFollow: (page = 0, limit = 3) =>
     axiosClientPrivate.get(url + '/getAllUnFollow'),
@@ -34,6 +35,7 @@ export const {
   getAllUnFollow,
   unFollowUser,
   addTopics,
+  followTopic,
   getOwnTopics,
   updateCountNotifications,
   getAllUsersFollower,
