@@ -7,21 +7,16 @@ import {
 } from '../features/post';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {Topic, TopicInput} from '../features/topic';
-import {extractHtmlToArrayPlaintext, generateReadingTime} from '../utils';
+import {
+  extractFirstImgFrommHtml,
+  extractHtmlToArrayPlaintext,
+  generateReadingTime,
+} from '../utils';
 import {useRef, useState} from 'react';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {ScrollView} from 'react-native-gesture-handler';
+import {Spinner} from '../components';
 import {useNavigation} from '@react-navigation/native';
-
-const initialPost = {
-  title: '',
-  description: '',
-  content: '',
-  topics: [],
-  timeRead: 0,
-};
 
 export const postEditorMode = {
   CREATE: 'create',
@@ -30,8 +25,8 @@ export const postEditorMode = {
 
 export const PostEditorScreen = ({route}) => {
   const {mode, postId} = route.params;
-  const {mutate: createPost} = useCreatePost();
-  const {mutate: updatePost} = useUpdatePost();
+  const {mutate: createPost, isLoading: isCreatingPost} = useCreatePost();
+  const {mutate: updatePost, isLoading: isUpdatingPost} = useUpdatePost();
   const {data: post = {}} = useGetPost(postId);
   const {content, topics = []} = post;
 
@@ -40,7 +35,8 @@ export const PostEditorScreen = ({route}) => {
     const arrayPlaintext = extractHtmlToArrayPlaintext(contentHtml);
     const newPost = {
       title: arrayPlaintext[0] || ' ',
-      description: arrayPlaintext[1] || ' ',
+      thumbnail: extractFirstImgFrommHtml(contentHtml),
+      subtitle: arrayPlaintext[1] || ' ',
       content: contentHtml,
       topics,
       timeRead: generateReadingTime(arrayPlaintext.join(' ')),
@@ -57,11 +53,15 @@ export const PostEditorScreen = ({route}) => {
   };
 
   const editorRef = useRef(null);
-
   return (
     <View className="flex-1 bg-white">
       <Header onPublish={handlePublish} defaultTopics={topics} mode={mode} />
       <Editor ref={editorRef} initialContentHTML={content} />
+      {(isCreatingPost || isUpdatingPost) && (
+        <View className="absolute inset-0 justify-center items-center">
+          <Spinner />
+        </View>
+      )}
     </View>
   );
 };
@@ -87,6 +87,7 @@ const Header = ({
     handleHideAddTopic();
   };
   const handlePublish = () => {
+    hidePublishForm();
     onPublish(topics);
   };
   const inputTopicRef = useRef(null);

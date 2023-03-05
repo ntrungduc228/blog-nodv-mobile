@@ -9,6 +9,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import {Provider as PaperProvider} from 'react-native-paper';
 import {SocketClient} from './src/websocket';
 import {getAuthInfo} from './src/api/authApi';
+import {getBookmarkByUserId} from './src/api/bookmarkApi';
+import {setBookmark} from './src/redux/slices/bookmarkSlice';
 import {store} from './src/redux/store';
 import useSocialAuth from './src/hooks/useSocialAuth';
 
@@ -18,6 +20,7 @@ const queryClient = new QueryClient();
 
 function AppScreen() {
   const {isLogin} = useSelector(state => state.user.data);
+  const bookmark = useSelector(state => state.bookmark);
   const dispatch = useDispatch();
 
   const {handleLogoutBySocial} = useSocialAuth();
@@ -25,7 +28,6 @@ function AppScreen() {
   useEffect(() => {
     checkIsLogin();
   }, [isLogin, checkIsLogin]);
-  console.log('store', store.getState().user.data);
 
   const checkIsLogin = useCallback(async () => {
     const user = await AsyncStorage.getItem('user');
@@ -48,6 +50,15 @@ function AppScreen() {
         // navigate(appRoutes.TOPIC_PICK);
       }
       dispatch(setUser(data));
+    },
+  });
+  useQuery(['bookmark', isLogin], getBookmarkByUserId, {
+    enabled: isLogin,
+    onSuccess: data => {
+      // fix tam - chua hay vi useQuery van goi api
+      if (!bookmark.postIds.length) {
+        dispatch(setBookmark(data));
+      }
     },
   });
 
