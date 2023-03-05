@@ -1,35 +1,33 @@
-import {formatRelative} from 'date-fns';
-import {useEffect, useMemo, useState} from 'react';
-import {Text, View, StyleSheet, Image, Alert, ScrollView} from 'react-native';
-import {Avatar, List} from 'react-native-paper';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {NotificationType} from '../../config/dataType.js';
+import {ScrollView, Text, View} from 'react-native';
+import axiosClient, {axiosClientPrivate} from '../../api/axiosClient.js';
+import {useEffect, useState} from 'react';
+
 import IconFeather from 'react-native-vector-icons/Feather';
-import IconFontAwesomer from 'react-native-vector-icons/FontAwesome';
-import IconAntDesign from 'react-native-vector-icons/AntDesign';
-import Styles from './Styles.js';
-import axiosClient from '../../api/axiosClient.js';
 import Post from './Post.js';
-import {FlatList} from 'react-native';
-function Home() {
-  // const lists = listPost;
-  // console.log('new'+lists)
+import Styles from './Styles.js';
+import Topic from './Topic.js';
+import {useSelector} from 'react-redux';
+
+function Home({navigation}) {
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(0);
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(15);
+  const currentUser = useSelector(state => state.user.data);
+  const [blackList, setBlackList] = useState([]);
+  const [topics, setTopics] = useState([]);
+  // console.log(blackList)
+  // console.log(currentUser)
+  // console.log(topics)
   useEffect(() => {
     async function fetchData() {
-      // get list post
       const postList = await axiosClient.get(
         `/posts?page=${page}&limit=${limit}&topic=&title=`,
       );
       setPosts(postList);
-      // setPosts(...posts, postList);
-      //   console.log(posts)
-      //get list topic
-      // const topicList =  await axiosClient.get('/users/topics')
-      // setTopics(topicList)
+      const blackList = await axiosClientPrivate.get(`blackLists/list`);
+      setBlackList(blackList);
+      const topicLists = await axiosClientPrivate.get(`/topics`);
+      setTopics(topicLists);
     }
     fetchData();
   }, [limit, page, posts]);
@@ -39,24 +37,7 @@ function Home() {
     const isCloseToBottom =
       layoutMeasurement.height + contentOffset.y >= contentSize.height - 20;
     if (isCloseToBottom) {
-      // Thực hiện hàm khi scroll đến cuối trang
-      //   setPage(page+1);
       setLimit(limit + 5);
-      console.log('Đã scroll đến cuối trang' + page);
-      // const postList = await axiosClient.get(`/posts?page=${page}&limit=5&topic=&title=`)
-      // setPosts(...posts, postList);
-      //   useEffect(()=>{
-      //     async function fetchData() {
-      //       // get list post
-      //       const postList = await axiosClient.get(`/posts?page=${page}&limit=5&topic=&title=`)
-      //       setPosts(...posts, postList);
-      //     //   console.log(posts)
-      //       //get list topic
-      //       // const topicList =  await axiosClient.get('/users/topics')
-      //       // setTopics(topicList)
-      //     }
-      //     fetchData();
-      //   },[posts])
     }
   };
   const topicList = () => {
@@ -66,9 +47,20 @@ function Home() {
   };
 
   const postList = () => {
-    return posts.map((post, index) => {
-      return <Post key={index} post={post} />;
+    return posts?.map((post, index) => {
+      return !blackList.includes(post.id) && <Post key={index} post={post} />;
     });
+  };
+
+  const topicListRender = () => {
+    return topics.map((topic, index) => {
+      return <Text style={Styles.textHeader}>{topic.name}</Text>;
+    });
+  };
+
+  const topic = () => {
+    console.log('onPress');
+    return <Topic />;
   };
 
   return (
@@ -77,16 +69,32 @@ function Home() {
       <View style={Styles.container}>
         <View style={Styles.containerSite}>
           <Text style={Styles.textSite}>Home</Text>
-          <IconFeather name="bell" size={35} color="#A09898" solid="#A09898" />
+          <IconFeather
+            name="bell"
+            size={35}
+            color="#A09898"
+            solid="#A09898"
+            onPress={() => navigation.navigate('Notifications')}
+          />
         </View>
 
         <View style={Styles.header}>
-          <Text style={[Styles.textHeader, Styles.textAddTopic]}>+</Text>
+          <IconFeather
+            name="plus"
+            size={25}
+            color="#A09898"
+            solid="#A09898"
+            onPress={() => {
+              navigation.navigate('Customize your interests');
+            }}
+          />
           <Text style={[Styles.textHeader, Styles.textHighline]}>For you</Text>
           <Text style={Styles.textHeader}>Following</Text>
-          <Text style={Styles.textHeader}>UX</Text>
-          <Text style={Styles.textHeader}>React</Text>
-          <Text style={Styles.textHeader}>JavaScript</Text>
+          {/* {topicListRender()} */}
+          {/* <View style={Styles.header}>{topicListRender()}</View> */}
+          {/* <Text style={Styles.textHeader}>UX</Text>
+                    <Text style={Styles.textHeader}>React</Text>
+                    <Text style={Styles.textHeader}>JavaScript</Text> */}
         </View>
         <View
           style={{
@@ -106,7 +114,6 @@ function Home() {
         {posts.length ? (
           <View>{postList()}</View>
         ) : (
-          // <View><Text>Text</Text></View>
           <View>
             <Text>No posts available</Text>
           </View>

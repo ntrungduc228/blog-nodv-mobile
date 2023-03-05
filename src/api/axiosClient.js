@@ -116,6 +116,7 @@ axiosClientPrivate.interceptors.response.use(
 
 axiosClient.interceptors.response.use(
   function (response) {
+    // console.log('responssee ', response.data);
     return response?.data;
   },
   function (error) {
