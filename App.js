@@ -11,6 +11,7 @@ import axiosClient from './src/api/axiosClient';
 import {getAuthInfo} from './src/api/authApi';
 import {store} from './src/redux/store';
 import useSocialAuth from './src/hooks/useSocialAuth';
+import {setProfile} from './src/redux/slices/profileSlice';
 
 // import SocketClient from './src/websocket/SocketClient';
 
@@ -26,12 +27,10 @@ function AppScreen() {
   useEffect(() => {
     checkIsLogin();
   }, [isLogin, checkIsLogin]);
-  console.log('store', store.getState().user.data);
 
   const checkIsLogin = useCallback(async () => {
     const user = await AsyncStorage.getItem('user');
     const userInfo = JSON.parse(user);
-    console.log('get user info', userInfo);
 
     if (!userInfo?.hasOwnProperty('accessToken')) {
       handleLogoutBySocial();
@@ -49,11 +48,13 @@ function AppScreen() {
         // navigate(appRoutes.TOPIC_PICK);
       }
       dispatch(setUser(data));
+      dispatch(setProfile(data));
     },
   });
 
   return (
     <NavigationContainer>
+      {/* <MainStackNavigator /> */}
       {isLogin ? <MainStackNavigator /> : <AuthStackNavigator />}
     </NavigationContainer>
   );

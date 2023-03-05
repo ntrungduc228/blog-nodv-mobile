@@ -1,4 +1,10 @@
-import {PostDetailScreen, PostEditorScreen, CommentScreen} from '../screens';
+import {
+  PostDetailScreen,
+  PostEditorScreen,
+  CommentScreen,
+  SettingsScreen,
+  ProfileEditScreen,
+} from '../screens';
 
 import BottomTabNavigator from './BottomTabNavigator';
 import NotificationScreen from '../screens/NotificationScreen';
@@ -36,6 +42,15 @@ function MainStackNavigator() {
         options={{headerShown: false}}
         name={routesScreen.Comment}
         component={CommentScreen}
+      />
+      <MainStack.Screen
+        name={routesScreen.Settings}
+        component={SettingsScreen}
+      />
+      <MainStack.Screen
+        options={{headerShown: false}}
+        name={routesScreen.ProfileEdit}
+        component={ProfileEditScreen}
       />
     </MainStack.Navigator>
   );

@@ -5,7 +5,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import {LoginManager, AccessToken, Profile} from 'react-native-fbsdk-next';
-import SocialLogin from '../features/auth/SocialLogin';
+// import SocialLogin from '../features/auth/SocialLogin';
+import {SocialLogin} from '../features/auth';
 
 const AuthScreen = () => {
   const isLogin = useSelector(state => state.user.data.isLogin);

@@ -1,3 +1,5 @@
 export * from './PostEditorScreen';
 export * from './PostDetailScreen';
-export {default as CommentScreen} from './CommentScreen';
+export * from './CommentScreen';
+export * from './SettingScreen';
+export * from './ProfileEditScreen';
