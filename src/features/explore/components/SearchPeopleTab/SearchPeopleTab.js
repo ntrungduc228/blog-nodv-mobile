@@ -21,11 +21,6 @@ export const SearchPeopleTab = () => {
 
   return (
     <SafeAreaView className="bg-white h-full pb-48">
-      {users?.length === 0 && (
-        <View className="flex-1 justify-center items-center">
-          <Text className="text-gray-500">No user found</Text>
-        </View>
-      )}
       <FlatList
         className="px-6 pt-6"
         data={users}
@@ -37,6 +32,15 @@ export const SearchPeopleTab = () => {
         )}
         refreshControl={
           <RefreshControl refreshing={isLoading} onRefresh={refetch} />
+        }
+        ListEmptyComponent={
+          <>
+            {!isLoading && (
+              <View className="flex-1 items-center justify-center mt-10">
+                <Text className="text-gray-500">No posts</Text>
+              </View>
+            )}
+          </>
         }
       />
     </SafeAreaView>
