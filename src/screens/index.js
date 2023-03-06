@@ -4,3 +4,4 @@ export * from './CommentScreen';
 export * from './SettingScreen';
 export * from './ProfileEditScreen';
 export * from './NotFoundScreen';
+export * from './SearchScreen';

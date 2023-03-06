@@ -1,10 +1,15 @@
 import {Chip} from 'react-native-paper';
-import {View} from 'react-native/Libraries/Components/View/View';
 
 export const Topic = ({topic, onPress, mode = 'flat'}) => {
-  const {id, name, slug} = topic;
+  const {name} = topic;
   return (
-    <Chip mode={mode} onPress={onPress} className="rounded-full bg-slate-200">
+    <Chip
+      mode={mode}
+      onPress={onPress}
+      textStyle={{
+        fontWeight: 'normal',
+      }}
+      className="rounded-full bg-gray-100">
       {name}
     </Chip>
   );
