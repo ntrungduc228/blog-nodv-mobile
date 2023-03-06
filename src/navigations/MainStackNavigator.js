@@ -1,10 +1,11 @@
 import {
+  CommentScreen,
+  NotFoundScreen,
   PostDetailScreen,
   PostEditorScreen,
-  CommentScreen,
-  SettingsScreen,
   ProfileEditScreen,
-  NotFoundScreen,
+  SearchScreen,
+  SettingsScreen,
 } from '../screens';
 
 import BottomTabNavigator from './BottomTabNavigator';
@@ -41,7 +42,7 @@ function MainStackNavigator() {
       />
       <MainStack.Screen
         options={{headerShown: false}}
-        name="NotFound"
+        name={routesScreen.NotFound}
         component={NotFoundScreen}
       />
       <MainStack.Screen
@@ -52,6 +53,11 @@ function MainStackNavigator() {
         options={{headerShown: false}}
         name={routesScreen.ProfileEdit}
         component={ProfileEditScreen}
+      />
+      <MainStack.Screen
+        options={{headerShown: false}}
+        name={routesScreen.Search}
+        component={SearchScreen}
       />
 
       <MainStack.Screen name={routesScreen.Comment} component={CommentScreen} />

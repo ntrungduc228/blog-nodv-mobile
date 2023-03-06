@@ -12,6 +12,8 @@ const routesScreen = {
   Comment: 'Comment',
   Settings: 'Settings',
   ProfileEdit: 'ProfileEdit',
+  Search: 'Search',
+  NotFound: 'NotFound',
 };
 
 export default routesScreen;
