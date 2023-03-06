@@ -4,8 +4,10 @@ import {PostCreateTrigger} from '../features/post';
 import axiosClient from '../api/axiosClient';
 import useSocialAuth from '../hooks/useSocialAuth';
 import Home from '../features/home/Home';
-import { createStackNavigator } from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import Topic from '../features/home/Topic';
+import TopicYouFollow from '../features/home/TopicYouFollow';
+import People from '../features/home/People';
 
 const HomeStack = createStackNavigator();
 function HomeScreen({navigation}) {
@@ -27,24 +29,42 @@ function HomeScreen({navigation}) {
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen
-        name='Home'
+        name="Home"
         component={Home}
         options={{
           // title:""
-          headerShown: false
+          headerShown: false,
           // tabBarIcon: 'home',
         }}
       />
       {/* <Home /> */}
       <HomeStack.Screen
-        name='Customize your interests'
+        name="Customize your interests"
         component={Topic}
         options={{
           // title:""
-          headerShown: false
+          headerShown: false,
           // tabBarIcon: 'home',
         }}
-        />
+      />
+      <HomeStack.Screen
+        name="Topic you follow"
+        component={TopicYouFollow}
+        options={{
+          // title:""
+          headerShown: false,
+          // tabBarIcon: 'home',
+        }}
+      />
+      <HomeStack.Screen
+        name="People"
+        component={People}
+        options={{
+          // title:""
+          headerShown: false,
+          // tabBarIcon: 'home',
+        }}
+      />
     </HomeStack.Navigator>
   );
 }

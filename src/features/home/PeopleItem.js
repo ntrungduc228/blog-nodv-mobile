@@ -7,37 +7,45 @@ import {useEffect, useMemo, useState} from 'react';
 import {axiosClientPrivate} from '../../api/axiosClient';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Chip} from 'react-native-paper';
-import {addTopics, followTopic, getUserProfile} from '../../api/userApi';
+import {
+  addTopics,
+  followTopic,
+  followUser,
+  getUserProfile,
+  unFollowUser,
+} from '../../api/userApi';
 import {useSelector} from 'react-redux';
 
-function TopicItem({topic}) {
+function PeopleItem({people, status}) {
   const currentUser = useSelector(state => state.user.data.info);
   const [lstTopic, setLstTopic] = useState(currentUser.topics || []);
-  const [isTopic, setIsTopic] = useState(
-    currentUser.topics ? currentUser.topics.includes(topic.id) : false,
-  );
-  const handleFollowTopic = async topic => {
-    setIsTopic(!isTopic);
-    // let newArr = [...lstTopic, topic.id];
-    // console.log(newArr);
-    // setLstTopic([...lstTopic, topic.id]);
+  const [isTopic, setIsTopic] = useState(false);
+  const [statusFollow, setStatusFollow] = useState(status);
+  const handleFollowUser = async people => {
+    console.log(people);
+    setStatusFollow(!statusFollow);
+    if (statusFollow === true) {
+      await unFollowUser(people.id);
+    } else {
+      await followUser(people.id);
+    }
     console.log(lstTopic);
-    await followTopic(topic.id);
-    console.log(topic);
+    // await followTopic(topic.id);
+    // console.log(topic);
   };
 
   return (
     <View style={Styles.topics}>
-      <Text style={Styles.textTopic}>{topic.name}</Text>
+      <Text style={Styles.textTopic}>{people.username}</Text>
       <Chip
         textStyle={{
           color: '#fff',
         }}
-        onPress={() => handleFollowTopic(topic)}
+        onPress={() => handleFollowUser(people)}
         className={`rounded-full  h-8 ${
-          isTopic ? ' bg-slate-500' : 'bg-emerald-600'
+          statusFollow ? ' bg-slate-500' : 'bg-emerald-600'
         }`}>
-        {isTopic ? 'Following' : 'Follow'}
+        {statusFollow ? 'Following' : 'Follow'}
       </Chip>
       {/* <Chip mode="outlined" onPress={()=> handleFollowTopic(topic)}/> */}
     </View>
@@ -105,4 +113,4 @@ const Styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
-export default TopicItem;
+export default PeopleItem;
