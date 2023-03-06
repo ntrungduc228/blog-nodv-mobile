@@ -1,8 +1,9 @@
-import {Avatar, Searchbar} from 'react-native-paper';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {Text, View} from 'react-native';
 
+import {Avatar} from 'react-native-paper';
 import {FollowUserButton} from '../features/user/components';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {PostLoading} from '../features/post';
 import {ScreenLayout} from './components';
 import {Topic} from '../features/topic';
@@ -18,20 +19,24 @@ import {useQuery} from 'react-query';
 function ExploreScreen() {
   const navigation = useNavigation();
   return (
-    <ScreenLayout title="Explore">
-      <View className="border-b border-gray-200">
-        <View className="mt-2">
-          <Searchbar
-            onPressIn={() => navigation.navigate(routesScreen.Search)}
-            elevation={0}
-            className="h-9 mx-6 rounded-lg bg-gray-100"
-          />
+    <ScrollView>
+      <ScreenLayout title="Explore">
+        <View className="border-b border-gray-200">
+          <View className="mt-2">
+            <TouchableOpacity
+              onPress={() => navigation.navigate(routesScreen.Search)}>
+              <View className="flex-row mr-2 items-center h-9 mx-6 rounded-lg bg-gray-100 px-3">
+                <MaterialCommunityIcons name="magnify" size={24} color="gray" />
+                <Text className="ml-2">Search on NODV</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+          <TopicSlider />
         </View>
-        <TopicSlider />
-      </View>
-      <Trending />
-      <WhoToFollow />
-    </ScreenLayout>
+        <Trending />
+        <WhoToFollow />
+      </ScreenLayout>
+    </ScrollView>
   );
 }
 
