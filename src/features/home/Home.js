@@ -1,4 +1,4 @@
-import {ScrollView, Text, View} from 'react-native';
+import {ScrollView, Text, View, Button} from 'react-native';
 import axiosClient, {axiosClientPrivate} from '../../api/axiosClient.js';
 import {useEffect, useState} from 'react';
 
@@ -66,6 +66,13 @@ function Home({navigation}) {
   return (
     <ScrollView onScroll={handleScroll}>
       {/* // <ScrollView> */}
+      <View className="my-3">
+        <Button
+          className="bg-emerald-500"
+          title="Comment"
+          onPress={() => navigation.navigate('Comments')}
+        />
+      </View>
       <View style={Styles.container}>
         <View style={Styles.containerSite}>
           <Text style={Styles.textSite}>Home</Text>

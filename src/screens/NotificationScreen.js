@@ -1,10 +1,21 @@
+import {ScrollView} from 'react-native-gesture-handler';
+import {useQuery} from 'react-query';
+import {getNotifications} from '../api/notificationApi';
 import {Avatar, Button} from 'react-native-paper';
 import {Text, View} from 'react-native';
 
 import Notification from '../features/notification/Notification';
-import {ScrollView} from 'react-native-gesture-handler';
 
 function NotificationScreen() {
+  // const [notifications, setNotifications] = useState([]);
+  // useQuery('notifications', () => getNotifications(), {
+  //   onSuccess: data => {
+  //     setNotifications(data);
+  //   },
+  //   onError: err => {
+  //     console.log('err re', err);
+  //   },
+  // });
   const notifications = [
     {
       id: 1,

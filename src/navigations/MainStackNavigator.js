@@ -26,7 +26,7 @@ function MainStackNavigator() {
       <MainStack.Screen
         name="Notifications"
         component={NotificationScreen}
-        options={{headerShown: false}}
+        options={{title: 'Notifications'}}
       />
       <MainStack.Screen
         options={{

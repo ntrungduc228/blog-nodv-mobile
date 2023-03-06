@@ -10,10 +10,8 @@ const notificationApi = {
       }page=${page}&limit=${limit}`,
     ),
   setIsRead: id => axiosClientPrivate.patch(`${url}/${id}`),
-  createNotification: notification => {
-    console.log('createNotification', notification);
-    return axiosClientPrivate.post(`${url}`, notification);
-  },
+  createNotification: notification =>
+    axiosClientPrivate.post(`${url}`, notification),
 };
 
 export const setNotificationRead = async id => {
