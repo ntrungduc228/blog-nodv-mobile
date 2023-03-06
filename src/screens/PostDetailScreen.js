@@ -6,17 +6,17 @@ import {
   PostToolbar,
 } from '../features/post/components';
 import {SafeAreaView, Text, View} from 'react-native';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {useEffect, useMemo} from 'react';
 import {useGetPost, useGetRecommendPostsByPostId} from '../features/post/hooks';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {Avatar} from 'react-native-paper';
-import {FollowUserButton} from '../features/user/components/FollowUserButton';
+import {FollowUserButton} from '../features/user/components';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {RichEditor} from 'react-native-pell-rich-editor';
 import {Topic} from '../features/topic/components';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {format} from 'date-fns';
 import {useNavigation} from '@react-navigation/native';
 import {useQueryClient} from 'react-query';
@@ -104,60 +104,60 @@ function MainContent({data, isAuthor}) {
   };
   return (
     <SafeAreaView className="flex-1 pt-14">
-      <View className="flex-row items-center mt-4 px-2">
-        <Avatar.Image
-          size={48}
-          source={{
-            uri: author.avatar,
-          }}
-        />
-        <View className="ml-4">
-          <View className="flex-row gap-2 items-center">
-            <Text className="text-xl font-bold">{author.username}</Text>
-            <View>
-              {isAuthor ? (
-                <View className={`h-5 rounded-full px-2 bg-yellow-500`}>
-                  <Text className="text-xs text-white mt-0.5">Owner</Text>
-                </View>
-              ) : (
-                <FollowUserButton followerId={author.id}>
-                  {({handleFollow, followed}) => {
-                    return (
-                      <TouchableOpacity onPress={handleFollow}>
-                        <View
-                          className={`h-5 rounded-full px-2  ${
-                            followed ? ' bg-slate-500' : 'bg-emerald-600'
-                          }`}>
-                          <Text className="text-xs text-white mt-0.5">
-                            {followed ? 'Following' : 'Follow'}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-                    );
-                  }}
-                </FollowUserButton>
-              )}
+      <ScrollView>
+        <View className="flex-row items-center mt-4 px-2">
+          <Avatar.Image
+            size={48}
+            source={{
+              uri: author.avatar,
+            }}
+          />
+          <View className="ml-4">
+            <View className="flex-row gap-2 items-center">
+              <Text className="text-xl font-bold">{author.username}</Text>
+              <View>
+                {isAuthor ? (
+                  <View className={`h-5 rounded-full px-2 bg-yellow-500`}>
+                    <Text className="text-xs text-white mt-0.5">Owner</Text>
+                  </View>
+                ) : (
+                  <FollowUserButton followerId={author.id}>
+                    {({handleFollow, followed}) => {
+                      return (
+                        <TouchableOpacity onPress={handleFollow}>
+                          <View
+                            className={`h-5 rounded-full px-2  ${
+                              followed ? ' bg-slate-500' : 'bg-emerald-600'
+                            }`}>
+                            <Text className="text-xs text-white mt-0.5">
+                              {followed ? 'Following' : 'Follow'}
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                      );
+                    }}
+                  </FollowUserButton>
+                )}
+              </View>
             </View>
+            <Text className="text-sm text-slate-500">
+              {createdDateFormatted} . {timeRead} min read
+            </Text>
           </View>
-          <Text className="text-sm text-slate-500">
-            {createdDateFormatted} . {timeRead} min read
-          </Text>
         </View>
-      </View>
-
-      <RichEditor disabled className="flex-1" initialContentHTML={content} />
-
-      <View className="w-[95%] h-[1px] bg-slate-300 mx-auto my-2" />
-      <View className="flex-row items-center pb-4 px-2">
-        {topics.map(topic => {
-          return (
-            <View className="p-1" key={topic.id}>
-              <Topic topic={topic} key={topic.id} />
-            </View>
-          );
-        })}
-      </View>
-      <View className="h-14" />
+        <RichEditor disabled className="flex-1" initialContentHTML={content} />
+        <View className="w-[95%] h-[1px] bg-slate-200 mx-auto my-2" />
+        <View className="flex-row items-center pb-4 px-2">
+          {topics.map(topic => {
+            return (
+              <View className="p-1" key={topic.id}>
+                <Topic topic={topic} key={topic.id} />
+              </View>
+            );
+          })}
+        </View>
+        <View className="h-14" />
+      </ScrollView>
       <PostToolbar>
         <LikePostButton postId={id} userLikeIds={userLikeIds || []}>
           {({liked, handleLike}) => {
@@ -187,7 +187,6 @@ function MainContent({data, isAuthor}) {
 
 function RecommendPostList({postId}) {
   const {data = [], isLoading} = useGetRecommendPostsByPostId(postId);
-  console.log(data);
   return (
     <>
       {data.length > 0 && (

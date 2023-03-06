@@ -6,6 +6,7 @@ import IconFeather from 'react-native-vector-icons/Feather';
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import Styles from './Styles';
 import {axiosClientPrivate} from '../../api/axiosClient.js';
+import {routesScreen} from '../../navigations';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 
@@ -63,7 +64,7 @@ function Post({post}) {
         <View style={Styles.titlePost}>
           <Text
             onPress={() => {
-              navigation.navigate('DetailPost', {id: post.id});
+              navigation.navigate(routesScreen.PostDetail, {id: post.id});
             }}
             style={Styles.contentPost}>
             {post.title}

@@ -1,6 +1,7 @@
-import {Text, View, ScrollView, TouchableOpacity} from 'react-native';
+import {ProfileTab, UserInfo} from '../features/profile';
+import {TouchableOpacity, View} from 'react-native';
+
 import IconFontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {UserInfo, ProfileTab} from '../features/profile';
 import {routesScreen} from '../navigations';
 import {useSelector} from 'react-redux';
 

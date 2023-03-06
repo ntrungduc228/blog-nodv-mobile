@@ -1,4 +1,4 @@
-import {Button, Dialog, Portal} from 'react-native-paper';
+import {Button, Chip, Dialog, Portal} from 'react-native-paper';
 import {
   Editor,
   useCreatePost,
@@ -133,7 +133,9 @@ const Header = ({
                   <View className="flex-row flex-wrap items-center gap-2 mt-2">
                     {topics.map((topic, index) => (
                       <View key={index}>
-                        <Topic topic={topic} />
+                        <Chip className="bg-gray-200 rounded-full">
+                          {topic.name}
+                        </Chip>
                       </View>
                     ))}
                   </View>
