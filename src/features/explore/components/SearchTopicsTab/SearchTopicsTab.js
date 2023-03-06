@@ -23,7 +23,7 @@ export const SearchTopicsTab = () => {
           <Text className="text-gray-500">No topic found</Text>
         </View>
       )}
-      <View className="flex-row flex-wrap gap-1">
+      <View className="flex-row flex-wrap gap-x-1 gap-y-3">
         {topics?.map(topic => (
           <View key={topic.id}>
             <Topic topic={topic} />

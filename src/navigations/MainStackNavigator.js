@@ -3,6 +3,7 @@ import {
   NotFoundScreen,
   PostDetailScreen,
   PostEditorScreen,
+  PostsTopicScreen,
   ProfileEditScreen,
   SearchScreen,
   SettingsScreen,
@@ -58,6 +59,11 @@ function MainStackNavigator() {
         options={{headerShown: false}}
         name={routesScreen.Search}
         component={SearchScreen}
+      />
+      <MainStack.Screen
+        options={{headerShown: false}}
+        name={routesScreen.PostsTopic}
+        component={PostsTopicScreen}
       />
 
       <MainStack.Screen name={routesScreen.Comment} component={CommentScreen} />

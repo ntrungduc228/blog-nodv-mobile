@@ -82,12 +82,13 @@ export const FollowUserButton = ({
   ) : (
     <Chip
       textStyle={{
-        color: '#fff',
+        color: followed ? 'black' : 'white',
       }}
       onPress={handleFollow}
+      mode={followed ? 'outlined' : 'flat'}
       className={`rounded-full h-8 ${
         followed
-          ? ' bg-slate-500'
+          ? 'bg-transparent'
           : `${primary ? 'bg-emerald-700' : 'bg-slate-900'}`
       } ${fullWith ? 'w-full' : ''} items-center`}>
       {followed ? 'Following' : 'Follow'}
