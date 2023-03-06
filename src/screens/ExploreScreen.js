@@ -1,9 +1,16 @@
-import {Text, View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet, Button} from 'react-native';
 
-function ExploreScreen() {
+function ExploreScreen({navigation}) {
   return (
     <View style={styles.viewContainer}>
       <Text>Explore!</Text>
+      <View className="my-3">
+        <Button
+          className="bg-emerald-500"
+          title="Comment"
+          onPress={() => navigation.navigate('Comments')}
+        />
+      </View>
     </View>
   );
 }

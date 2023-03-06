@@ -9,7 +9,7 @@ const routesScreen = {
   BottomTab: 'BottomTab',
   PostEditor: 'PostEditor',
   PostDetail: 'PostDetail',
-  Comment: 'Comment',
+  Comment: 'Comments',
   Settings: 'Settings',
   ProfileEdit: 'ProfileEdit',
 };
