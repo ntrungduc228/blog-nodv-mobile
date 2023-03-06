@@ -7,8 +7,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 
 export const UserInfo = () => {
-  const user = useSelector(state => state.user?.data.info);
-  // const profile = useSelector(state => state.profile?.data);
+  const profile = useSelector(state => state.profile?.data);
   const navigation = useNavigation();
 
   return (
@@ -17,13 +16,15 @@ export const UserInfo = () => {
         <View>
           <Image
             source={{
-              uri: user?.avatar,
+              uri: profile?.avatar,
             }}
             className="h-[60] w-[60] rounded-full"
           />
         </View>
         <View className="ml-4 flex-1">
-          <Text className="text-black font-bold text-lg">{user?.username}</Text>
+          <Text className="text-black font-bold text-lg">
+            {profile?.username}
+          </Text>
           <View className="flex-row text-black font-semibold text-base">
             <Text className="text-black font-semibold text-[15px] mr-5">
               1 followers
@@ -36,13 +37,22 @@ export const UserInfo = () => {
       </View>
       <View className="mt-5">
         <Button
+          style={{borderColor: '#4caf50'}}
+          className="rounded-full mx-10"
+          mode="outlined"
+          onPress={() => {}}
+          textColor="#4caf50">
+          Follower
+        </Button>
+
+        {/* <Button
           style={{borderColor: '#000'}}
           className="rounded-full mx-10"
           mode="outlined"
           onPress={() => navigation.navigate(routesScreen.ProfileEdit)}
           textColor="#0f172a">
           Edit your profile
-        </Button>
+        </Button> */}
       </View>
     </View>
   );

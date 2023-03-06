@@ -78,7 +78,7 @@ function Home({navigation}) {
           <Text style={Styles.textSite}>Home</Text>
           <IconFeather
             name="bell"
-            size={35}
+            size={22}
             color="#A09898"
             solid="#A09898"
             onPress={() => navigation.navigate('Notifications')}

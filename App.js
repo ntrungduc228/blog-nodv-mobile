@@ -50,7 +50,6 @@ function AppScreen() {
         // navigate(appRoutes.TOPIC_PICK);
       }
       dispatch(setUser(data));
-      dispatch(setProfile(data));
     },
   });
   useQuery(['bookmark', isLogin], getBookmarkByUserId, {

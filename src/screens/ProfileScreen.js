@@ -4,11 +4,24 @@ import {TouchableOpacity, View} from 'react-native';
 import IconFontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {routesScreen} from '../navigations';
 import {useSelector} from 'react-redux';
+import {getUserProfile} from '../api/userApi';
+import {useQuery} from 'react-query';
+import {useDispatch} from 'react-redux';
+import {setProfile} from '../redux/slices/profileSlice';
 
-function ProfileScreen({navigation}) {
+function ProfileScreen({navigation, route}) {
+  const {email} = route.params;
   const profile = useSelector(state => state?.profile?.data);
   const ownProfile =
     useSelector(state => state.user.data.info)?.id === profile?.id;
+
+  const dispatch = useDispatch();
+
+  useQuery(['profile', email], () => getUserProfile(email), {
+    onSuccess: data => {
+      dispatch(setProfile({...data, isOwnProfile: ownProfile}));
+    },
+  });
 
   return (
     <View className="h-full bg-white pt-[20] flex-1">
