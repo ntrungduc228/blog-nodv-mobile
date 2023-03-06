@@ -1,23 +1,12 @@
-import {StatusBar} from 'expo-status-bar';
-import {StyleSheet, Text, View, Image, Button} from 'react-native';
-import IconFeather from 'react-native-vector-icons/Feather';
-import IconFontAwesomer from 'react-native-vector-icons/FontAwesome';
+import {StyleSheet, Text, View} from 'react-native';
+import {getAllUsersFollowing, getOwnTopics} from '../../api/userApi';
+import {useEffect, useState} from 'react';
+
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
-import {useEffect, useMemo, useState} from 'react';
-import {axiosClientPrivate} from '../../api/axiosClient';
-import {ScrollView} from 'react-native-gesture-handler';
-import {Chip} from 'react-native-paper';
-import {
-  addTopics,
-  followTopic,
-  getAllUsersFollowing,
-  getOwnTopics,
-  getUserProfile,
-} from '../../api/userApi';
-import {useSelector} from 'react-redux';
-import TopicItem from './TopicItem';
 import PeopleItem from './PeopleItem';
-import {Spinner} from '../../component/Spinner';
+import {ScrollView} from 'react-native-gesture-handler';
+import {Spinner} from '../../components/Spinner';
+import {useSelector} from 'react-redux';
 
 function People({navigation}) {
   const currentUser = useSelector(state => state.user.data.info);
@@ -39,6 +28,7 @@ function People({navigation}) {
       setIsLoading(false);
     }
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const handleClickPeople = async () => {
     const peopleFollowing = await getAllUsersFollowing();
@@ -128,7 +118,7 @@ const Styles = StyleSheet.create({
     borderRadius: 100,
     marginLeft: 60,
   },
-  iconBootom: {
+  iconBottom: {
     paddingLeft: 60,
     marginTop: 5,
   },

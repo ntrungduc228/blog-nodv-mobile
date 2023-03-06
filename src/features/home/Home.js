@@ -1,23 +1,14 @@
-import {Alert, Image, ScrollView, StyleSheet, Text, View} from 'react-native';
-import {Avatar, List} from 'react-native-paper';
-import {FlatList, TouchableOpacity} from 'react-native';
+import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import axiosClient, {axiosClientPrivate} from '../../api/axiosClient.js';
-import {useDispatch, useSelector} from 'react-redux';
-import {useEffect, useMemo, useState} from 'react';
+import {useEffect, useState} from 'react';
 
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import IconFeather from 'react-native-vector-icons/Feather';
-import IconFontAwesomer from 'react-native-vector-icons/FontAwesome';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {NotificationType} from '../../config/dataType.js';
 import Post from './Post.js';
-import {Spinner} from '../../component/Spinner/Spinner';
+import {Spinner} from '../../components';
 import Styles from './Styles.js';
 import Topic from './Topic.js';
-import {formatRelative} from 'date-fns';
 import {getOwnTopics} from '../../api/userApi.js';
-import {getPosts} from '../../api/postApi.js';
+import {useSelector} from 'react-redux';
 
 // import {TouchableOpacity} from 'react-native-gesture-handler';
 
@@ -60,6 +51,7 @@ function Home({navigation}) {
     }
     // setIsLoading(true);
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [limit, topicSlug]);
 
   const handleScroll = async event => {

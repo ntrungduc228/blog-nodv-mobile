@@ -1,24 +1,11 @@
-import {StatusBar} from 'expo-status-bar';
-import {StyleSheet, Text, View, Image, Button} from 'react-native';
-import IconFeather from 'react-native-vector-icons/Feather';
-import IconFontAwesomer from 'react-native-vector-icons/FontAwesome';
+import {StyleSheet, Text, View} from 'react-native';
+import {useEffect, useState} from 'react';
+
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
-import {useEffect, useMemo, useState} from 'react';
-import {axiosClientPrivate} from '../../api/axiosClient';
 import {ScrollView} from 'react-native-gesture-handler';
-import {Chip} from 'react-native-paper';
-import {
-  addTopics,
-  followTopic,
-  getAllUsers,
-  getAllUsersFollowing,
-  getOwnTopics,
-  getUserProfile,
-} from '../../api/userApi';
-import {useSelector} from 'react-redux';
+import {Spinner} from '../../components/Spinner';
 import TopicItem from './TopicItem';
-import PeopleItem from './PeopleItem';
-import {Spinner} from '../../component/Spinner';
+import {getOwnTopics} from '../../api/userApi';
 
 function TopicYouFollow({navigation}) {
   const [isFollowTopic, setIsFollowTopic] = useState([]);
@@ -123,7 +110,7 @@ const Styles = StyleSheet.create({
     borderRadius: 100,
     marginLeft: 60,
   },
-  iconBootom: {
+  iconBottom: {
     paddingLeft: 60,
     marginTop: 5,
   },

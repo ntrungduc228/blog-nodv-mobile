@@ -1,27 +1,23 @@
-import {StatusBar} from 'expo-status-bar';
-import {StyleSheet, Text, View, Image, Button} from 'react-native';
-import IconFeather from 'react-native-vector-icons/Feather';
-import IconFontAwesomer from 'react-native-vector-icons/FontAwesome';
-import IconAntDesign from 'react-native-vector-icons/AntDesign';
-import {useEffect, useMemo, useState} from 'react';
-import {axiosClientPrivate} from '../../api/axiosClient';
-import {ScrollView} from 'react-native-gesture-handler';
-import {Chip} from 'react-native-paper';
+import {StyleSheet, Text, View} from 'react-native';
 import {
-  addTopics,
   followTopic,
   getUserProfile,
-  getOwnTopics,
-  getAllUsers,
   getUsersNotFollow,
 } from '../../api/userApi';
 import {useDispatch, useSelector} from 'react-redux';
-import {setUser, updateUser} from '../../redux/slices/userSlice';
-import {useMutation} from 'react-query';
-// import TopicItem from './TopicItem';
-import {TouchableOpacity} from 'react-native';
+import {useEffect, useState} from 'react';
+
+import {Chip} from 'react-native-paper';
+import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import PeopleItem from './PeopleItem';
-import {Spinner} from '../../component/Spinner';
+import {ScrollView} from 'react-native-gesture-handler';
+import {Spinner} from '../../components/Spinner';
+import {TouchableOpacity} from 'react-native';
+import {axiosClientPrivate} from '../../api/axiosClient';
+import {updateUser} from '../../redux/slices/userSlice';
+import {useMutation} from 'react-query';
+
+// import TopicItem from './TopicItem';
 
 function Topic({navigation}) {
   const currentUser = useSelector(state => state.user.data.info);
@@ -59,9 +55,10 @@ function Topic({navigation}) {
       setIsLoading(false);
     }
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const setStatusFilter = topicActive => {
-    setActive(topicActive);
+    // setActive(topicActive);
   };
   const handleClickTopic = () => {
     setStatus('topic');
