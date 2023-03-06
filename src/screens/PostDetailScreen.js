@@ -1,14 +1,16 @@
-import {Avatar, Chip} from 'react-native-paper';
 import {
+  BookmarkButton,
   LikePostButton,
   PostDetailLoading,
   PostMenu,
   PostToolbar,
-  useGetPost,
-} from '../features/post';
+} from '../features/post/components';
 import {SafeAreaView, Text, View} from 'react-native';
+import {useEffect, useMemo} from 'react';
+import {useGetPost, useGetRecommendPostsByPostId} from '../features/post/hooks';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import {Avatar} from 'react-native-paper';
 import {FollowUserButton} from '../features/user/components/FollowUserButton';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -16,21 +18,20 @@ import {RichEditor} from 'react-native-pell-rich-editor';
 import {Topic} from '../features/topic/components';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {format} from 'date-fns';
-import {useEffect} from 'react';
-import {useMemo} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {useQueryClient} from 'react-query';
 import {useSelector} from 'react-redux';
 
 export const PostDetailScreen = ({route}) => {
   const {id} = route.params;
-
   const navigation = useNavigation();
   const {data = {}, isLoading, isSuccess} = useGetPost(id);
-
+  const {user: author} = data;
+  const userId = useSelector(state => state.user.data.info.id);
+  const isAuthor = useMemo(() => author?.id === userId, [author, userId]);
   return (
     <View className="bg-white h-full">
-      <View className="h-14 flex-row items-center justify-between border-b px-4 border-slate-200 absolute top-0 bg-white w-full z-10">
+      <View className="h-14 flex-row items-center justify-between px-4 border-slate-200 absolute top-0 bg-white w-full z-10">
         <TouchableOpacity>
           <AntDesign
             name="arrowleft"
@@ -40,16 +41,9 @@ export const PostDetailScreen = ({route}) => {
           />
         </TouchableOpacity>
         {!isLoading && (
-          <View className="flex-row gap-2">
-            <TouchableOpacity>
-              <MaterialCommunityIcons
-                name="bookmark-plus-outline"
-                size={24}
-                color="black"
-                onPress={() => {}}
-              />
-            </TouchableOpacity>
-            <PostMenu postId={id} />
+          <View className="flex-row gap-2 items-center h-full">
+            <BookmarkButton postId={id} />
+            {isAuthor && <PostMenu postId={id} />}
           </View>
         )}
       </View>
@@ -58,16 +52,20 @@ export const PostDetailScreen = ({route}) => {
           <PostDetailLoading />
         </View>
       ) : (
-        isSuccess && <MainContent data={data} />
+        isSuccess && (
+          <>
+            <MainContent data={data} isAuthor={isAuthor} />
+            <RecommendPostList postId={id} />
+          </>
+        )
       )}
     </View>
   );
 };
 
-function MainContent({data}) {
+function MainContent({data, isAuthor}) {
   const queryClient = useQueryClient();
   const socket = useSelector(state => state.socket.data);
-
   const {
     content,
     user: author,
@@ -77,7 +75,6 @@ function MainContent({data}) {
     id,
     userLikeIds = [],
   } = data;
-  const userId = useSelector(state => state.user.data.info.id);
   const createdDateFormatted = useMemo(() => {
     if (!createdDate) {
       return null;
@@ -92,7 +89,6 @@ function MainContent({data}) {
     }
     return () => {
       if (socket) {
-        console.log('unsubscribing');
         socket.unsubscribe(topic);
       }
     };
@@ -116,21 +112,36 @@ function MainContent({data}) {
           }}
         />
         <View className="ml-4">
-          <View className="flex-row gap-2">
-            <Text className="text-lg mr-2">{author.username}</Text>
+          <View className="flex-row gap-2 items-center">
+            <Text className="text-xl font-bold">{author.username}</Text>
+            <View>
+              {isAuthor ? (
+                <View className={`h-5 rounded-full px-2 bg-yellow-500`}>
+                  <Text className="text-xs text-white mt-0.5">Owner</Text>
+                </View>
+              ) : (
+                <FollowUserButton followerId={author.id}>
+                  {({handleFollow, followed}) => {
+                    return (
+                      <TouchableOpacity onPress={handleFollow}>
+                        <View
+                          className={`h-5 rounded-full px-2  ${
+                            followed ? ' bg-slate-500' : 'bg-emerald-600'
+                          }`}>
+                          <Text className="text-xs text-white mt-0.5">
+                            {followed ? 'Following' : 'Follow'}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    );
+                  }}
+                </FollowUserButton>
+              )}
+            </View>
           </View>
           <Text className="text-sm text-slate-500">
             {createdDateFormatted} . {timeRead} min read
           </Text>
-        </View>
-        <View className="ml-4">
-          {userId === author.id ? (
-            <Chip className="rounded-full bg-slate-300">
-              <Text className="text-slate-600">Owner</Text>
-            </Chip>
-          ) : (
-            <FollowUserButton followerId={author.id} />
-          )}
         </View>
       </View>
 
@@ -167,10 +178,25 @@ function MainContent({data}) {
         </LikePostButton>
         <PostToolbar.Divider />
         <PostToolbar.Item
-          icon={<FontAwesome name="comment-o" size={18} color="gray" />}>
-          100
-        </PostToolbar.Item>
+          icon={<FontAwesome name="comment-o" size={18} color="gray" />}
+        />
       </PostToolbar>
     </SafeAreaView>
+  );
+}
+
+function RecommendPostList({postId}) {
+  const {data = [], isLoading} = useGetRecommendPostsByPostId(postId);
+  console.log(data);
+  return (
+    <>
+      {data.length > 0 && (
+        <View className="bg-white">
+          <View className="px-4 py-2">
+            <Text className="text-xl font-bold">Recommended</Text>
+          </View>
+        </View>
+      )}
+    </>
   );
 }

@@ -1,5 +1,6 @@
 import axiosClient, {axiosClientPrivate} from './axiosClient';
 
+import Config from 'react-native-config';
 import axios from 'axios';
 
 const url = '/posts';
@@ -49,10 +50,11 @@ const postApi = {
 
   getPostsRecommend: async id => {
     const response = await axios.get(
-      `${process.env.REACT_APP_SERVER_RECOMMEND_URL}/api/posts/${id}/recommend`,
+      `${Config.REACT_APP_SERVER_RECOMMEND_URL}/api/posts/${id}/recommend`,
     );
     return response.data;
   },
+  bookmarkPost: id => axiosClientPrivate.patch(`${url}/${id}/bookmark`, null),
 };
 
 export const {
