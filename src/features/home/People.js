@@ -83,9 +83,10 @@ const Styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   containerSite: {
-    paddingTop: 75,
+    // paddingTop: 75,
     paddingVertical: 59,
     paddingHorizontal: 40,
+    // height: 100,
   },
   header: {
     flexDirection: 'row',

@@ -19,7 +19,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {setUser, updateUser} from '../../redux/slices/userSlice';
 import {useMutation} from 'react-query';
 // import TopicItem from './TopicItem';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native';
 import PeopleItem from './PeopleItem';
 import {Spinner} from '../../component/Spinner';
 
@@ -28,15 +28,22 @@ function Topic({navigation}) {
   const [topics, setTopics] = useState([]);
   const [user, setUser] = useState();
   const [isTopic, setIsTopic] = useState(false);
-  const [selectTopic, setSelectTopic] = useState(currentUser.topics || []);
+  const filters = [
+    {
+      item: 'Topics',
+    },
+    {
+      item: 'People',
+    },
+  ];
+  // const [selectTopic, setSelectTopic] = useState(currentUser.topics || []);
   const [isFollowTopic, setIsFollowTopic] = useState(
     currentUser?.topics ? currentUser.topics : [],
   );
   const [people, setPeople] = useState([]);
   const [status, setStatus] = useState('topic');
   const [isLoading, setIsLoading] = useState(true);
-
-  console.log(isFollowTopic);
+  const [filterItem, setFilterItem] = useState('Topics');
   useEffect(() => {
     async function fetchData() {
       setIsLoading(true);
@@ -53,12 +60,16 @@ function Topic({navigation}) {
     }
     fetchData();
   }, []);
-
+  const setStatusFilter = topicActive => {
+    setActive(topicActive);
+  };
   const handleClickTopic = () => {
     setStatus('topic');
+    setFilterItem('Topics');
   };
   const handleClickPeole = () => {
     setStatus('people');
+    setFilterItem('People');
   };
   const topicListRender = () => {
     return topics.map((topic, index) => {
@@ -72,6 +83,27 @@ function Topic({navigation}) {
   const peopleRender = () => {
     return people.map((people, index) => {
       return <PeopleItem key={index} people={people} status={false} />;
+    });
+  };
+
+  const filterRender = () => {
+    return filters.map((filter, index) => {
+      return (
+        <TouchableOpacity
+          onPress={() =>
+            filter.item === 'Topics' ? handleClickTopic() : handleClickPeole()
+          }>
+          <View style={[filterItem === filter.item && Styles.borderBottom]}>
+            <Text
+              style={[
+                Styles.textHeader,
+                filterItem === filter.item && Styles.textHighline,
+              ]}>
+              {filter.item}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      );
     });
   };
 
@@ -91,12 +123,13 @@ function Topic({navigation}) {
       </View>
 
       <View style={Styles.header}>
-        <TouchableOpacity onPress={() => handleClickTopic()}>
+        {/* <TouchableOpacity onPress={() => handleClickTopic()}>
           <Text style={[Styles.textHeader, Styles.textHighline]}>Topics</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleClickPeole()}>
           <Text style={Styles.textHeader}>People</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+        {filterRender()}
       </View>
       <View
         style={{
@@ -105,23 +138,25 @@ function Topic({navigation}) {
           backgroundColor: '#8A8383',
         }}
       />
-      <View
+      {/* <View
         style={{
           width: '12%',
           height: 1,
           backgroundColor: '#000',
           marginLeft: 25,
         }}
-      />
+      /> */}
       <TouchableOpacity
         onPress={() => {
           status === 'topic'
             ? navigation.navigate('Topic you follow')
             : navigation.navigate('People');
         }}>
-        <Text>
-          See all {status === 'topic' ? 'topics' : 'people'} you follow
-        </Text>
+        <View style={Styles.seeAllBackground}>
+          <Text style={Styles.seeAllText}>
+            See all {status === 'topic' ? 'topics' : 'people'} you follow
+          </Text>
+        </View>
       </TouchableOpacity>
       <ScrollView>
         {status === 'topic' ? topicListRender() : peopleRender()}
@@ -195,11 +230,22 @@ const Styles = StyleSheet.create({
   },
   textHighline: {
     color: '#201A1B',
+    paddingBottom: 10,
+  },
+  seeAllBackground: {
+    // flex: 1,
+    // justifyContent: 'center',
+    backgroundColor: '#f3f6f4',
   },
   textHeader: {
-    paddingLeft: 18,
+    marginHorizontal: 18,
     fontSize: 14,
     color: '#8A8383',
+  },
+  borderBottom: {
+    borderBottomWidth: 1,
+    marginTop: 5,
+    borderBottomColor: '#000',
   },
   textAddTopic: {
     fontSize: 18,
@@ -212,6 +258,14 @@ const Styles = StyleSheet.create({
     paddingTop: 40,
     justifyContent: 'space-between',
     paddingRight: 25,
+  },
+  seeAllText: {
+    marginTop: 30,
+    color: '#000',
+    fontWeight: '500',
+    fontSize: 17,
+    marginLeft: 30,
+    paddingBottom: 30,
   },
   textTopic: {
     fontSize: 16,

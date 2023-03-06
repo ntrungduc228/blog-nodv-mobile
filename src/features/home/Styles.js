@@ -28,10 +28,17 @@ const Styles = StyleSheet.create({
   textHighline: {
     color: '#201A1B',
   },
+  wrapTopic: {
+    // marginLeft: 18,
+    marginRight: 18,
+  },
   textHeader: {
-    paddingLeft: 18,
+    // paddingLeft: 18,
     fontSize: 14,
     color: '#8A8383',
+  },
+  paddingBottom: {
+    paddingBottom: 15,
   },
   borderBottom: {
     borderBottomWidth: 1,

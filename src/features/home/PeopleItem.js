@@ -36,7 +36,23 @@ function PeopleItem({people, status}) {
 
   return (
     <View style={Styles.topics}>
-      <Text style={Styles.textTopic}>{people.username}</Text>
+      <Image
+        source={{
+          uri: people.avatar
+            ? people.avatar
+            : 'https://icons.iconarchive.com/icons/papirus-team/papirus-status/512/avatar-default-icon.png',
+          method: 'POST',
+          headers: {
+            Pragma: 'no-cache',
+          },
+          body: 'Your Body goes here',
+        }}
+        style={Styles.imageProfile}
+      />
+      <View style={Styles.infoUser}>
+        <Text style={Styles.textTopic}>{people.username}</Text>
+        <Text>{people.bio}</Text>
+      </View>
       <Chip
         textStyle={{
           color: '#fff',
@@ -69,6 +85,16 @@ const Styles = StyleSheet.create({
   textHighline: {
     color: '#201A1B',
   },
+  imageProfile: {
+    width: 40,
+    height: 40,
+    borderRadius: 100,
+    marginRight: 15,
+  },
+  infoUser: {
+    flex: 1,
+    flexDirection: 'column',
+  },
   textHeader: {
     paddingLeft: 18,
     fontSize: 14,
@@ -85,10 +111,15 @@ const Styles = StyleSheet.create({
     paddingTop: 40,
     justifyContent: 'space-between',
     paddingRight: 25,
+    borderBottomColor: '#ccc',
+    borderBottomWidth: 1,
+    paddingBottom: 25,
   },
   textTopic: {
+    width: '70%',
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: '700',
+    color: '#000',
   },
 
   bottom: {

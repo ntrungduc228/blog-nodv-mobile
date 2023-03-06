@@ -22,20 +22,27 @@ import {Spinner} from '../../component/Spinner/Spinner';
 function Home({navigation}) {
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(0);
-  const [limit, setLimit] = useState(20);
+  const [limit, setLimit] = useState(10);
   const currentUser = useSelector(state => state.user.data);
   const [blackList, setBlackList] = useState([]);
   const [topics, setTopics] = useState([]);
   const [topicSlug, setTopicSlug] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const [update, setUpdate] = useState(false);
-  // console.log(topics);
+  const [active, setActive] = useState('For you');
+  const [listScrollTopic, setListScrollTopic] = useState([]);
+  const [action, setAction] = useState(false);
+  const setStatusFilter = topicActive => {
+    setActive(topicActive);
+  };
+
+  // console.log(posts);
   // console.log(isLoading);
   // console.log(currentUser)
   // console.log(topics)
   useEffect(() => {
     async function fetchData() {
       setIsLoading(true);
+
       const postList = await axiosClient.get(
         `/posts?page=${page}&limit=${limit}&topic=${topicSlug}&title=`,
       );
@@ -45,28 +52,37 @@ function Home({navigation}) {
       setBlackList(blackList);
       setPosts(postList);
       setTopics(topicLists);
+      setListScrollTopic([{name: 'For you'}, ...topicLists]);
+      // console.log(listScrollTopic);
       setIsLoading(false);
     }
     // setIsLoading(true);
     fetchData();
-  }, [limit, posts]);
+  }, [limit, topicSlug]);
 
   const handleScroll = async event => {
     const {layoutMeasurement, contentOffset, contentSize} = event.nativeEvent;
     const isCloseToBottom =
-      layoutMeasurement.height + contentOffset.y >= contentSize.height - 150;
+      layoutMeasurement.height + contentOffset.y >= contentSize.height - 30;
     if (isCloseToBottom) {
-      setLimit(limit + 5);
+      setLimit(limit + 10);
       console.log(limit);
+      setIsLoading(true);
     }
   };
 
   const handleChangeTopic = async topic => {
-    console.log('click');
+    setLimit(10);
+    console.log(topic.name);
+    setPosts([]);
+    setIsLoading(true);
+    setStatusFilter(topic.name);
     setTopicSlug(topic.slug);
   };
 
-  const handleChangeAllTopic = async () => {
+  const handleChangeAllTopic = async topic => {
+    setLimit(10);
+    setStatusFilter(topic.name);
     setTopicSlug('');
   };
 
@@ -93,11 +109,11 @@ function Home({navigation}) {
       return (
         !blackList.includes(post.id) && (
           <TouchableOpacity
-            onPress={() =>
+            onPress={() => {
               navigation.push('PostDetail', {
                 id: post.id,
-              })
-            }>
+              });
+            }}>
             <Post key={index} post={post} />
           </TouchableOpacity>
         )
@@ -106,10 +122,16 @@ function Home({navigation}) {
   };
 
   const topicListRender = () => {
-    return topics.map((topic, index) => {
+    return listScrollTopic.map((topic, index) => {
       return (
-        <TouchableOpacity onPress={() => handleChangeTopic(topic)}>
-          <Text style={Styles.textHeader}>{topic.name}</Text>
+        <TouchableOpacity
+          style={Styles.wrapTopic}
+          onPress={() =>
+            topic.name === 'For you'
+              ? handleChangeAllTopic(topic)
+              : handleChangeTopic(topic)
+          }>
+          <ScrollBarTopicItem topic={topic} isActive={active} />
         </TouchableOpacity>
       );
     });
@@ -135,7 +157,7 @@ function Home({navigation}) {
         </View>
 
         <ScrollView horizontal={true} style={Styles.header}>
-          <View>
+          <View style={Styles.wrapTopic}>
             <IconFeather
               name="plus"
               size={25}
@@ -146,15 +168,6 @@ function Home({navigation}) {
               }}
             />
           </View>
-          <TouchableOpacity
-            className="mr-2"
-            onPress={() => handleChangeAllTopic()}>
-            <View style={Styles.borderBottom}>
-              <Text style={[Styles.textHeader, Styles.textHighline]}>
-                For you
-              </Text>
-            </View>
-          </TouchableOpacity>
 
           {topicListRender()}
         </ScrollView>
@@ -183,6 +196,39 @@ function Home({navigation}) {
       </View>
       {isLoading ? <Spinner /> : <></>}
     </ScrollView>
+  );
+}
+
+function ScrollBarTopicItem({topic, isActive}) {
+  // console.log(topic);
+  const [active, setActive] = useState(isActive);
+
+  return (
+    <View style={[isActive === topic.name && Styles.borderBottom]}>
+      <Text
+        style={
+          isActive === topic.name
+            ? [Styles.textHeader, Styles.textHighline, Styles.paddingBottom]
+            : Styles.textHeader
+        }>
+        {topic.name}
+      </Text>
+      {/* <TouchableOpacity
+            style={Styles.wrapTopic}
+            className="mr-2"
+            onPress={() => handleChangeAllTopic()}>
+            <View style={Styles.borderBottom}>
+              <Text
+                style={[
+                  Styles.textHeader,
+                  Styles.textHighline,
+                  Styles.paddingBottom,
+                ]}>
+                For you
+              </Text>
+            </View>
+          </TouchableOpacity> */}
+    </View>
   );
 }
 

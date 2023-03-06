@@ -61,7 +61,7 @@ function TopicYouFollow({navigation}) {
       </View>
       <ScrollView>
         {isFollowTopic.length > 0 ? (
-          opicListRender()
+          topicListRender()
         ) : (
           <View>
             <Text>You are not following any topics</Text>
