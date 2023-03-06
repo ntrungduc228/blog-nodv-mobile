@@ -1,4 +1,4 @@
-import {Image, Text, View} from 'react-native';
+import {Image, Text, View, TouchableOpacity} from 'react-native';
 import {useEffect, useState} from 'react';
 
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
@@ -45,20 +45,28 @@ function Post({post}) {
   return (
     <View style={Styles.body}>
       <View style={Styles.bodyTop}>
-        <Image
-          source={{
-            uri: post.user.avatar
-              ? post.user.avatar
-              : 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pinterest.com%2Fpin%2F540994973993086717%2F&psig=AOvVaw1Mrgp1Bdc9w_gq7PTOt3hx&ust=1677994074144000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCMDe5JfFwf0CFQAAAAAdAAAAABAE',
-            method: 'POST',
-            headers: {
-              Pragma: 'no-cache',
-            },
-            body: 'Your Body goes here',
-          }}
-          style={Styles.imageProfile}
-        />
-        <Text style={Styles.userName}>{post.user.username}</Text>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate(routesScreen.Profile, {
+              email: post.user?.email,
+            })
+          }
+          className="flex-1 flex-row">
+          <Image
+            source={{
+              uri: post.user.avatar
+                ? post.user.avatar
+                : 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pinterest.com%2Fpin%2F540994973993086717%2F&psig=AOvVaw1Mrgp1Bdc9w_gq7PTOt3hx&ust=1677994074144000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCMDe5JfFwf0CFQAAAAAdAAAAABAE',
+              method: 'POST',
+              headers: {
+                Pragma: 'no-cache',
+              },
+              body: 'Your Body goes here',
+            }}
+            style={Styles.imageProfile}
+          />
+          <Text style={Styles.userName}>{post.user.username}</Text>
+        </TouchableOpacity>
       </View>
       <View style={Styles.post}>
         <View style={Styles.titlePost}>
