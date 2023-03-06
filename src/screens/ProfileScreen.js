@@ -10,7 +10,8 @@ import {useDispatch} from 'react-redux';
 import {setProfile} from '../redux/slices/profileSlice';
 
 function ProfileScreen({navigation, route}) {
-  const {email} = route.params;
+  // const {email} = route.params;
+  const email = useSelector(state => state.user.data.info.email);
   const profile = useSelector(state => state?.profile?.data);
   const ownProfile =
     useSelector(state => state.user.data.info)?.id === profile?.id;
@@ -18,6 +19,7 @@ function ProfileScreen({navigation, route}) {
   const dispatch = useDispatch();
 
   useQuery(['profile', email], () => getUserProfile(email), {
+    enabled: !!email,
     onSuccess: data => {
       dispatch(setProfile({...data, isOwnProfile: ownProfile}));
     },

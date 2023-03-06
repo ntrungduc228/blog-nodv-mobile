@@ -16,7 +16,7 @@ export const UserInfo = () => {
         <View>
           <Image
             source={{
-              uri: profile?.avatar,
+              uri: profile?.avatar || '',
             }}
             className="h-[60] w-[60] rounded-full"
           />
@@ -36,23 +36,23 @@ export const UserInfo = () => {
         </View>
       </View>
       <View className="mt-5">
-        <Button
+        {/* <Button
           style={{borderColor: '#4caf50'}}
           className="rounded-full mx-10"
           mode="outlined"
           onPress={() => {}}
           textColor="#4caf50">
           Follower
-        </Button>
+        </Button> */}
 
-        {/* <Button
+        <Button
           style={{borderColor: '#000'}}
           className="rounded-full mx-10"
           mode="outlined"
           onPress={() => navigation.navigate(routesScreen.ProfileEdit)}
           textColor="#0f172a">
           Edit your profile
-        </Button> */}
+        </Button>
       </View>
     </View>
   );

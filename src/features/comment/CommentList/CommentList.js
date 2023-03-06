@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {View, Text} from 'react-native';
 import Comment from '../components/Comment/Comment';
 import {Spinner} from '../../../components';
 
@@ -11,7 +11,12 @@ export function CommentList({comments, post}) {
           <Comment key={comment.id} comment={comment} post={post} />
         ))
       ) : (
-        <Spinner />
+        // <Spinner />
+        <View className="flex-1 items-center justify-center">
+          <Text className="mt-4 text-black font-bold text-lg">
+            No Comment yet!
+          </Text>
+        </View>
       )}
     </View>
   );
