@@ -1,9 +1,11 @@
 import {Text, View, StyleSheet} from 'react-native';
+import {Spinner} from '../components';
 
 function ExploreScreen() {
   return (
     <View style={styles.viewContainer}>
       <Text>Explore!</Text>
+      <Spinner />
     </View>
   );
 }
