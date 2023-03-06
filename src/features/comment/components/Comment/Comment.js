@@ -1,5 +1,5 @@
 import {formatRelative} from 'date-fns';
-import React, {useMemo, useState} from 'react';
+import React, {useMemo, useState, memo} from 'react';
 import {Text, View} from 'react-native';
 import {Avatar} from 'react-native-paper';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -11,7 +11,7 @@ import {updateCountNotifications} from '../../../../api/userApi';
 import {NotificationType} from '../../../../config/dataType';
 import {callApiCreateNotification} from '../../../../utils/generationNotification';
 import CommentEditor from '../../CommentEditor/CommentEditor';
-import CommentList from '../../CommentList/CommentList';
+import {CommentList} from '../../CommentList/CommentList';
 import CommentFooter from './CommentFooter';
 import CommentMenu from './CommentMenu';
 
@@ -67,7 +67,7 @@ function Comment({comment, post}) {
           <Avatar.Image
             size={44}
             source={{
-              uri: 'https://firebasestorage.googleapis.com/v0/b/blog-nodv.appspot.com/o/images%2F1666836545615avt.jpg?alt=media&token=f3715525-f6d8-42f5-a341-5f9b8d135978',
+              uri: comment.user.avatar,
             }}
           />
           <View className="pl-3">

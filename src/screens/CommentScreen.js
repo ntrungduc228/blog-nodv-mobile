@@ -18,9 +18,10 @@ import {
 } from '../redux/slices/commentSlice';
 import {callApiCreateNotification} from '../utils/generationNotification';
 
-export function CommentScreen() {
+export function CommentScreen({route}) {
+  const post = route.params?.post;
   const dispatch = useDispatch();
-  const post = {id: '63a89482c85bd05cd16c340b'};
+  // const post = {id: '63a89482c85bd05cd16c340b'};
   const socket = useSelector(state => state.socket.data);
   const userId = useSelector(state => state.user?.data?.info?.id);
 
@@ -28,9 +29,10 @@ export function CommentScreen() {
     state => state.comment.commentsByParentId[null],
   );
 
-  useQuery(['comments', post.id], () => getComment(post.id), {
+  useQuery(['comments', post?.id], () => getComment(post.id), {
+    enabled: !!post?.id,
     onSuccess: data => {
-      console.log('data: ', data);
+      // console.log('data: ', data);
       dispatch(setComments(data));
     },
   });
@@ -124,13 +126,14 @@ export function CommentScreen() {
   }, [post?.id, socket]);
 
   return (
-    <View className="bg-white h-screen">
+    <View className="bg-white h-full">
       <ScrollView>
         <CommentEditor
           initialComment={initialComment}
           onSubmit={handleCreateComment}
           post={post}
         />
+
         <CommentList comments={rootComments} userId={userId} post={post} />
       </ScrollView>
     </View>

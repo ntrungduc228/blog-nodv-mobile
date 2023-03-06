@@ -1,13 +1,18 @@
 import React from 'react';
 import {View} from 'react-native';
 import Comment from '../components/Comment/Comment';
+import {Spinner} from '../../../components';
 
-function CommentList({comments, post}) {
+export function CommentList({comments, post}) {
   return (
     <View>
-      {comments?.map(comment => (
-        <Comment key={comment.id} comment={comment} post={post} />
-      ))}
+      {comments?.length ? (
+        comments?.map(comment => (
+          <Comment key={comment.id} comment={comment} post={post} />
+        ))
+      ) : (
+        <Spinner />
+      )}
     </View>
   );
 }

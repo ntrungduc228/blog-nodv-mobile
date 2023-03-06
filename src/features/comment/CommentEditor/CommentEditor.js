@@ -22,6 +22,7 @@ const CommentEditor = ({
   const handleFocus = () => {
     setIsFocused(true);
   };
+
   const handleCancel = () => {
     setIsFocused(false);
     onCancel();
@@ -34,6 +35,7 @@ const CommentEditor = ({
       replyId: initialComment?.replyId,
       postId: post?.id,
     };
+
     setInputValue('');
     onSubmit(comment);
   };
@@ -47,18 +49,22 @@ const CommentEditor = ({
         <CommentEditorInput
           value={inputValue}
           isFocused={isFocused}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
           onChange={e => {
             setInputValue(prev => ({...prev, e}.e));
           }}
         />
       </View>
       {/* <Collapse orientation="vertical" in={isFocused}> */}
-      <CommentEditorFooter
-        onCancel={handleCancel}
-        onSubmit={handleSubmit}
-        disabled={inputValue.trim() === ''}
-        isEdit={isEdit}
-      />
+      {
+        <CommentEditorFooter
+          onCancel={handleCancel}
+          onSubmit={handleSubmit}
+          disabled={inputValue.trim() === ''}
+          isEdit={isEdit}
+        />
+      }
       {/* </Collapse> */}
     </View>
   );
