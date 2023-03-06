@@ -121,9 +121,7 @@ function MainContent({data, isAuthor}) {
                     <Text className="text-xs text-white mt-0.5">Owner</Text>
                   </View>
                 ) : (
-                  <FollowUserButton
-                    followerId={author.id}
-                    followerEmail={author.email}>
+                  <FollowUserButton followerId={author.id}>
                     {({handleFollow, followed}) => {
                       return (
                         <TouchableOpacity onPress={handleFollow}>
