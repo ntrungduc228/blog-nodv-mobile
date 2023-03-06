@@ -10,13 +10,7 @@ import {updateCountNotifications} from '../../../../api/userApi';
 import {updateUser} from '../../../../redux/slices/userSlice';
 import {useMutation} from 'react-query';
 
-export const FollowUserButton = ({
-  followerId,
-  children,
-  fullWith,
-  primary,
-  followerEmail,
-}) => {
+export const FollowUserButton = ({followerId, children, fullWith, primary}) => {
   const followingIds = useSelector(
     state => state.user.data.info.followingId || [],
   );
@@ -35,7 +29,6 @@ export const FollowUserButton = ({
 
   const createNotificationMutation = useMutation(createNotification, {
     onSuccess: data => {
-      console.log('createNotificationMutation', data);
       const Increase = {
         isIncrease: true,
         userId: data.receiverId,

@@ -4,6 +4,7 @@ import {
   PostDetailLoading,
   PostMenu,
   PostToolbar,
+  CommentButton,
 } from '../features/post/components';
 import {SafeAreaView, Text, View} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
@@ -102,6 +103,7 @@ function MainContent({data, isAuthor}) {
       userLikeIds: newUserLikeIds,
     }));
   };
+
   return (
     <SafeAreaView className="flex-1 pt-14">
       <ScrollView>
@@ -121,9 +123,7 @@ function MainContent({data, isAuthor}) {
                     <Text className="text-xs text-white mt-0.5">Owner</Text>
                   </View>
                 ) : (
-                  <FollowUserButton
-                    followerId={author.id}
-                    followerEmail={author.email}>
+                  <FollowUserButton followerId={author.id}>
                     {({handleFollow, followed}) => {
                       return (
                         <TouchableOpacity onPress={handleFollow}>
@@ -179,10 +179,12 @@ function MainContent({data, isAuthor}) {
           }}
         </LikePostButton>
         <PostToolbar.Divider />
-        <PostToolbar.Item
+        <CommentButton post={data} />
+        {/* <PostToolbar.Item
           icon={<FontAwesome name="comment-o" size={18} color="gray" />}
-        />
+        /> */}
       </PostToolbar>
+      {/* <CommentButton /> */}
     </SafeAreaView>
   );
 }
