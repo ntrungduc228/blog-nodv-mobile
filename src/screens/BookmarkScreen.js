@@ -1,5 +1,6 @@
 import {FlatList, RefreshControl} from 'react-native-gesture-handler';
 
+import Post from '../features/home/Post';
 import {ScreenLayout} from './components';
 import {Text} from 'react-native-paper';
 import {useGetBookmark} from '../features/post';
@@ -12,7 +13,7 @@ function BookmarkScreen() {
       <FlatList
         data={posts}
         keyExtractor={item => item.id}
-        renderItem={({item}) => <Text>{item.title}</Text>}
+        renderItem={({item}) => <Post post={item} />}
         refreshControl={
           <RefreshControl refreshing={isLoading} onRefresh={refetch} />
         }
