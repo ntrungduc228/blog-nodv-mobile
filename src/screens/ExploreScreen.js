@@ -67,7 +67,7 @@ const Trending = () => {
     getPostsTrending(6),
   );
   return (
-    <View className="mx-6">
+    <View className="px-6 border-b border-gray-200">
       <View className="h-14 justify-center">
         <Text className="text-black text-base">Trending on NODV</Text>
       </View>
@@ -140,12 +140,7 @@ const User = ({user}) => {
       <Text className="text-gray-500 text-sm truncate flex-1 mb-2">
         {user?.bio || 'No bio'}
       </Text>
-      <FollowUserButton
-        className="w-full"
-        fullWith
-        followerId={user?.id}
-        followerEmail={user?.email}
-      />
+      <FollowUserButton className="w-full" fullWith followerId={user?.id} />
     </View>
   );
 };
@@ -154,6 +149,8 @@ function PostItem({index, post}) {
   const timeDisplay = useMemo(() => {
     return intlFormatDistance(new Date(post.createdDate), new Date());
   }, [post.createdDate]);
+
+  const navigation = useNavigation();
 
   return (
     <View className="flex-row">
@@ -172,9 +169,14 @@ function PostItem({index, post}) {
           />
           <Text>{post?.user?.username}</Text>
         </View>
-        <View className="my-1">
-          <Text className="text-base text-black font-bold">{post.title}</Text>
-        </View>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate(routesScreen.PostDetail, {id: post.id})
+          }>
+          <View className="my-1">
+            <Text className="text-base text-black font-bold">{post.title}</Text>
+          </View>
+        </TouchableOpacity>
         <View>
           <Text>
             {timeDisplay} . {post.timeRead} min read

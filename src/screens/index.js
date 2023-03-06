@@ -5,4 +5,4 @@ export * from './SettingScreen';
 export * from './ProfileEditScreen';
 export * from './NotFoundScreen';
 export * from './SearchScreen';
-export * from './PostsTopicScreen';
+export * from './TopicScreen';
