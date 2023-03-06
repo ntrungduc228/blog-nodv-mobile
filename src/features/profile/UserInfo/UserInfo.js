@@ -7,8 +7,8 @@ import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 
 export const UserInfo = () => {
-  // const user = useSelector(state => state.user?.data.info);
-  const profile = useSelector(state => state.profile?.data);
+  const user = useSelector(state => state.user?.data.info);
+  // const profile = useSelector(state => state.profile?.data);
   const navigation = useNavigation();
 
   return (
@@ -17,15 +17,13 @@ export const UserInfo = () => {
         <View>
           <Image
             source={{
-              uri: profile?.avatar,
+              uri: user?.avatar,
             }}
             className="h-[60] w-[60] rounded-full"
           />
         </View>
         <View className="ml-4 flex-1">
-          <Text className="text-black font-bold text-lg">
-            {profile?.username}
-          </Text>
+          <Text className="text-black font-bold text-lg">{user?.username}</Text>
           <View className="flex-row text-black font-semibold text-base">
             <Text className="text-black font-semibold text-[15px] mr-5">
               1 followers

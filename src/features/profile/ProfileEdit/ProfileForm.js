@@ -45,7 +45,6 @@ export const ProfileForm = ({
       const url = await uploadImage(uriAvatar);
       setUserInfo(prev => ({...prev, avatar: url}));
     }
-    console.log('handle submit');
     setIsSubmitted(false);
     onSubmit(userInfo);
   }, [
