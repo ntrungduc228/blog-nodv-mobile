@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">BlogNodvMobile</string>
+    <string name="facebook_app_id">501150302223671</string>
+    <string name="fb_login_protocol_scheme">fb501150302223671</string>
+    <string name="facebook_client_token">daa217e71e56c9c6f57079df8f9d1f07</string>
+
+
 </resources>

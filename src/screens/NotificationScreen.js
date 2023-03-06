@@ -1,7 +1,8 @@
-import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useQuery} from 'react-query';
 import {getNotifications} from '../api/notificationApi';
+import {Avatar, Button} from 'react-native-paper';
+import {Text, View} from 'react-native';
 
 import Notification from '../features/notification/Notification';
 

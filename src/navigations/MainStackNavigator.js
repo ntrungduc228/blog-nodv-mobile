@@ -1,11 +1,16 @@
-import {createStackNavigator} from '@react-navigation/stack';
-import HomeScreen from '../screens/HomeScreen';
-import BookmarkScreen from '../screens/BookmarkScreen';
-import ExploreScreen from '../screens/ExploreScreen';
+import {
+  PostDetailScreen,
+  PostEditorScreen,
+  CommentScreen,
+  SettingsScreen,
+  ProfileEditScreen,
+  NotFoundScreen,
+} from '../screens';
+
 import BottomTabNavigator from './BottomTabNavigator';
 import NotificationScreen from '../screens/NotificationScreen';
-import CommentScreen from '../screens/CommentScreen';
-import {PostEditorScreen} from '../screens';
+import {createStackNavigator} from '@react-navigation/stack';
+import routesScreen from './routesScreen';
 
 const MainStack = createStackNavigator();
 
@@ -13,16 +18,43 @@ function MainStackNavigator() {
   return (
     <MainStack.Navigator>
       <MainStack.Screen
-        name="BottomTab"
+        name={routesScreen.BottomTab}
         component={BottomTabNavigator}
         options={{headerShown: false}}
       />
-      <MainStack.Screen name="Notifications" component={NotificationScreen} />
-      <MainStack.Screen name="Comments" component={CommentScreen} />
-      <MainStack.Screen name="PostEditor" component={PostEditorScreen} />
-      {/* <MainStack.Screen name="Home" component={HomeScreen} /> */}
-      {/* <MainStack.Screen name="Explore" component={ExploreScreen} /> */}
-      {/* <MainStack.Screen name="Bookmark" component={BookmarkScreen} /> */}
+      <MainStack.Screen
+        name="Notifications"
+        component={NotificationScreen}
+        options={{title: 'Notifications'}}
+      />
+      <MainStack.Screen
+        options={{
+          headerShown: false,
+        }}
+        name={routesScreen.PostEditor}
+        component={PostEditorScreen}
+      />
+      <MainStack.Screen
+        options={{headerShown: false}}
+        name={routesScreen.PostDetail}
+        component={PostDetailScreen}
+      />
+      <MainStack.Screen
+        options={{headerShown: false}}
+        name="NotFound"
+        component={NotFoundScreen}
+      />
+      <MainStack.Screen
+        name={routesScreen.Settings}
+        component={SettingsScreen}
+      />
+      <MainStack.Screen
+        options={{headerShown: false}}
+        name={routesScreen.ProfileEdit}
+        component={ProfileEditScreen}
+      />
+
+      <MainStack.Screen name={routesScreen.Comment} component={CommentScreen} />
     </MainStack.Navigator>
   );
 }

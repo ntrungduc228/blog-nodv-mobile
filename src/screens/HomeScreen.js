@@ -1,22 +1,18 @@
-import {Text, View, Button} from 'react-native';
-import {logout} from '../redux/slices/userSlice';
-import {useDispatch, useSelector} from 'react-redux';
+import {Button, Text, View} from 'react-native';
+
+import {PostCreateTrigger} from '../features/post';
 import axiosClient from '../api/axiosClient';
 // import {useState, useEffect} from 'react';
 import {useQuery} from 'react-query';
 import {FAB} from 'react-native-paper';
+import useSocialAuth from '../hooks/useSocialAuth';
+import Home from '../features/home/Home';
+import {createStackNavigator} from '@react-navigation/stack';
+import Topic from '../features/home/Topic';
 
+const HomeStack = createStackNavigator();
 function HomeScreen({navigation}) {
-  const isLogin = useSelector(state => state.user.data.isLogin);
-  // const [data, setData] = useState('');
-
-  const dispatch = useDispatch();
-
-  const logoutUser = () => {
-    if (isLogin) {
-      dispatch(logout());
-    }
-  };
+  const {handleLogoutBySocial} = useSocialAuth();
 
   // const {data} = useQuery({queryKey: ['test'], queryFn: () => callApi()});
   // console.log('data from useQuery', data);
@@ -32,41 +28,35 @@ function HomeScreen({navigation}) {
   };
 
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text className="text-2xl dark:text-white text-orange-500">
-        Home!fsdf
-      </Text>
-      <Button
-        className="bg-amber-300 mt-3"
-        title="Logout"
-        onPress={logoutUser}
-      />
-      <View className="my-3">
-        <Button className="bg-emerald-500" title="Call api" onPress={callApi} />
-      </View>
+    <>
+      <HomeStack.Navigator>
+        <HomeStack.Screen
+          name="Home"
+          component={Home}
+          options={{
+            // title:""
+            headerShown: false,
+            // tabBarIcon: 'home',
+          }}
+        />
+        {/* <Home /> */}
+        <HomeStack.Screen
+          name="Customize your interests"
+          component={Topic}
+          options={{
+            // title:""
+            headerShown: false,
+            // tabBarIcon: 'home',
+          }}
+        />
+      </HomeStack.Navigator>
 
-      <View className="my-3">
-        <Button
-          className="bg-emerald-500"
-          title="Notification"
-          onPress={() => navigation.push('Notifications')}
-        />
-      </View>
-      <View className="my-3">
-        <Button
-          className="bg-emerald-500"
-          title="Comment"
-          onPress={() => navigation.push('Comments')}
-        />
-      </View>
-      <FAB
+      {/* <FAB
         icon="plus"
         className="bg-emerald-500 rounded-full absolute bottom-2 right-2"
         onPress={() => navigation.push('PostEditor')}
-      />
-
-      {/* <Text>{data ? JSON.stringify(data) : 'fucking no data'}</Text> */}
-    </View>
+      /> */}
+    </>
   );
 }
 

@@ -2,7 +2,7 @@ import React from 'react';
 import {View} from 'react-native';
 import Comment from '../features/comment/components/Comment/Comment';
 
-function CommentScreen() {
+export function CommentScreen() {
   const userId = 1;
   const comments = [
     {
@@ -35,5 +35,3 @@ function CommentScreen() {
     </View>
   );
 }
-
-export default CommentScreen;
