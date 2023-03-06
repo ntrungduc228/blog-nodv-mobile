@@ -14,6 +14,7 @@ const routesScreen = {
   ProfileEdit: 'ProfileEdit',
   Search: 'Search',
   NotFound: 'NotFound',
+  PostsTopic: 'PostsTopic',
 };
 
 export default routesScreen;

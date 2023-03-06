@@ -1,10 +1,10 @@
 import {FlatList, RefreshControl} from 'react-native-gesture-handler';
 import {PostLoading, useGetBookmark} from '../features/post';
+import {Text, View} from 'react-native';
 
 import Post from '../features/home/Post';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ScreenLayout} from './components';
-import {View} from 'react-native';
 
 function BookmarkScreen() {
   const {data = {}, isLoading, refetch} = useGetBookmark();
@@ -26,6 +26,11 @@ function BookmarkScreen() {
           renderItem={({item}) => <Post post={item} />}
           refreshControl={
             <RefreshControl refreshing={isLoading} onRefresh={refetch} />
+          }
+          ListEmptyComponent={
+            <View className="flex-1 items-center justify-center">
+              <Text className="text-gray-500">No posts</Text>
+            </View>
           }
         />
       </SafeAreaView>
