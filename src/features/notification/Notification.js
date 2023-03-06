@@ -57,11 +57,11 @@ function Notification({notification}) {
             ? setNotificationReadMutation.mutate(notification.id)
             : ''
         }
-        className={`flex-row justify-between items-center p-4 w-screen border-l-[3px] bg-white ${
+        className={`flex-row justify-between items-center w-screen border-l-[3px] bg-white ${
           notification.isRead
             ? `border-transparent`
             : `border-green-500 bg-slate-100`
-        }`}>
+        } h-24`}>
         <View className="flex-row justify-between items-center">
           <Avatar.Image
             size={50}
@@ -80,7 +80,7 @@ function Notification({notification}) {
 
               <Text className="text-xs capitalize">
                 {displayTime}
-                &nbsp;
+                &nbsp; &nbsp;
                 {type.icon}
               </Text>
             </View>
