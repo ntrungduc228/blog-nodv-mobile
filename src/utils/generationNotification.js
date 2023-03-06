@@ -39,7 +39,7 @@ export const callApiCreateNotification = (data, type, callApi, userId) => {
       }
       break;
     default:
-      notification.link = `/users/${userId}`;
+      notification.link = 'hihi'; //`/users/${userId}`;
       notification.receiverId = `${data}`;
       if (userId !== data.id) {
         callApi.mutate(notification);
