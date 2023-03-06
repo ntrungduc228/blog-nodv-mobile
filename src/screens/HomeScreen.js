@@ -1,5 +1,7 @@
 import Home from '../features/home/Home';
+import People from '../features/home/People';
 import Topic from '../features/home/Topic';
+import TopicYouFollow from '../features/home/TopicYouFollow';
 import {createStackNavigator} from '@react-navigation/stack';
 
 const HomeStack = createStackNavigator();
@@ -18,7 +20,27 @@ function HomeScreen({navigation}) {
         name="Customize your interests"
         component={Topic}
         options={{
+          // title:""
           headerShown: false,
+          // tabBarIcon: 'home',
+        }}
+      />
+      <HomeStack.Screen
+        name="Topic you follow"
+        component={TopicYouFollow}
+        options={{
+          // title:""
+          headerShown: false,
+          // tabBarIcon: 'home',
+        }}
+      />
+      <HomeStack.Screen
+        name="People"
+        component={People}
+        options={{
+          // title:""
+          headerShown: false,
+          // tabBarIcon: 'home',
         }}
       />
     </HomeStack.Navigator>

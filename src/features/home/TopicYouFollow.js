@@ -7,39 +7,68 @@ import {useEffect, useMemo, useState} from 'react';
 import {axiosClientPrivate} from '../../api/axiosClient';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Chip} from 'react-native-paper';
-import {addTopics, followTopic, getUserProfile} from '../../api/userApi';
+import {
+  addTopics,
+  followTopic,
+  getAllUsers,
+  getAllUsersFollowing,
+  getOwnTopics,
+  getUserProfile,
+} from '../../api/userApi';
 import {useSelector} from 'react-redux';
+import TopicItem from './TopicItem';
+import PeopleItem from './PeopleItem';
+import {Spinner} from '../../component/Spinner';
 
-function TopicItem({topic}) {
-  const currentUser = useSelector(state => state.user.data.info);
-  const [lstTopic, setLstTopic] = useState(currentUser.topics || []);
-  const [isTopic, setIsTopic] = useState(
-    currentUser.topics ? currentUser.topics.includes(topic.id) : false,
-  );
-  const handleFollowTopic = async topic => {
-    setIsTopic(!isTopic);
-    // let newArr = [...lstTopic, topic.id];
-    // console.log(newArr);
-    // setLstTopic([...lstTopic, topic.id]);
-    console.log(lstTopic);
-    await followTopic(topic.id);
-    console.log(topic);
+function TopicYouFollow({navigation}) {
+  const [isFollowTopic, setIsFollowTopic] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      setIsLoading(true);
+
+      const followTopic = await getOwnTopics();
+      setIsFollowTopic(followTopic);
+      //   console.log(isFollowTopic);
+      setIsLoading(false);
+    }
+    fetchData();
+  }, []);
+  //   const handleClickPeople = async () => {
+  //     const people = await getAllUsers();
+  //     setPeople(people);
+  //   };
+  const topicListRender = () => {
+    return isFollowTopic.map((topic, index) => {
+      return <TopicItem key={index} topic={topic} />;
+    });
   };
 
   return (
-    <View style={Styles.topics}>
-      <Text style={Styles.textTopic}>{topic.name}</Text>
-      <Chip
-        textStyle={{
-          color: '#fff',
-        }}
-        onPress={() => handleFollowTopic(topic)}
-        className={`rounded-full  h-8 ${
-          isTopic ? ' bg-slate-500' : 'bg-emerald-600'
-        }`}>
-        {isTopic ? 'Following' : 'Follow'}
-      </Chip>
-      {/* <Chip mode="outlined" onPress={()=> handleFollowTopic(topic)}/> */}
+    <View style={Styles.container}>
+      <View style={Styles.containerSite}>
+        <IconAntDesign
+          name="arrowleft"
+          size={20}
+          color="#000"
+          onPress={() => {
+            navigation.navigate('Customize your interests');
+          }}>
+          {' '}
+          Topic you follow
+        </IconAntDesign>
+      </View>
+      <ScrollView>
+        {isFollowTopic.length > 0 ? (
+          topicListRender()
+        ) : (
+          <View>
+            <Text>You are not following any topics</Text>
+          </View>
+        )}
+      </ScrollView>
+      {isLoading ? <Spinner /> : <></>}
     </View>
   );
 }
@@ -105,4 +134,4 @@ const Styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
-export default TopicItem;
+export default TopicYouFollow;

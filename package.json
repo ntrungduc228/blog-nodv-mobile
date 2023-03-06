@@ -30,6 +30,7 @@
     "react-hook-form": "^7.43.2",
     "react-native": "0.71.3",
     "react-native-config": "^1.5.0",
+    "react-native-element-dropdown": "^2.7.1",
     "react-native-fbsdk-next": "^11.1.0",
     "react-native-gesture-handler": "^2.9.0",
     "react-native-image-picker": "^5.1.0",
