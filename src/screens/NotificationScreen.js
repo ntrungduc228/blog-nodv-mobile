@@ -1,12 +1,23 @@
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {Avatar, Button} from 'react-native-paper';
+import {useQuery} from 'react-query';
+import {getNotifications} from '../api/notificationApi';
 
 import Notification from '../features/notification/Notification';
 
 function NotificationScreen() {
+  // const [notifications, setNotifications] = useState([]);
+  // useQuery('notifications', () => getNotifications(), {
+  //   onSuccess: data => {
+  //     setNotifications(data);
+  //   },
+  //   onError: err => {
+  //     console.log('err re', err);
+  //   },
+  // });
   const notifications = [
     {
+      id: 1,
       type: 'REPLYCOMMENT',
       sender: {
         username: 'Đức Nguyễnn',
@@ -15,6 +26,7 @@ function NotificationScreen() {
       createdDate: new Date(),
     },
     {
+      id: 2,
       type: 'LIKECOMMENT',
       sender: {
         username: 'Đức Nguyễn',
@@ -23,6 +35,7 @@ function NotificationScreen() {
       createdDate: new Date(),
     },
     {
+      id: 3,
       type: 'COMMENT',
       sender: {
         username: 'Đức Nguyễnnn',
@@ -35,7 +48,9 @@ function NotificationScreen() {
     <ScrollView>
       <View>
         {notifications.map(notification => {
-          return <Notification notification={notification} />;
+          return (
+            <Notification key={notification.id} notification={notification} />
+          );
         })}
       </View>
     </ScrollView>
