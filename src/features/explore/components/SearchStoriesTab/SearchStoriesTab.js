@@ -32,17 +32,22 @@ export const SearchStoriesTab = () => {
           <PostLoading />
         </View>
       )}
-      {posts?.length === 0 && (
-        <View className="flex-1 justify-center items-center">
-          <Text className="text-gray-500">No post found</Text>
-        </View>
-      )}
+
       <FlatList
         data={posts}
         keyExtractor={item => item.id}
         renderItem={({item}) => <Post post={item} />}
         refreshControl={
           <RefreshControl refreshing={isLoading} onRefresh={refetch} />
+        }
+        ListEmptyComponent={
+          <>
+            {!isLoading && (
+              <View className="flex-1 items-center justify-center mt-10">
+                <Text className="text-gray-500">No posts</Text>
+              </View>
+            )}
+          </>
         }
       />
     </SafeAreaView>

@@ -37,7 +37,7 @@ export const SearchScreen = () => {
             <MaterialCommunityIcons name="magnify" size={24} color="gray" />
             <TextInput
               autoFocus
-              className="flex-1 ml-1"
+              className="flex-1 ml-1 h-9 -mb-1"
               placeholder="Search on NODV"
               value={searchValue}
               onChange={e => setSearchValue(e.nativeEvent.text)}
