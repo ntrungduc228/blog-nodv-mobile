@@ -18,7 +18,7 @@ import {
 import {useSelector} from 'react-redux';
 import TopicItem from './TopicItem';
 import PeopleItem from './PeopleItem';
-import {Spinner} from '../../component/Spinner';
+import {Spinner} from '../../components';
 
 function TopicYouFollow({navigation}) {
   const [isFollowTopic, setIsFollowTopic] = useState([]);

@@ -1,107 +1,105 @@
-import {formatRelative} from 'date-fns';
-import {useEffect, useMemo, useState} from 'react';
-import {Text, View, StyleSheet, Image, Alert, ScrollView} from 'react-native';
-import {Avatar, List} from 'react-native-paper';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {NotificationType} from '../../config/dataType.js';
+import {useEffect, useState} from 'react';
+import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import IconFeather from 'react-native-vector-icons/Feather';
-import IconFontAwesomer from 'react-native-vector-icons/FontAwesome';
-import IconAntDesign from 'react-native-vector-icons/AntDesign';
-import Styles from './Styles.js';
+import {useSelector} from 'react-redux';
 import axiosClient, {axiosClientPrivate} from '../../api/axiosClient.js';
-import Post from './Post.js';
-import {FlatList, TouchableOpacity} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import Topic from './Topic.js';
 import {getOwnTopics} from '../../api/userApi.js';
-import {getPosts} from '../../api/postApi.js';
-import {Spinner} from '../../component/Spinner/Spinner';
-// import {TouchableOpacity} from 'react-native-gesture-handler';
+import {Spinner} from '../../components/index.js';
+import Post from './Post.js';
+import Styles from './Styles.js';
 
 function Home({navigation}) {
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(0);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(6);
   const currentUser = useSelector(state => state.user.data);
   const [blackList, setBlackList] = useState([]);
-  const [topics, setTopics] = useState([]);
   const [topicSlug, setTopicSlug] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [active, setActive] = useState('For you');
   const [listScrollTopic, setListScrollTopic] = useState([]);
-  const [action, setAction] = useState(false);
+  console.log('topic: ', topicSlug !== '' ? topicSlug : 'none');
+  console.log('line 25 page: ', page);
   const setStatusFilter = topicActive => {
     setActive(topicActive);
   };
 
-  // console.log(posts);
-  // console.log(isLoading);
-  // console.log(currentUser)
-  // console.log(topics)
   useEffect(() => {
-    async function fetchData() {
-      setIsLoading(true);
-
-      const postList = await axiosClient.get(
-        `/posts?page=${page}&limit=${limit}&topic=${topicSlug}&title=`,
-      );
-      const blackList = await axiosClientPrivate.get(`blackLists/list`);
-      const topicLists = await getOwnTopics();
-      // console.log(topicList);
-      setBlackList(blackList);
-      setPosts(postList);
-      setTopics(topicLists);
-      setListScrollTopic([{name: 'For you'}, ...topicLists]);
-      // console.log(listScrollTopic);
-      setIsLoading(false);
-    }
-    // setIsLoading(true);
+    setIsLoading(true);
     fetchData();
-  }, [limit, topicSlug]);
+    console.log('call api done');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  async function fetchData() {
+    setIsLoading(true);
+    fetchDataPost();
+    fetchDataBlackList();
+    fetchDataTopic();
+
+    setIsLoading(false);
+  }
+
+  async function fetchDataPost() {
+    const postList = await axiosClient.get(
+      `/posts?page=${page}&limit=${limit}&topic=${topicSlug}&title=`,
+    );
+    setPosts([...posts, ...postList]);
+    console.log('posts.length: ' + posts.length);
+    console.log('call api done');
+  }
+
+  async function fetchDataPostByTopic(curPage, curTopicSlug) {
+    setPosts([]);
+    const postList = await axiosClient.get(
+      `/posts?page=${curPage}&limit=${limit}&topic=${curTopicSlug}&title=`,
+    );
+    setPosts(postList);
+    console.log('posts.length: ' + posts.length);
+    console.log('call api done');
+  }
+
+  async function fetchDataBlackList() {
+    const blackListPost = await axiosClientPrivate.get(`blackLists/list`);
+    setBlackList(blackListPost);
+    console.log('call api done');
+  }
+
+  async function fetchDataTopic() {
+    const topicLists = await getOwnTopics();
+    setListScrollTopic([{name: 'For you'}, ...topicLists]);
+    console.log('call api done');
+  }
 
   const handleScroll = async event => {
     const {layoutMeasurement, contentOffset, contentSize} = event.nativeEvent;
     const isCloseToBottom =
-      layoutMeasurement.height + contentOffset.y >= contentSize.height - 30;
+      layoutMeasurement.height + contentOffset.y >= contentSize.height - 10;
     if (isCloseToBottom) {
-      setLimit(limit + 10);
-      console.log(limit);
+      // setLimit(limit + 10);
+      setPage(page + 1);
       setIsLoading(true);
+      await fetchDataPost();
+      setIsLoading(false);
     }
   };
 
   const handleChangeTopic = async topic => {
-    setLimit(10);
-    console.log(topic.name);
-    setPosts([]);
+    setPage(0);
     setIsLoading(true);
     setStatusFilter(topic.name);
     setTopicSlug(topic.slug);
+    await fetchDataPostByTopic(0, topic.slug);
+    setIsLoading(false);
   };
 
   const handleChangeAllTopic = async topic => {
-    setLimit(10);
+    setIsLoading(true);
+    setPage(0);
     setStatusFilter(topic.name);
     setTopicSlug('');
-  };
-
-  const handleChangeFollowTopic = async () => {
-    setTopicSlug('');
-  };
-
-  const handleUpdate = async () => {
-    setUpdate(true);
-  };
-
-  const topicList = () => {
-    return topicList.map((topic, index) => {
-      return (
-        <Text key={index} style={Styles.textHeader}>
-          {}
-        </Text>
-      );
-    });
+    await fetchDataPostByTopic(0, '');
+    setIsLoading(false);
   };
 
   const postList = () => {
@@ -109,6 +107,7 @@ function Home({navigation}) {
       return (
         !blackList.includes(post.id) && (
           <TouchableOpacity
+            key={index}
             onPress={() => {
               navigation.push('PostDetail', {
                 id: post.id,
@@ -125,21 +124,17 @@ function Home({navigation}) {
     return listScrollTopic.map((topic, index) => {
       return (
         <TouchableOpacity
+          key={index}
           style={Styles.wrapTopic}
           onPress={() =>
             topic.name === 'For you'
               ? handleChangeAllTopic(topic)
               : handleChangeTopic(topic)
           }>
-          <ScrollBarTopicItem topic={topic} isActive={active} />
+          <ScrollBarTopicItem key={index} topic={topic} isActive={active} />
         </TouchableOpacity>
       );
     });
-  };
-
-  const topic = () => {
-    console.log('onPress');
-    return <Topic />;
   };
 
   return (
@@ -178,14 +173,6 @@ function Home({navigation}) {
             backgroundColor: '#8A8383',
           }}
         />
-        {/* <View
-          style={{
-            width: '15%',
-            height: 1,
-            backgroundColor: '#000',
-            marginLeft: 46,
-          }}
-        /> */}
         {posts.length ? (
           <View>{postList()}</View>
         ) : (
@@ -200,9 +187,6 @@ function Home({navigation}) {
 }
 
 function ScrollBarTopicItem({topic, isActive}) {
-  // console.log(topic);
-  const [active, setActive] = useState(isActive);
-
   return (
     <View style={[isActive === topic.name && Styles.borderBottom]}>
       <Text
@@ -213,21 +197,6 @@ function ScrollBarTopicItem({topic, isActive}) {
         }>
         {topic.name}
       </Text>
-      {/* <TouchableOpacity
-            style={Styles.wrapTopic}
-            className="mr-2"
-            onPress={() => handleChangeAllTopic()}>
-            <View style={Styles.borderBottom}>
-              <Text
-                style={[
-                  Styles.textHeader,
-                  Styles.textHighline,
-                  Styles.paddingBottom,
-                ]}>
-                For you
-              </Text>
-            </View>
-          </TouchableOpacity> */}
     </View>
   );
 }

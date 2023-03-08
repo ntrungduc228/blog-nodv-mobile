@@ -34,13 +34,14 @@ function Post({post}) {
   const [isLoading, setIsLoading] = useState(true);
   const [isHide, setIsHide] = useState(false);
   useEffect(() => {
-    async function fetchData() {
-      const checkBookmark = await axiosClientPrivate.get(`bookmarks/list`);
-      // console.log(checkBookmark)
-      if (checkBookmark.includes(post.id)) setIsBookmark(true);
-    }
     fetchData();
-  }, [isBookmark]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  async function fetchData() {
+    const checkBookmark = await axiosClientPrivate.get(`bookmarks/list`);
+    // console.log(checkBookmark)
+    if (checkBookmark.includes(post.id)) setIsBookmark(true);
+  }
   const handleBookmark = async id => {
     await axiosClientPrivate.patch(`/bookmarks/${id}`);
     setIsBookmark(!isBookmark);

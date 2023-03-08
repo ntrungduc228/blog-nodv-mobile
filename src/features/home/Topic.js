@@ -21,7 +21,7 @@ import {useMutation} from 'react-query';
 // import TopicItem from './TopicItem';
 import {TouchableOpacity} from 'react-native';
 import PeopleItem from './PeopleItem';
-import {Spinner} from '../../component/Spinner';
+import {Spinner} from '../../components';
 
 function Topic({navigation}) {
   const currentUser = useSelector(state => state.user.data.info);
@@ -59,10 +59,9 @@ function Topic({navigation}) {
       setIsLoading(false);
     }
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const setStatusFilter = topicActive => {
-    setActive(topicActive);
-  };
+
   const handleClickTopic = () => {
     setStatus('topic');
     setFilterItem('Topics');
@@ -90,6 +89,7 @@ function Topic({navigation}) {
     return filters.map((filter, index) => {
       return (
         <TouchableOpacity
+          key={index}
           onPress={() =>
             filter.item === 'Topics' ? handleClickTopic() : handleClickPeole()
           }>

@@ -17,7 +17,7 @@ import {
 import {useSelector} from 'react-redux';
 import TopicItem from './TopicItem';
 import PeopleItem from './PeopleItem';
-import {Spinner} from '../../component/Spinner';
+import {Spinner} from '../../components';
 
 function People({navigation}) {
   const currentUser = useSelector(state => state.user.data.info);
@@ -39,6 +39,7 @@ function People({navigation}) {
       setIsLoading(false);
     }
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const handleClickPeople = async () => {
     const peopleFollowing = await getAllUsersFollowing();
