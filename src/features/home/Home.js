@@ -66,19 +66,13 @@ function Home({navigation}) {
   return (
     <ScrollView onScroll={handleScroll}>
       {/* // <ScrollView> */}
-      <View className="my-3">
-        <Button
-          className="bg-emerald-500"
-          title="Comment"
-          onPress={() => navigation.navigate('Comments')}
-        />
-      </View>
+
       <View style={Styles.container}>
         <View style={Styles.containerSite}>
           <Text style={Styles.textSite}>Home</Text>
           <IconFeather
             name="bell"
-            size={35}
+            size={22}
             color="#A09898"
             solid="#A09898"
             onPress={() => navigation.navigate('Notifications')}

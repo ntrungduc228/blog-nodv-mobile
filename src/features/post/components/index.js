@@ -6,4 +6,5 @@ export * from './PostDetailLoading';
 export * from './PostToolbar';
 export * from './LikePostButton';
 export * from './PostLoading';
+export * from './CommentButton';
 // export * from './PostPublishForm';
