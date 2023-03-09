@@ -52,6 +52,7 @@ export const LikePostButton = ({userLikeIds = [], postId, children}) => {
     },
   });
   const handleLike = () => {
+    setLiked(!liked);
     if (liked) {
       unLikePost(postId);
     } else {
