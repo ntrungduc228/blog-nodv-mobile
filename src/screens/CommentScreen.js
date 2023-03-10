@@ -21,7 +21,6 @@ import {callApiCreateNotification} from '../utils/generationNotification';
 export function CommentScreen({route}) {
   const post = route.params?.post;
   const dispatch = useDispatch();
-  // const post = {id: '63a89482c85bd05cd16c340b'};
   const socket = useSelector(state => state.socket.data);
   const userId = useSelector(state => state.user?.data?.info?.id);
 
