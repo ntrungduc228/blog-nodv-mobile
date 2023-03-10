@@ -17,16 +17,20 @@ import {
 } from '../../api/userApi';
 import {useDispatch, useSelector} from 'react-redux';
 import {setUser, updateUser} from '../../redux/slices/userSlice';
-import {useMutation} from 'react-query';
+import {useMutation, useQuery} from 'react-query';
 // import TopicItem from './TopicItem';
 import {TouchableOpacity} from 'react-native';
 import PeopleItem from './PeopleItem';
 import {Spinner} from '../../components';
+import {setTopic, updateTopic} from '../../redux/slices/topicSlice';
+import {getTopics} from '../../api/topicApi';
 
 function Topic({navigation}) {
+  const {isLogin} = useSelector(state => state.user.data);
+  const dispatch = useDispatch();
   const currentUser = useSelector(state => state.user.data.info);
   const [topics, setTopics] = useState([]);
-  const [user, setUser] = useState();
+  // const [user, setUser] = useState();
   const [isTopic, setIsTopic] = useState(false);
   const filters = [
     {
@@ -44,18 +48,24 @@ function Topic({navigation}) {
   const [status, setStatus] = useState('topic');
   const [isLoading, setIsLoading] = useState(true);
   const [filterItem, setFilterItem] = useState('Topics');
+  useQuery(['topic', isLogin], getOwnTopics, {
+    enabled: isLogin,
+    onSuccess: data => {
+      dispatch(setTopic(data));
+    },
+  });
   useEffect(() => {
     async function fetchData() {
       setIsLoading(true);
-      const topicLists = await axiosClientPrivate.get(`/topics`);
+      const topicLists = await getTopics();
       setTopics(topicLists);
       const user = await getUserProfile(currentUser.email);
       setUser(user);
-      const people = await getUsersNotFollow(20);
+      const peopleNotFollow = await getUsersNotFollow(20);
       // const people = await axiosClientPrivate.get(
       //   `/users/getUsersNotFollowed/20`,
       // );
-      setPeople(people);
+      setPeople(peopleNotFollow);
       setIsLoading(false);
     }
     fetchData();
@@ -80,8 +90,8 @@ function Topic({navigation}) {
     });
   };
   const peopleRender = () => {
-    return people.map((people, index) => {
-      return <PeopleItem key={index} people={people} status={false} />;
+    return people.map((curPeople, index) => {
+      return <PeopleItem key={index} people={curPeople} status={false} />;
     });
   };
 
@@ -177,11 +187,22 @@ function TopicItem({topic, curUser}) {
   const [isTopic, setIsTopic] = useState(
     currentUser.topics ? currentUser.topics.includes(topic.id) : false,
   );
+  // const {isLogin} = useSelector(state => state.user.data);
 
+  // useQuery(['topic', isLogin], getOwnTopics, {
+  //   enabled: isLogin,
+  //   onSuccess: data => {
+  //     console.log('update');
+
+  //     dispatch(setTopic(data));
+  //   },
+  // });
   const addTopicsMutation = useMutation(followTopic, {
     onSuccess: data => {
       dispatch(updateUser(data));
       // navigate(appRoutes.HOME);
+      console.log(data);
+      // dispatch(updateTopic(data));
     },
   });
 
@@ -193,7 +214,7 @@ function TopicItem({topic, curUser}) {
     // await followTopic(topic.id);
     // await addTopics(lstTopic);
     // dispatch(updateUser());
-    addTopicsMutation.mutate(topic.id);
+    await addTopicsMutation.mutate(topic.id);
   };
 
   return (

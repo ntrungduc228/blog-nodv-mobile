@@ -1,10 +1,12 @@
 import {useEffect, useState} from 'react';
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import IconFeather from 'react-native-vector-icons/Feather';
-import {useSelector} from 'react-redux';
+import {useQuery} from 'react-query';
+import {useDispatch, useSelector} from 'react-redux';
 import axiosClient, {axiosClientPrivate} from '../../api/axiosClient.js';
 import {getOwnTopics} from '../../api/userApi.js';
 import {Spinner} from '../../components/index.js';
+import {setTopic} from '../../redux/slices/topicSlice.js';
 import Post from './Post.js';
 import Styles from './Styles.js';
 
@@ -12,7 +14,8 @@ function Home({navigation}) {
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(6);
-  const currentUser = useSelector(state => state.user.data);
+  const currentUser = useSelector(state => state.user.data.info);
+  const curTopicFollow = useSelector(state => state.topic.topicFollow);
   const [blackList, setBlackList] = useState([]);
   const [topicSlug, setTopicSlug] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -24,6 +27,11 @@ function Home({navigation}) {
     setActive(topicActive);
   };
 
+  const {isLogin} = useSelector(state => state.user.data);
+  const dispatch = useDispatch();
+
+  // const {dataTopic, loading, error} = useQuery(getOwnTopics, {});
+  // console.log(dataTopic);
   useEffect(() => {
     setIsLoading(true);
     fetchData();
@@ -35,7 +43,6 @@ function Home({navigation}) {
     setIsLoading(true);
     fetchDataPost();
     fetchDataBlackList();
-    fetchDataTopic();
 
     setIsLoading(false);
   }
@@ -55,19 +62,11 @@ function Home({navigation}) {
       `/posts?page=${curPage}&limit=${limit}&topic=${curTopicSlug}&title=`,
     );
     setPosts(postList);
-    console.log('posts.length: ' + posts.length);
-    console.log('call api done');
   }
 
   async function fetchDataBlackList() {
     const blackListPost = await axiosClientPrivate.get(`blackLists/list`);
     setBlackList(blackListPost);
-    console.log('call api done');
-  }
-
-  async function fetchDataTopic() {
-    const topicLists = await getOwnTopics();
-    setListScrollTopic([{name: 'For you'}, ...topicLists]);
     console.log('call api done');
   }
 
@@ -121,7 +120,7 @@ function Home({navigation}) {
   };
 
   const topicListRender = () => {
-    return listScrollTopic.map((topic, index) => {
+    return curTopicFollow.map((topic, index) => {
       return (
         <TouchableOpacity
           key={index}

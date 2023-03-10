@@ -9,14 +9,10 @@ import {
 import {useMemo, useState, useMutation, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Styles from './Styles';
-import {Avatar} from 'react-native-paper';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {NotificationType} from '../../config/dataType.js';
 import IconFeather from 'react-native-vector-icons/Feather';
 import IconFontAwesomer from 'react-native-vector-icons/FontAwesome';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
-import axiosClient from '../../api/axiosClient.js';
+
 import {axiosClientPrivate} from '../../api/axiosClient.js';
 import {useQueryClient} from 'react-query';
 import {format} from 'date-fns';
@@ -28,10 +24,7 @@ import {PostMenu} from '../post/components/PostMenu/PostMenu';
 function Post({post}) {
   const currentUser = useSelector(state => state.user.data.info);
   const checkPost = post.userId === currentUser.id;
-  // console.log(checkPost);
-  //  console.log(currentUser.info.id)
   const [isBookmark, setIsBookmark] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [isHide, setIsHide] = useState(false);
   useEffect(() => {
     fetchData();
@@ -40,7 +33,9 @@ function Post({post}) {
   async function fetchData() {
     const checkBookmark = await axiosClientPrivate.get(`bookmarks/list`);
     // console.log(checkBookmark)
-    if (checkBookmark.includes(post.id)) setIsBookmark(true);
+    if (checkBookmark.includes(post.id)) {
+      setIsBookmark(true);
+    }
   }
   const handleBookmark = async id => {
     await axiosClientPrivate.patch(`/bookmarks/${id}`);
@@ -52,10 +47,6 @@ function Post({post}) {
     console.log(id);
     await axiosClientPrivate.patch(`/blackLists/${id}`);
   };
-
-  // const handleHidePost = useMutation(hidePost, {
-  //     onSuccess: (data)
-  // })
 
   return (
     !isHide && (
