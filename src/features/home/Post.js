@@ -1,23 +1,14 @@
-import {
-  Text,
-  View,
-  StyleSheet,
-  Image,
-  Alert,
-  TouchableOpacity,
-} from 'react-native';
-import {useMemo, useState, useMutation, useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import Styles from './Styles';
-import IconFeather from 'react-native-vector-icons/Feather';
-import IconFontAwesomer from 'react-native-vector-icons/FontAwesome';
-import IconAntDesign from 'react-native-vector-icons/AntDesign';
+import {Image, Text, View, TouchableOpacity} from 'react-native';
+import {useEffect, useState} from 'react';
 
 import {axiosClientPrivate} from '../../api/axiosClient.js';
 import {useQueryClient} from 'react-query';
 import {format} from 'date-fns';
 import {PostMenu} from '../post/components/PostMenu/PostMenu';
 // import {TouchableOpacity} from 'react-native-gesture-handler';
+import {routesScreen} from '../../navigations';
+import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
 
 // import {useMutation} from '@apollo/react-hooks';
 // import { useMutation, useQueryClient } from 'react-query';
@@ -49,9 +40,40 @@ function Post({post}) {
   };
 
   return (
-    !isHide && (
-      <View style={Styles.body}>
-        <View style={Styles.bodyTop}>
+    <View style={Styles.body}>
+      <View style={Styles.bodyTop}>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate(routesScreen.Profile, {
+              email: post.user?.email,
+            })
+          }
+          className="flex-1 flex-row">
+          <Image
+            source={{
+              uri: post.user.avatar
+                ? post.user.avatar
+                : 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pinterest.com%2Fpin%2F540994973993086717%2F&psig=AOvVaw1Mrgp1Bdc9w_gq7PTOt3hx&ust=1677994074144000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCMDe5JfFwf0CFQAAAAAdAAAAABAE',
+              method: 'POST',
+              headers: {
+                Pragma: 'no-cache',
+              },
+              body: 'Your Body goes here',
+            }}
+            style={Styles.imageProfile}
+          />
+          <Text style={Styles.userName}>{post.user.username}</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={Styles.post}>
+        <View style={Styles.titlePost}>
+          <Text
+            onPress={() => {
+              navigation.navigate(routesScreen.PostDetail, {id: post.id});
+            }}
+            style={Styles.contentPost}>
+            {post.title}
+          </Text>
           <Image
             source={{
               uri: post.user.avatar

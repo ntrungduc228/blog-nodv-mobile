@@ -4,6 +4,8 @@ import {Text, View} from 'react-native';
 import {Avatar} from 'react-native-paper';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useMutation} from 'react-query';
+import {setNotificationRead} from '../../api/notificationApi.js';
 import {NotificationType} from '../../config/dataType.js';
 
 function Notification({notification}) {
@@ -45,19 +47,27 @@ function Notification({notification}) {
   const displayTime = useMemo(() => {
     return formatRelative(new Date(notification.createdDate), new Date());
   }, [notification.createdDate]);
+  const setNotificationReadMutation = useMutation(setNotificationRead);
 
   return (
     <>
       <View
-        className={`flex-row justify-between items-center p-4 w-screen border-l-[3px] bg-white ${
+        onPress={() =>
+          !notification.isRead
+            ? setNotificationReadMutation.mutate(notification.id)
+            : ''
+        }
+        className={`flex-row justify-between items-center w-screen border-l-[3px] bg-white ${
           notification.isRead
             ? `border-transparent`
             : `border-green-500 bg-slate-100`
-        }`}>
+        } h-24`}>
         <View className="flex-row justify-between items-center">
           <Avatar.Image
             size={50}
-            source={require('../../assets/imgs/avatar.png')}
+            source={{
+              uri: 'https://firebasestorage.googleapis.com/v0/b/blog-nodv.appspot.com/o/images%2F1666836545615avt.jpg?alt=media&token=f3715525-f6d8-42f5-a341-5f9b8d135978',
+            }}
           />
           <View className="ml-3 flex-1">
             <View className="flex-row flex-wrap">
@@ -70,7 +80,7 @@ function Notification({notification}) {
 
               <Text className="text-xs capitalize">
                 {displayTime}
-                &nbsp;
+                &nbsp; &nbsp;
                 {type.icon}
               </Text>
             </View>

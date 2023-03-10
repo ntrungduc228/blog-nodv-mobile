@@ -14,7 +14,7 @@ export const PostCreateTrigger = () => {
       icon="plus"
       color="#fff"
       size="medium"
-      className="bg-emerald-600 rounded-full absolute right-4 bottom-4"
+      className="bg-green-700 rounded-full absolute right-4 bottom-24 w-12 h-12 items-center justify-center"
       onPress={() =>
         navigation.push('PostEditor', {
           mode: postEditorMode.CREATE,

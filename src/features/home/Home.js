@@ -1,3 +1,5 @@
+import {ScrollView, Text, View, Button} from 'react-native';
+import axiosClient, {axiosClientPrivate} from '../../api/axiosClient.js';
 import {useEffect, useState} from 'react';
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import IconFeather from 'react-native-vector-icons/Feather';
@@ -138,12 +140,13 @@ function Home({navigation}) {
 
   return (
     <ScrollView onScroll={handleScroll}>
+
       <View style={Styles.container}>
         <View style={Styles.containerSite}>
           <Text style={Styles.textSite}>Home</Text>
           <IconFeather
             name="bell"
-            size={35}
+            size={22}
             color="#A09898"
             solid="#A09898"
             onPress={() => navigation.navigate('Notifications')}

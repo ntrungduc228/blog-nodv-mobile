@@ -34,6 +34,7 @@ export const BookmarkButton = ({postId, children}) => {
   });
 
   const handleBookmark = () => {
+    setIsBookmarked(!isBookmarked);
     bookmarkPost(postId);
   };
 

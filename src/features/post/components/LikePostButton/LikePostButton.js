@@ -1,9 +1,13 @@
 import {cloneElement, useState} from 'react';
+import {useMutation, useQueryClient} from 'react-query';
 
 import {Chip} from 'react-native-paper';
+import {NotificationType} from '../../../../config/dataType';
+import {callApiCreateNotification} from '../../../../utils/generationNotification';
+import {createNotification} from '../../../../api/notificationApi';
+import {updateCountNotifications} from '../../../../api/userApi';
 import {useEffect} from 'react';
 import {useLikePost} from '../../hooks/useLikePost';
-import {useQueryClient} from 'react-query';
 import {useSelector} from 'react-redux';
 import {useUnLikePost} from '../../hooks/useUnlikePost';
 
@@ -30,9 +34,15 @@ export const LikePostButton = ({userLikeIds = [], postId, children}) => {
     });
   };
   const {mutate: likePost} = useLikePost({
-    onSuccess: () => {
+    onSuccess: data => {
       setLiked(true);
       handleUpdateLocalLike(true);
+      callApiCreateNotification(
+        data,
+        NotificationType.LIKE,
+        createNotificationLikePostMutation,
+        userId,
+      );
     },
   });
   const {mutate: unLikePost} = useUnLikePost({
@@ -42,12 +52,28 @@ export const LikePostButton = ({userLikeIds = [], postId, children}) => {
     },
   });
   const handleLike = () => {
+    setLiked(!liked);
     if (liked) {
       unLikePost(postId);
     } else {
       likePost(postId);
     }
   };
+
+  // Vi's Code
+  const updateUserIncreaseNumOfNotification = useMutation(
+    updateCountNotifications,
+  );
+  const createNotificationLikePostMutation = useMutation(createNotification, {
+    onSuccess: data => {
+      const Increase = {
+        isIncrease: true,
+        userId: data.receiverId,
+      };
+      updateUserIncreaseNumOfNotification.mutate(Increase);
+    },
+  });
+
   return children ? (
     typeof children === 'function' ? (
       children({liked, handleLike})
