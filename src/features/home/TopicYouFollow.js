@@ -1,24 +1,10 @@
-import {StatusBar} from 'expo-status-bar';
-import {StyleSheet, Text, View, Image, Button} from 'react-native';
-import IconFeather from 'react-native-vector-icons/Feather';
-import IconFontAwesomer from 'react-native-vector-icons/FontAwesome';
+import {StyleSheet, Text, View} from 'react-native';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
-import {useEffect, useMemo, useState} from 'react';
-import {axiosClientPrivate} from '../../api/axiosClient';
+import {useEffect, useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
-import {Chip} from 'react-native-paper';
-import {
-  addTopics,
-  followTopic,
-  getAllUsers,
-  getAllUsersFollowing,
-  getOwnTopics,
-  getUserProfile,
-} from '../../api/userApi';
-import {useSelector} from 'react-redux';
+import {getOwnTopics} from '../../api/userApi';
 import TopicItem from './TopicItem';
-import PeopleItem from './PeopleItem';
-import {Spinner} from '../../components';
+import {PostLoading} from '../post';
 
 function TopicYouFollow({navigation}) {
   const [isFollowTopic, setIsFollowTopic] = useState([]);
@@ -28,23 +14,26 @@ function TopicYouFollow({navigation}) {
     async function fetchData() {
       setIsLoading(true);
 
-      const followTopic = await getOwnTopics();
-      setIsFollowTopic(followTopic);
-      //   console.log(isFollowTopic);
+      const followingTopic = await getOwnTopics();
+      setIsFollowTopic(followingTopic);
       setIsLoading(false);
     }
     fetchData();
   }, []);
-  //   const handleClickPeople = async () => {
-  //     const people = await getAllUsers();
-  //     setPeople(people);
-  //   };
+
   const topicListRender = () => {
     return isFollowTopic.map((topic, index) => {
       return <TopicItem key={index} topic={topic} />;
     });
   };
-
+  const loadingRender = () => {
+    const elements = [];
+    const times = 5;
+    for (let i = 0; i < times; i++) {
+      elements.push(<PostLoading />);
+    }
+    return elements;
+  };
   return (
     <View style={Styles.container}>
       <View style={Styles.containerSite}>
@@ -60,15 +49,17 @@ function TopicYouFollow({navigation}) {
         </IconAntDesign>
       </View>
       <ScrollView>
-        {isFollowTopic.length > 0 ? (
-          topicListRender()
-        ) : (
-          <View>
-            <Text>You are not following any topics</Text>
-          </View>
-        )}
+        {isFollowTopic.length > 0
+          ? topicListRender()
+          : !isLoading && (
+              <View>
+                <Text className="text-center text-lg">
+                  You are not following any topics
+                </Text>
+              </View>
+            )}
       </ScrollView>
-      {isLoading ? <Spinner /> : <></>}
+      {isLoading ? <>{loadingRender()}</> : <></>}
     </View>
   );
 }
@@ -86,6 +77,11 @@ const Styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     paddingLeft: 10,
+  },
+  chipFollowing: {
+    borderColor: '#1A8917',
+    backgroundColor: '#fff',
+    color: '#1A8917',
   },
   textHighline: {
     color: '#201A1B',

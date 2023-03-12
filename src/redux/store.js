@@ -12,13 +12,6 @@ export const store = configureStore({
     socket: socketReducer,
     profile: profileReducer,
     bookmark: bookmarkReducer,
-
-export const store = configureStore({
-  reducer: {
-    user: userReducer,
-    socket: socketReducer,
-    profile: profileReducer,
-    bookmark: bookmarkReducer,
     topic: topicReducer,
     comment: commentReducer,
   },

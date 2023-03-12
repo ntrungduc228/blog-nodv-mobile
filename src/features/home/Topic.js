@@ -1,37 +1,29 @@
-import {StatusBar} from 'expo-status-bar';
 import {StyleSheet, Text, View, Image, Button} from 'react-native';
-import IconFeather from 'react-native-vector-icons/Feather';
-import IconFontAwesomer from 'react-native-vector-icons/FontAwesome';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
-import {useEffect, useMemo, useState} from 'react';
-import {axiosClientPrivate} from '../../api/axiosClient';
+import {useEffect, useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Chip} from 'react-native-paper';
 import {
-  addTopics,
   followTopic,
   getUserProfile,
   getOwnTopics,
-  getAllUsers,
   getUsersNotFollow,
 } from '../../api/userApi';
 import {useDispatch, useSelector} from 'react-redux';
 import {setUser, updateUser} from '../../redux/slices/userSlice';
 import {useMutation, useQuery} from 'react-query';
-// import TopicItem from './TopicItem';
 import {TouchableOpacity} from 'react-native';
 import PeopleItem from './PeopleItem';
-import {Spinner} from '../../components';
-import {setTopic, updateTopic} from '../../redux/slices/topicSlice';
+import {setTopic} from '../../redux/slices/topicSlice';
 import {getTopics} from '../../api/topicApi';
+import {Spinner} from '../../components';
+import {PostLoading} from '../post';
 
 function Topic({navigation}) {
   const {isLogin} = useSelector(state => state.user.data);
   const dispatch = useDispatch();
   const currentUser = useSelector(state => state.user.data.info);
   const [topics, setTopics] = useState([]);
-  // const [user, setUser] = useState();
-  const [isTopic, setIsTopic] = useState(false);
   const filters = [
     {
       item: 'Topics',
@@ -40,10 +32,7 @@ function Topic({navigation}) {
       item: 'People',
     },
   ];
-  // const [selectTopic, setSelectTopic] = useState(currentUser.topics || []);
-  const [isFollowTopic, setIsFollowTopic] = useState(
-    currentUser?.topics ? currentUser.topics : [],
-  );
+  const followingTopic = currentUser?.topics ? currentUser.topics : [];
   const [people, setPeople] = useState([]);
   const [status, setStatus] = useState('topic');
   const [isLoading, setIsLoading] = useState(true);
@@ -62,9 +51,6 @@ function Topic({navigation}) {
       const user = await getUserProfile(currentUser.email);
       setUser(user);
       const peopleNotFollow = await getUsersNotFollow(20);
-      // const people = await axiosClientPrivate.get(
-      //   `/users/getUsersNotFollowed/20`,
-      // );
       setPeople(peopleNotFollow);
       setIsLoading(false);
     }
@@ -83,7 +69,7 @@ function Topic({navigation}) {
   const topicListRender = () => {
     return topics.map((topic, index) => {
       return (
-        !isFollowTopic.includes(topic.id) && (
+        !followingTopic.includes(topic.id) && (
           <TopicItem key={index} topic={topic} />
         )
       );
@@ -93,6 +79,14 @@ function Topic({navigation}) {
     return people.map((curPeople, index) => {
       return <PeopleItem key={index} people={curPeople} status={false} />;
     });
+  };
+  const loadingRender = () => {
+    const elements = [];
+    const times = 5;
+    for (let i = 0; i < times; i++) {
+      elements.push(<PostLoading />);
+    }
+    return elements;
   };
 
   const filterRender = () => {
@@ -132,35 +126,19 @@ function Topic({navigation}) {
         </IconAntDesign>
       </View>
 
-      <View style={Styles.header}>
-        {/* <TouchableOpacity onPress={() => handleClickTopic()}>
-          <Text style={[Styles.textHeader, Styles.textHighline]}>Topics</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleClickPeole()}>
-          <Text style={Styles.textHeader}>People</Text>
-        </TouchableOpacity> */}
-        {filterRender()}
-      </View>
+      <View style={Styles.header}>{filterRender()}</View>
       <View
         style={{
           width: '100%',
           height: 1,
-          backgroundColor: '#8A8383',
+          backgroundColor: '#ebeaea',
         }}
       />
-      {/* <View
-        style={{
-          width: '12%',
-          height: 1,
-          backgroundColor: '#000',
-          marginLeft: 25,
-        }}
-      /> */}
       <TouchableOpacity
         onPress={() => {
           status === 'topic'
             ? navigation.navigate('Topic you follow')
-            : navigation.navigate('People');
+            : navigation.navigate('People you follow');
         }}>
         <View style={Styles.seeAllBackground}>
           <Text style={Styles.seeAllText}>
@@ -168,69 +146,63 @@ function Topic({navigation}) {
           </Text>
         </View>
       </TouchableOpacity>
-      <ScrollView>
-        {status === 'topic' ? topicListRender() : peopleRender()}
-      </ScrollView>
-      {isLoading ? <Spinner /> : <></>}
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <ScrollView>
+          {status === 'topic' ? topicListRender() : peopleRender()}
+        </ScrollView>
+      )}
     </View>
   );
 }
 
 function TopicItem({topic, curUser}) {
-  // console.log('1' + curUser);
   const currentUser = useSelector(state => state.user.data.info);
   const dispatch = useDispatch();
   const curTopic = [];
-  // const curTopic = curUser.topics ? curUser.topics : [];
   const [lstTopic, setLstTopic] = useState(curTopic);
-  // console.log('before: ' + lstTopic);
   const [isTopic, setIsTopic] = useState(
     currentUser.topics ? currentUser.topics.includes(topic.id) : false,
   );
-  // const {isLogin} = useSelector(state => state.user.data);
-
-  // useQuery(['topic', isLogin], getOwnTopics, {
-  //   enabled: isLogin,
-  //   onSuccess: data => {
-  //     console.log('update');
-
-  //     dispatch(setTopic(data));
-  //   },
-  // });
   const addTopicsMutation = useMutation(followTopic, {
     onSuccess: data => {
       dispatch(updateUser(data));
       // navigate(appRoutes.HOME);
-      console.log(data);
-      // dispatch(updateTopic(data));
     },
   });
 
-  const handleFollowTopic = async topic => {
+  const handleFollowTopic = async topicItem => {
     setIsTopic(!isTopic);
-    setLstTopic([...lstTopic, topic.id]);
-    // console.log(lstTopic);
-    // console.log('after: ' + lstTopic);
-    // await followTopic(topic.id);
-    // await addTopics(lstTopic);
-    // dispatch(updateUser());
-    await addTopicsMutation.mutate(topic.id);
+    setLstTopic([...lstTopic, topicItem.id]);
+    await addTopicsMutation.mutate(topicItem.id);
   };
 
   return (
-    <View style={Styles.topics}>
-      <Text style={Styles.textTopic}>{topic.name}</Text>
-      <Chip
-        textStyle={{
-          color: '#fff',
+    <View>
+      <View style={Styles.topics}>
+        <Text style={Styles.textTopic}>{topic.name}</Text>
+        <Chip
+          style={isTopic ? Styles.chipFollowing : ''}
+          textStyle={{
+            color: '#fff',
+          }}
+          mode={'outlined'}
+          onPress={() => handleFollowTopic(topic)}
+          className={`rounded-full  h-8 ${
+            isTopic ? ' bg-slate-500' : 'bg-green-600'
+          }`}>
+          {isTopic ? 'Following' : 'Follow'}
+        </Chip>
+      </View>
+      <View
+        style={{
+          width: '100%',
+          height: 2.5,
+          backgroundColor: '#F8F8F8',
+          marginTop: 19,
         }}
-        onPress={() => handleFollowTopic(topic)}
-        className={`rounded-full  h-8 ${
-          isTopic ? ' bg-slate-500' : 'bg-emerald-600'
-        }`}>
-        {isTopic ? 'Following' : 'Follow'}
-      </Chip>
-      {/* <Chip mode="outlined" onPress={()=> handleFollowTopic(topic)}/> */}
+      />
     </View>
   );
 }
@@ -242,8 +214,8 @@ const Styles = StyleSheet.create({
   },
   containerSite: {
     paddingTop: 75,
-    paddingVertical: 59,
-    paddingHorizontal: 40,
+    paddingVertical: 50,
+    paddingHorizontal: 30,
   },
   header: {
     flexDirection: 'row',
@@ -252,6 +224,11 @@ const Styles = StyleSheet.create({
   textHighline: {
     color: '#201A1B',
     paddingBottom: 10,
+  },
+  chipFollowing: {
+    borderColor: '#1A8917',
+    backgroundColor: '#fff',
+    color: '#1A8917',
   },
   seeAllBackground: {
     // flex: 1,
@@ -283,7 +260,7 @@ const Styles = StyleSheet.create({
   seeAllText: {
     marginTop: 30,
     color: '#000',
-    fontWeight: '500',
+    fontWeight: '700',
     fontSize: 17,
     marginLeft: 30,
     paddingBottom: 30,
@@ -291,6 +268,7 @@ const Styles = StyleSheet.create({
   textTopic: {
     fontSize: 16,
     fontWeight: '500',
+    color: '#000',
   },
 
   bottom: {
