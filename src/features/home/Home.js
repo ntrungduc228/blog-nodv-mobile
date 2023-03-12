@@ -1,20 +1,28 @@
 import {ScrollView, Text, View, Button} from 'react-native';
 import axiosClient, {axiosClientPrivate} from '../../api/axiosClient.js';
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 
 import IconFeather from 'react-native-vector-icons/Feather';
 import Post from './Post.js';
 import Styles from './Styles.js';
 import Topic from './Topic.js';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {Badge} from 'react-native-paper';
+import {setUser} from '../../redux/slices/userSlice.js';
+import {updateCountNotifications} from '../../api/userApi.js';
+import {useMutation} from 'react-query';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 function Home({navigation}) {
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(15);
-  const currentUser = useSelector(state => state.user.data);
+  const currentUser = useSelector(state => state.user.data.info);
   const [blackList, setBlackList] = useState([]);
   const [topics, setTopics] = useState([]);
+
+  const socket = useSelector(state => state.socket.data);
+  const dispatch = useDispatch();
   // console.log(blackList)
   // console.log(currentUser)
   // console.log(topics)
@@ -63,6 +71,45 @@ function Home({navigation}) {
     return <Topic />;
   };
 
+  //vi
+  const handleReceiveCountNotificationSocket = useCallback(
+    payload => {
+      const data = JSON.parse(payload.body);
+      console.log(data);
+      dispatch(setUser(data));
+    },
+    [dispatch],
+  );
+
+  useEffect(() => {
+    const topic = `/topic/notifications/${currentUser?.id}/countNotifications`;
+    if (socket) {
+      socket.subscribe(topic, handleReceiveCountNotificationSocket);
+    }
+    return () => {
+      if (socket) {
+        socket.unsubscribe(topic);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [socket, currentUser]);
+  const updateUserCountNotification = useMutation(updateCountNotifications, {
+    onSuccess: data => {
+      dispatch(setUser(data));
+    },
+  });
+
+  const handleClickNotification = useCallback(
+    user => {
+      const data = {
+        userId: user?.id,
+        isIncrease: false,
+      };
+      updateUserCountNotification.mutate(data);
+    },
+    [updateUserCountNotification],
+  );
+  //kt
   return (
     <ScrollView onScroll={handleScroll}>
       {/* // <ScrollView> */}
@@ -70,14 +117,27 @@ function Home({navigation}) {
       <View style={Styles.container}>
         <View style={Styles.containerSite}>
           <Text style={Styles.textSite}>Home</Text>
-          <IconFeather
-            name="bell"
-            size={22}
-            color="#A09898"
-            solid="#A09898"
-            onPress={() => navigation.navigate('Notifications')}
-          />
+          {/* vi */}
+          <TouchableOpacity
+            onPress={() => handleClickNotification(currentUser)}>
+            {currentUser?.notificationsCount > 0 ? (
+              <Badge className="bg-green-500 absolute -top-1 z-30" size={16}>
+                {currentUser?.notificationsCount}
+              </Badge>
+            ) : (
+              ''
+            )}
+
+            <IconFeather
+              name="bell"
+              size={25}
+              color="#A09898"
+              solid="#A09898"
+              onPress={() => navigation.navigate('Notifications')}
+            />
+          </TouchableOpacity>
         </View>
+        {/*  */}
 
         <View style={Styles.header}>
           <IconFeather
@@ -115,7 +175,7 @@ function Home({navigation}) {
         {posts.length ? (
           <View>{postList()}</View>
         ) : (
-          <View>
+          <View className="h-full">
             <Text>No posts available</Text>
           </View>
         )}
