@@ -22,7 +22,7 @@ const UserComponent = ({user}) => {
     <View
       className=" flex-1 flex-row items-start justify-between mb-4 ml-2"
       key={user.id}>
-      <View className="flex-row items-center">
+      <View className="flex-row items-center flex-1">
         <TouchableOpacity onPress={() => console.log(user.name)}>
           <Image
             source={{
@@ -33,12 +33,12 @@ const UserComponent = ({user}) => {
             className="h-[60px] w-[60px] rounded-full"
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log(user.name)}>
+        <TouchableOpacity onPress={() => console.log(user.username)}>
           <View className="ml-4 mr-2 block">
-            <Text className="break-all text-base font-bold">
-              {user.name} {user.id}
+            <Text className="break-words text-base font-bold">
+              {user.username}
             </Text>
-            <View className="mt-1 block  break-words">
+            <View className="mt-1 block break-words">
               <Text className=" color break-all text-sm font-normal line-clamp-2">
                 {user?.bio}
               </Text>

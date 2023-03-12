@@ -8,15 +8,14 @@ export const ModalTrigger = ({
   visible,
   setVisible,
 }) => {
-  // const [visible, setVisible] = useState(false);
-  const handleClose = () => {
-    setVisible(false);
+  const handleOpen = () => {
+    setVisible(true);
   };
-
-  const handleOpen = () => {};
   return (
-    <View className="absolute m-auto left-3 right-3 max-h-[400]">
-      <TouchableOpacity onPress={handleOpen}>{button}</TouchableOpacity>
+    <>
+      <View className="">
+        <TouchableOpacity onPress={handleOpen}>{button}</TouchableOpacity>
+      </View>
       <Portal>
         <Modal
           visible={visible}
@@ -27,6 +26,6 @@ export const ModalTrigger = ({
           </ScrollView>
         </Modal>
       </Portal>
-    </View>
+    </>
   );
 };
