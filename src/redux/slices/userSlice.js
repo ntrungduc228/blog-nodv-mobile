@@ -8,6 +8,7 @@ const initialState = {
     accessToken: null,
     isLogin: false,
     provider: null,
+    topicFollow: [],
   },
   error: undefined,
 };

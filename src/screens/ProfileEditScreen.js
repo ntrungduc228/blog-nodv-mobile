@@ -6,24 +6,31 @@ import {ProfileForm} from '../features/profile';
 import {useDispatch, useSelector} from 'react-redux';
 import {setUser} from '../redux/slices/userSlice';
 import {useMutation} from 'react-query';
-import {updateUserProfile} from '../api/authApi';
+import {updateUserProfile} from '../api/userApi';
+import {Spinner} from '../components';
 
 export const ProfileEditScreen = ({navigation}) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isMutating, setIsMutating] = useState(false);
   const user = useSelector(state => state.user.data.info);
   const dispatch = useDispatch();
 
   const updateProfileMutation = useMutation({
-    mutationKey: 'fsd',
     mutationFn: updateUserProfile,
     onSuccess: data => {
       dispatch(setUser(data));
       // toast.success('Update profile successfully');
       console.log('update profile successfully');
+      // setIsSubmitted(false);
+      setIsMutating(false);
+    },
+    onError: () => {
+      setIsMutating(false);
     },
   });
 
   const handleOnSubmit = data => {
+    setIsMutating(true);
     updateProfileMutation.mutate(data);
   };
 
@@ -33,15 +40,19 @@ export const ProfileEditScreen = ({navigation}) => {
         navigation={navigation}
         setIsSubmitted={setIsSubmitted}
       />
-      <ProfileForm
-        isSubmitted={isSubmitted}
-        setIsSubmitted={setIsSubmitted}
-        initialValue={user}
-        onSubmit={data => {
-          console.log('updateProfileMutation.mutate(data)}');
-          handleOnSubmit(data);
-        }}
-      />
+      {isMutating ? (
+        <Spinner />
+      ) : (
+        <ProfileForm
+          isSubmitted={isSubmitted}
+          setIsSubmitted={setIsSubmitted}
+          initialValue={user}
+          onSubmit={data => {
+            console.log('updateProfileMutation.mutate(data)}');
+            handleOnSubmit(data);
+          }}
+        />
+      )}
     </View>
   );
 };

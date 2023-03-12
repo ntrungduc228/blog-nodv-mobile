@@ -2,8 +2,8 @@ import {StyleSheet, Text, View} from 'react-native';
 import {useEffect, useState} from 'react';
 
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
+import {PostLoading} from '../post';
 import {ScrollView} from 'react-native-gesture-handler';
-import {Spinner} from '../../components/Spinner';
 import TopicItem from './TopicItem';
 import {getOwnTopics} from '../../api/userApi';
 
@@ -15,23 +15,26 @@ function TopicYouFollow({navigation}) {
     async function fetchData() {
       setIsLoading(true);
 
-      const followTopic = await getOwnTopics();
-      setIsFollowTopic(followTopic);
-      //   console.log(isFollowTopic);
+      const followingTopic = await getOwnTopics();
+      setIsFollowTopic(followingTopic);
       setIsLoading(false);
     }
     fetchData();
   }, []);
-  //   const handleClickPeople = async () => {
-  //     const people = await getAllUsers();
-  //     setPeople(people);
-  //   };
+
   const topicListRender = () => {
     return isFollowTopic.map((topic, index) => {
       return <TopicItem key={index} topic={topic} />;
     });
   };
-
+  const loadingRender = () => {
+    const elements = [];
+    const times = 5;
+    for (let i = 0; i < times; i++) {
+      elements.push(<PostLoading />);
+    }
+    return elements;
+  };
   return (
     <View style={Styles.container}>
       <View style={Styles.containerSite}>
@@ -47,15 +50,17 @@ function TopicYouFollow({navigation}) {
         </IconAntDesign>
       </View>
       <ScrollView>
-        {isFollowTopic.length > 0 ? (
-          topicListRender()
-        ) : (
-          <View>
-            <Text>You are not following any topics</Text>
-          </View>
-        )}
+        {isFollowTopic.length > 0
+          ? topicListRender()
+          : !isLoading && (
+              <View>
+                <Text className="text-center text-lg">
+                  You are not following any topics
+                </Text>
+              </View>
+            )}
       </ScrollView>
-      {isLoading ? <Spinner /> : <></>}
+      {isLoading ? <>{loadingRender()}</> : <></>}
     </View>
   );
 }
@@ -73,6 +78,11 @@ const Styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     paddingLeft: 10,
+  },
+  chipFollowing: {
+    borderColor: '#1A8917',
+    backgroundColor: '#fff',
+    color: '#1A8917',
   },
   textHighline: {
     color: '#201A1B',

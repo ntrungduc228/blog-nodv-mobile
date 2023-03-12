@@ -1,44 +1,44 @@
 import {StyleSheet, Text, View} from 'react-native';
-import {getAllUsersFollowing, getOwnTopics} from '../../api/userApi';
-import {useEffect, useState} from 'react';
-
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
-import PeopleItem from './PeopleItem';
+import {useEffect, useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
-import {Spinner} from '../../components/Spinner';
+import {getAllUsersFollowing} from '../../api/userApi';
 import {useSelector} from 'react-redux';
+import PeopleItem from './PeopleItem';
+import {PostLoading} from '../post';
 
 function People({navigation}) {
   const currentUser = useSelector(state => state.user.data.info);
-  const [isFollowTopic, setIsFollowTopic] = useState([]);
   const [peopleFollowing, setPeopleFollowing] = useState([]);
-  const [status, setStatus] = useState();
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    async function fetchData() {
-      setIsLoading(true);
+  async function fetchData() {
+    setIsLoading(true);
+    const peopleIsFollowing = await getAllUsersFollowing(currentUser.id);
+    setPeopleFollowing(peopleIsFollowing);
+    setIsLoading(false);
+  }
 
-      const followTopic = await getOwnTopics();
-      setIsFollowTopic(followTopic);
-      //   console.log(isFollowTopic);
-      const peopleFollowing = await getAllUsersFollowing(currentUser.id);
-      setPeopleFollowing(peopleFollowing);
-      // console.log(peopleFollowing);
-      setIsLoading(false);
-    }
+  useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const handleClickPeople = async () => {
-    const peopleFollowing = await getAllUsersFollowing();
-    setPeopleFollowing(peopleFollowing);
-  };
+
   const peopleRender = () => {
     return peopleFollowing.map((topic, index) => {
       return <PeopleItem key={index} people={topic} status={true} />;
     });
   };
+
+  const loadingRender = () => {
+    const elements = [];
+    const times = 5;
+    for (let i = 0; i < times; i++) {
+      elements.push(<PostLoading />);
+    }
+    return elements;
+  };
+
   return (
     <View style={Styles.container}>
       <View style={Styles.containerSite}>
@@ -54,15 +54,17 @@ function People({navigation}) {
         </IconAntDesign>
       </View>
       <ScrollView>
-        {peopleFollowing.length > 0 ? (
-          peopleRender()
-        ) : (
-          <View>
-            <Text>You are not following any people</Text>
-          </View>
-        )}
+        {peopleFollowing.length > 0
+          ? peopleRender()
+          : !isLoading && (
+              <View>
+                <Text className="text-center text-lg">
+                  You are not following any people
+                </Text>
+              </View>
+            )}
       </ScrollView>
-      {isLoading ? <Spinner /> : <></>}
+      {isLoading ? <>{loadingRender()}</> : <></>}
     </View>
   );
 }

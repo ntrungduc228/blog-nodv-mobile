@@ -1,8 +1,8 @@
 export const NotificationType = {
-  COMMENT: 'COMMENT',
-  LIKE: 'LIKE',
+  COMMENT: 'COMMENT', // done
+  LIKE: 'LIKE', // done
   FOLLOW: 'FOLLOW',
-  POST: 'POST',
+  POST: 'POST', // don;t do this
   REPLYCOMMENT: 'REPLYCOMMENT',
-  LIKECOMMENT: 'LIKECOMMENT',
+  LIKECOMMENT: 'LIKECOMMENT', // done
 };

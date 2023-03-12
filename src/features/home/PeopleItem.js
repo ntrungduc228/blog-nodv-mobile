@@ -1,25 +1,9 @@
-import {StatusBar} from 'expo-status-bar';
-import {StyleSheet, Text, View, Image, Button} from 'react-native';
-import IconFeather from 'react-native-vector-icons/Feather';
-import IconFontAwesomer from 'react-native-vector-icons/FontAwesome';
-import IconAntDesign from 'react-native-vector-icons/AntDesign';
-import {useEffect, useMemo, useState} from 'react';
-import {axiosClientPrivate} from '../../api/axiosClient';
-import {ScrollView} from 'react-native-gesture-handler';
+import {StyleSheet, Text, View, Image} from 'react-native';
+import {useState} from 'react';
 import {Chip} from 'react-native-paper';
-import {
-  addTopics,
-  followTopic,
-  followUser,
-  getUserProfile,
-  unFollowUser,
-} from '../../api/userApi';
-import {useSelector} from 'react-redux';
+import {followUser, unFollowUser} from '../../api/userApi';
 
 function PeopleItem({people, status}) {
-  const currentUser = useSelector(state => state.user.data.info);
-  const [lstTopic, setLstTopic] = useState(currentUser.topics || []);
-  const [isTopic, setIsTopic] = useState(false);
   const [statusFollow, setStatusFollow] = useState(status);
   const handleFollowUser = async people => {
     console.log(people);
@@ -29,9 +13,6 @@ function PeopleItem({people, status}) {
     } else {
       await followUser(people.id);
     }
-    console.log(lstTopic);
-    // await followTopic(topic.id);
-    // console.log(topic);
   };
 
   return (
@@ -54,16 +35,17 @@ function PeopleItem({people, status}) {
         <Text>{people.bio}</Text>
       </View>
       <Chip
+        style={statusFollow ? Styles.chipFollowing : ''}
         textStyle={{
-          color: '#fff',
+          color: statusFollow ? '#1A8917' : '#fff',
         }}
+        mode={'outlined'}
         onPress={() => handleFollowUser(people)}
         className={`rounded-full  h-8 ${
-          statusFollow ? ' bg-slate-500' : 'bg-emerald-600'
+          statusFollow ? ' bg-slate-500' : 'bg-green-600'
         }`}>
         {statusFollow ? 'Following' : 'Follow'}
       </Chip>
-      {/* <Chip mode="outlined" onPress={()=> handleFollowTopic(topic)}/> */}
     </View>
   );
 }
@@ -72,6 +54,11 @@ const Styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  chipFollowing: {
+    borderColor: '#1A8917',
+    backgroundColor: '#fff',
+    color: '#1A8917',
   },
   containerSite: {
     paddingTop: 75,
@@ -108,15 +95,15 @@ const Styles = StyleSheet.create({
   topics: {
     flexDirection: 'row',
     paddingLeft: 25,
-    paddingTop: 40,
+    paddingTop: 30,
     justifyContent: 'space-between',
     paddingRight: 25,
-    borderBottomColor: '#ccc',
+    borderBottomColor: '#ebeaea',
     borderBottomWidth: 1,
     paddingBottom: 25,
   },
   textTopic: {
-    width: '70%',
+    width: '90%',
     fontSize: 16,
     fontWeight: '700',
     color: '#000',

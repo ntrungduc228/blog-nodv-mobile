@@ -7,7 +7,6 @@ import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 
 export const UserInfo = () => {
-  // const user = useSelector(state => state.user?.data.info);
   const profile = useSelector(state => state.profile?.data);
   const navigation = useNavigation();
 
@@ -17,7 +16,7 @@ export const UserInfo = () => {
         <View>
           <Image
             source={{
-              uri: profile?.avatar,
+              uri: profile?.avatar || '',
             }}
             className="h-[60] w-[60] rounded-full"
           />
@@ -37,6 +36,15 @@ export const UserInfo = () => {
         </View>
       </View>
       <View className="mt-5">
+        {/* <Button
+          style={{borderColor: '#4caf50'}}
+          className="rounded-full mx-10"
+          mode="outlined"
+          onPress={() => {}}
+          textColor="#4caf50">
+          Follower
+        </Button> */}
+
         <Button
           style={{borderColor: '#000'}}
           className="rounded-full mx-10"

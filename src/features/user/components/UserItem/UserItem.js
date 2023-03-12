@@ -17,11 +17,7 @@ export const UserItem = ({user}) => {
         <Text className="text-black">{user?.username}</Text>
         {user?.bio && <Text>{user?.bio}</Text>}
       </View>
-      <FollowUserButton
-        followerId={user?.id}
-        followerEmail={user?.email}
-        primary
-      />
+      <FollowUserButton followerId={user?.id} primary />
     </View>
   );
 };

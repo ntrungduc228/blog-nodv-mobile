@@ -9,7 +9,7 @@ function HomeScreen({navigation}) {
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen
-        name="Main"
+        name="Home"
         component={Home}
         options={{
           headerShown: false,
@@ -20,27 +20,21 @@ function HomeScreen({navigation}) {
         name="Customize your interests"
         component={Topic}
         options={{
-          // title:""
           headerShown: false,
-          // tabBarIcon: 'home',
         }}
       />
       <HomeStack.Screen
         name="Topic you follow"
         component={TopicYouFollow}
         options={{
-          // title:""
           headerShown: false,
-          // tabBarIcon: 'home',
         }}
       />
       <HomeStack.Screen
-        name="People"
+        name="People you follow"
         component={People}
         options={{
-          // title:""
           headerShown: false,
-          // tabBarIcon: 'home',
         }}
       />
     </HomeStack.Navigator>

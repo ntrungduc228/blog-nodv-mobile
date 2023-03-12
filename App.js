@@ -14,6 +14,8 @@ import {setBookmark} from './src/redux/slices/bookmarkSlice';
 import {store} from './src/redux/store';
 import useSocialAuth from './src/hooks/useSocialAuth';
 import {setProfile} from './src/redux/slices/profileSlice';
+import {getOwnTopics} from './src/api/userApi';
+import {setTopic} from './src/redux/slices/topicSlice';
 
 // import SocketClient from './src/websocket/SocketClient';
 
@@ -22,6 +24,7 @@ const queryClient = new QueryClient();
 function AppScreen() {
   const {isLogin} = useSelector(state => state.user.data);
   const bookmark = useSelector(state => state.bookmark);
+  const topic = useSelector(state => state.topic);
   const dispatch = useDispatch();
 
   const {handleLogoutBySocial} = useSocialAuth();
@@ -50,7 +53,6 @@ function AppScreen() {
         // navigate(appRoutes.TOPIC_PICK);
       }
       dispatch(setUser(data));
-      dispatch(setProfile(data));
     },
   });
   useQuery(['bookmark', isLogin], getBookmarkByUserId, {
@@ -59,6 +61,14 @@ function AppScreen() {
       // fix tam - chua hay vi useQuery van goi api
       if (!bookmark.postIds.length) {
         dispatch(setBookmark(data));
+      }
+    },
+  });
+  useQuery(['topic', isLogin], getOwnTopics, {
+    enabled: isLogin,
+    onSuccess: data => {
+      if (!topic.topicFollow.length) {
+        dispatch(setTopic(data));
       }
     },
   });
