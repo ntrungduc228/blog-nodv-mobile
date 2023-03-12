@@ -175,7 +175,7 @@ function Home({navigation}) {
         {posts.length ? (
           <View>{postList()}</View>
         ) : (
-          <View>
+          <View className="h-full">
             <Text>No posts available</Text>
           </View>
         )}

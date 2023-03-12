@@ -7,7 +7,7 @@ import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import Styles from './Styles';
 import {axiosClientPrivate} from '../../api/axiosClient.js';
 import {routesScreen} from '../../navigations';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 
 // import {useMutation} from '@apollo/react-hooks';
@@ -17,6 +17,7 @@ function Post({post}) {
   //  console.log(currentUser.info.id)
   const [isBookmark, setIsBookmark] = useState(false);
   const navigation = useNavigation();
+  const route = useRoute();
 
   useEffect(() => {
     async function fetchData() {
@@ -46,11 +47,21 @@ function Post({post}) {
     <View style={Styles.body}>
       <View style={Styles.bodyTop}>
         <TouchableOpacity
-          onPress={() =>
-            navigation.navigate(routesScreen.Profile, {
+          onPress={() => {
+            // if (route.name === routesScreen.ListsTab) {
+            //   return navigation.navigate(routesScreen.BottomTab, {
+            //     screen: routesScreen.Profile,
+            //     params: {
+            //       email: post.user?.email,
+            //     },
+            //   });
+
+            // }
+
+            return navigation.navigate(routesScreen.Profile, {
               email: post.user?.email,
-            })
-          }
+            });
+          }}
           className="flex-1 flex-row">
           <Image
             source={{

@@ -9,7 +9,7 @@ export const FollowingModal = () => {
         <Text
           variant="titleSmalls"
           className="mb-10 block text-black font-semibold">
-          Followers
+          FollowingModal{' '}
         </Text>
         <UserList />
       </View>

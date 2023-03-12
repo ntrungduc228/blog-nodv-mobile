@@ -1,8 +1,17 @@
-import {View, Text, ScrollView} from 'react-native';
-import React from 'react';
+import {
+  View,
+  Text,
+  ScrollView,
+  FlatList,
+  RefreshControl,
+  SafeAreaView,
+} from 'react-native';
+import React, {useCallback} from 'react';
 import {useSelector} from 'react-redux';
 import {useGetBookmark, PostLoading} from '../../post';
 import Post from '../../home/Post';
+import {useFocusEffect, useRoute} from '@react-navigation/native';
+import {BookmarkList} from '../../bookmark/BookmarkList';
 
 export const ListsTab = () => {
   const {data = {}, isLoading, refetch} = useGetBookmark();
@@ -14,28 +23,41 @@ export const ListsTab = () => {
     });
   };
 
-  return (
-    <ScrollView>
-      <View className="flex-1 bg-white">
-        {isLoading && (
-          <View className="p-6">
-            <PostLoading />
-            <PostLoading />
-            <PostLoading />
-            <PostLoading />
-          </View>
-        )}
+  // refetch() when screen is focused
 
-        {posts?.length ? (
-          <View className="p-2">{postList()}</View>
-        ) : (
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []),
+  );
+
+  return (
+    <SafeAreaView className="bg-white h-full">
+      {/* <BookmarkList isLoading={isLoading} posts={posts} refetch={refetch} /> */}
+      {isLoading && (
+        <View className="p-6">
+          <PostLoading />
+          <PostLoading />
+          <PostLoading />
+          <PostLoading />
+        </View>
+      )}
+      <FlatList
+        data={posts}
+        keyExtractor={item => item.id}
+        renderItem={({item}) => <Post post={item} />}
+        refreshControl={
+          <RefreshControl refreshing={isLoading} onRefresh={refetch} />
+        }
+        ListEmptyComponent={
           <View className="mt-20 justify-center">
             <Text className="text-black text-lg text-center break-words mx-10">
               You don't have any posts.
             </Text>
           </View>
-        )}
-      </View>
-    </ScrollView>
+        }
+      />
+    </SafeAreaView>
   );
 };
