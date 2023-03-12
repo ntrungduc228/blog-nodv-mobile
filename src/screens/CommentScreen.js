@@ -1,15 +1,16 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useEffect} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useMutation, useQuery} from 'react-query';
 import {useDispatch, useSelector} from 'react-redux';
-import {createComment, getComment} from '../api/commentApi';
+import {createComment, getComment, updateCommentApi} from '../api/commentApi';
 import {createNotification} from '../api/notificationApi';
 import {updateCountNotifications} from '../api/userApi';
 import {NotificationType} from '../config/dataType';
 import CommentEditor from '../features/comment/CommentEditor/CommentEditor';
 import CommentList from '../features/comment/CommentList/CommentList';
+import {setIsEdit} from '../redux/slices/commentInputSlice';
 import {
   addComment,
   removeComment,
@@ -27,7 +28,9 @@ export function CommentScreen({route}) {
   const rootComments = useSelector(
     state => state.comment.commentsByParentId[null],
   );
-
+  const initialComment = useSelector(
+    state => state.commentInput.initialComment,
+  );
   useQuery(['comments', post?.id], () => getComment(post.id), {
     enabled: !!post?.id,
     onSuccess: data => {
@@ -61,7 +64,26 @@ export function CommentScreen({route}) {
   const handleCreateComment = comment => {
     createNewComment.mutate(comment);
   };
-  const initialComment = {};
+  //edit comment
+  const updateCommentById = useMutation(updateCommentApi);
+  const handleUpdateComment = comment => {
+    updateCommentById.mutate(comment);
+    dispatch(setIsEdit(false));
+    //setIsOpenMenu(false);
+  };
+  // choose fuc handle
+  // const handleSubmit = comment => {
+  //   if (isEdit) {
+  //     handleUpdateComment(comment);
+  //   }
+  //   // else if(isReply){
+
+  //   //  }
+  //   else {
+  //     handleCreateComment(comment);
+  //   }
+  // };
+
   //realtime
   const updateLocalListComment = updatedComment => {
     dispatch(addComment(updatedComment));
@@ -127,14 +149,13 @@ export function CommentScreen({route}) {
   return (
     <View className="bg-white h-full">
       <ScrollView>
-        <CommentEditor
-          initialComment={initialComment}
-          onSubmit={handleCreateComment}
-          post={post}
-        />
-
         <CommentList comments={rootComments} userId={userId} post={post} />
       </ScrollView>
+      <CommentEditor
+        initialComment={initialComment}
+        onSubmit={handleCreateComment}
+        post={post}
+      />
     </View>
   );
 }

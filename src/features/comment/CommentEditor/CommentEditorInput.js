@@ -17,7 +17,7 @@ const CommentEditorInput = ({isFocused, onChange, value, onFocus, onBlur}) => {
     <TextInput
       onFocus={onFocus}
       onBlur={onBlur}
-      className="bg-white border-b-1 h-11 mt-5"
+      className="bg-white"
       activeUnderlineColor="#000"
       ref={inputRef}
       value={value}

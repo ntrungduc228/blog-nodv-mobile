@@ -4,6 +4,7 @@ import socketReducer from './slices/socketSlice';
 import profileReducer from './slices/profileSlice';
 import bookmarkReducer from './slices/bookmarkSlice';
 import commentReducer from './slices/commentSlice';
+import commentInputReducer from './slices/commentInputSlice';
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     profile: profileReducer,
     bookmark: bookmarkReducer,
     comment: commentReducer,
+    commentInput: commentInputReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
