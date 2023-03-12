@@ -88,7 +88,7 @@ const Styles = StyleSheet.create({
     borderRadius: 100,
     marginLeft: 60,
   },
-  iconBootom: {
+  iconBottom: {
     paddingLeft: 60,
     marginTop: 5,
   },

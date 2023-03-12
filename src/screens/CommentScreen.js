@@ -1,28 +1,26 @@
+import React from 'react';
+import {useEffect} from 'react';
+import {View} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
+import {useMutation, useQuery} from 'react-query';
+import {useDispatch, useSelector} from 'react-redux';
+import {createComment, getComment} from '../api/commentApi';
+import {createNotification} from '../api/notificationApi';
+import {updateCountNotifications} from '../api/userApi';
+import {NotificationType} from '../config/dataType';
+import CommentEditor from '../features/comment/CommentEditor/CommentEditor';
+import CommentList from '../features/comment/CommentList/CommentList';
 import {
   addComment,
   removeComment,
   setComments,
   updateComment,
 } from '../redux/slices/commentSlice';
-import {createComment, getComment} from '../api/commentApi';
-import {useDispatch, useSelector} from 'react-redux';
-import {useMutation, useQuery} from 'react-query';
-
-import CommentEditor from '../features/comment/CommentEditor/CommentEditor';
-import CommentList from '../features/comment/CommentList/CommentList';
-import {NotificationType} from '../config/dataType';
-import React from 'react';
-import {ScrollView} from 'react-native-gesture-handler';
-import {View} from 'react-native';
 import {callApiCreateNotification} from '../utils/generationNotification';
-import {createNotification} from '../api/notificationApi';
-import {updateCountNotifications} from '../api/userApi';
-import {useEffect} from 'react';
 
 export function CommentScreen({route}) {
   const post = route.params?.post;
   const dispatch = useDispatch();
-  // const post = {id: '63a89482c85bd05cd16c340b'};
   const socket = useSelector(state => state.socket.data);
   const userId = useSelector(state => state.user?.data?.info?.id);
 
