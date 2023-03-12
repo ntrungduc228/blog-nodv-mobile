@@ -13,6 +13,7 @@ function Home({navigation}) {
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(15);
   const currentUser = useSelector(state => state.user.data);
+  // console.log('currentUser', currentUser);
   const [blackList, setBlackList] = useState([]);
   const [topics, setTopics] = useState([]);
   // console.log(blackList)
@@ -115,7 +116,7 @@ function Home({navigation}) {
         {posts.length ? (
           <View>{postList()}</View>
         ) : (
-          <View>
+          <View className="h-full">
             <Text>No posts available</Text>
           </View>
         )}

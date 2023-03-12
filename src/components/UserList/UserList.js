@@ -1,96 +1,9 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  ScrollView,
-  SafeAreaView,
-  Pressable,
-} from 'react-native';
+import {View, Text, TouchableOpacity, Image, ScrollView} from 'react-native';
 import React from 'react';
 import {Dialog, Portal} from 'react-native-paper';
+import {FollowUserButton} from '../../features/user';
 
-const users = [
-  {
-    id: '1',
-    name: 'John',
-    avatarUrl:
-      'https://firebasestorage.googleapis.com/v0/b/blog-nodv.appspot.com/o/images%2F1669780325902clouds_sky_porous_103701_2560x1600.jpg?alt=media&token=f43cd46a-bd9a-44a9-a70f-d26c86c43f7b',
-    bio: 'hihihi',
-  },
-  {
-    id: '2',
-    name: 'Vi',
-    avatarUrl:
-      'https://firebasestorage.googleapis.com/v0/b/blog-nodv.appspot.com/o/images%2F1670292301097sky3.jpg?alt=media&token=faa76cb9-3a53-41ac-ab82-72b069c3bbbc',
-    bio: 'student',
-  },
-  {
-    id: '3',
-    name: 'John',
-    avatarUrl:
-      'https://firebasestorage.googleapis.com/v0/b/blog-nodv.appspot.com/o/images%2F1669780325902clouds_sky_porous_103701_2560x1600.jpg?alt=media&token=f43cd46a-bd9a-44a9-a70f-d26c86c43f7b',
-    bio: 'hihihi',
-  },
-  {
-    id: '4',
-    name: 'Vi',
-    avatarUrl:
-      'https://firebasestorage.googleapis.com/v0/b/blog-nodv.appspot.com/o/images%2F1670292301097sky3.jpg?alt=media&token=faa76cb9-3a53-41ac-ab82-72b069c3bbbc',
-    bio: 'student',
-  },
-  {
-    id: '5',
-    name: 'John',
-    avatarUrl:
-      'https://firebasestorage.googleapis.com/v0/b/blog-nodv.appspot.com/o/images%2F1669780325902clouds_sky_porous_103701_2560x1600.jpg?alt=media&token=f43cd46a-bd9a-44a9-a70f-d26c86c43f7b',
-    bio: 'hihihi',
-  },
-  {
-    id: '6',
-    name: 'Vi',
-    avatarUrl:
-      'https://firebasestorage.googleapis.com/v0/b/blog-nodv.appspot.com/o/images%2F1670292301097sky3.jpg?alt=media&token=faa76cb9-3a53-41ac-ab82-72b069c3bbbc',
-    bio: 'student',
-  },
-  {
-    id: '7',
-    name: 'John',
-    avatarUrl:
-      'https://firebasestorage.googleapis.com/v0/b/blog-nodv.appspot.com/o/images%2F1669780325902clouds_sky_porous_103701_2560x1600.jpg?alt=media&token=f43cd46a-bd9a-44a9-a70f-d26c86c43f7b',
-    bio: 'hihihi',
-  },
-  {
-    id: '8',
-    name: 'Vi',
-    avatarUrl:
-      'https://firebasestorage.googleapis.com/v0/b/blog-nodv.appspot.com/o/images%2F1670292301097sky3.jpg?alt=media&token=faa76cb9-3a53-41ac-ab82-72b069c3bbbc',
-    bio: 'student',
-  },
-  {
-    id: '9',
-    name: 'John',
-    avatarUrl:
-      'https://firebasestorage.googleapis.com/v0/b/blog-nodv.appspot.com/o/images%2F1669780325902clouds_sky_porous_103701_2560x1600.jpg?alt=media&token=f43cd46a-bd9a-44a9-a70f-d26c86c43f7b',
-    bio: 'hihihi',
-  },
-  {
-    id: '94',
-    name: 'John',
-    avatarUrl:
-      'https://firebasestorage.googleapis.com/v0/b/blog-nodv.appspot.com/o/images%2F1669780325902clouds_sky_porous_103701_2560x1600.jpg?alt=media&token=f43cd46a-bd9a-44a9-a70f-d26c86c43f7b',
-    bio: 'hihihi',
-  },
-  {
-    id: '549',
-    name: 'John',
-    avatarUrl:
-      'https://firebasestorage.googleapis.com/v0/b/blog-nodv.appspot.com/o/images%2F1669780325902clouds_sky_porous_103701_2560x1600.jpg?alt=media&token=f43cd46a-bd9a-44a9-a70f-d26c86c43f7b',
-    bio: 'hihihi',
-  },
-];
-
-export const UserList = ({}) => {
+export const UserList = ({users}) => {
   return (
     // <SafeAreaView>
     <View className="flex-col gap-4 h-[300]">
@@ -107,13 +20,15 @@ export const UserList = ({}) => {
 const UserComponent = ({user}) => {
   return (
     <View
-      className="relative flex flex-1 w-full items-start justify-between mb-4 ml-2"
+      className=" flex-1 flex-row items-start justify-between mb-4 ml-2"
       key={user.id}>
-      <View className="flex-1 flex-row items-center">
+      <View className="flex-row items-center">
         <TouchableOpacity onPress={() => console.log(user.name)}>
           <Image
             source={{
-              uri: 'https://firebasestorage.googleapis.com/v0/b/blog-nodv.appspot.com/o/images%2F1677399030007.jpg?alt=media&token=ba20149c-1dbd-4638-a57f-578df11d85c7',
+              uri:
+                user?.avatar ||
+                'https://firebasestorage.googleapis.com/v0/b/blog-nodv.appspot.com/o/images%2F1677399030007.jpg?alt=media&token=ba20149c-1dbd-4638-a57f-578df11d85c7',
             }}
             className="h-[60px] w-[60px] rounded-full"
           />
@@ -130,6 +45,9 @@ const UserComponent = ({user}) => {
             </View>
           </View>
         </TouchableOpacity>
+      </View>
+      <View>
+        <FollowUserButton className="" fullWith followerId={user?.id} />
       </View>
     </View>
   );
