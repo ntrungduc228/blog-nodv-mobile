@@ -14,7 +14,7 @@ export const FollowerModal = () => {
 
   return (
     <View className="flex jusitfy-center">
-      <View className="bg-white mx-4  p-6">
+      <View className="bg-white mx-4  p-4">
         <Text
           variant="titleSmalls"
           className="mb-10 block text-black font-semibold">

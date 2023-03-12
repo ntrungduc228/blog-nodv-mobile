@@ -13,11 +13,8 @@ export const UserInfo = () => {
   const [openModalFollower, setOpenModalFollower] = useState(false);
   const [openModalFollowing, setOpenModalFollowing] = useState(false);
 
-  console.log('poer ', openModalFollower, openModalFollowing);
-
   const profile = useSelector(state => state.profile?.data);
   const navigation = useNavigation();
-  const user = useSelector(state => state.user.data.info);
 
   return (
     <View className="px-4 py-2">
@@ -36,32 +33,28 @@ export const UserInfo = () => {
           <Text className="text-black font-bold text-lg">
             {profile?.username}
           </Text>
-          <View className="text-black font-semibold text-base mt-1">
-            <View className="flex-1">
+          <View className="flex-row text-black font-semibold text-base mt-1">
+            <View className="">
               <ModalTrigger
                 button={
-                  <Text className="text-black font-semibold text-[15px] mr-5 text-[#4caf50]">
+                  <Text className="text-red font-semibold text-[15px] text-[#4caf50]">
                     {profile?.followerId?.length} followers
                   </Text>
                 }
                 visible={openModalFollower}
-                setVisible={setOpenModalFollower}
-                // handleOpen={() => setOpenModalFollower(true)}>
-              >
+                setVisible={value => setOpenModalFollower(value)}>
                 <FollowerModal />
               </ModalTrigger>
             </View>
-            <View className="flex-1">
+            <View className="">
               <ModalTrigger
                 button={
-                  <Text className="ml-[110] text-black font-semibold text-[15px] mr-5 text-[#4caf50]">
-                    1 following
+                  <Text className="ml-[30] text-black font-semibold text-[15px] text-[#4caf50]">
+                    {profile?.followingId?.length} following
                   </Text>
                 }
                 visible={openModalFollowing}
-                setVisible={value => setOpenModalFollowing(value)}
-                // handleOpen={() => setOpenModalFollowing(true)}>
-              >
+                setVisible={value => setOpenModalFollowing(value)}>
                 <FollowingModal />
               </ModalTrigger>
             </View>

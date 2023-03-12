@@ -14,7 +14,7 @@ export const FollowUserButton = ({followerId, children, fullWith, primary}) => {
   const followingIds = useSelector(
     state => state.user.data?.info?.followingId || [],
   );
-  const userId = useSelector(state => state.user.data.info.id);
+  const userId = useSelector(state => state.user.data.info?.id);
   const dispatch = useDispatch();
   const [followed, setFollowed] = useState(followingIds?.includes(followerId));
   const handleUpdateLocalFollowing = isFollowed => {
