@@ -1,18 +1,21 @@
-import {Image, Text, View, TouchableOpacity} from 'react-native';
+import {Image, Text, TouchableOpacity, View} from 'react-native';
 import {useEffect, useState} from 'react';
-import {axiosClientPrivate} from '../../api/axiosClient.js';
-import {format} from 'date-fns';
-import {PostMenu} from '../post/components/PostMenu/PostMenu';
-import {routesScreen} from '../../navigations';
-import {useSelector} from 'react-redux';
-import Styles from './Styles.js';
+
+import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import IconFeather from 'react-native-vector-icons/Feather';
 import IconFontAwesomer from 'react-native-vector-icons/FontAwesome';
-import IconAntDesign from 'react-native-vector-icons/AntDesign';
+import {PostMenu} from '../post/components/PostMenu/PostMenu';
+import Styles from './Styles.js';
+import {axiosClientPrivate} from '../../api/axiosClient.js';
+import {format} from 'date-fns';
+import {routesScreen} from '../../navigations';
+import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
 
-function Post({post, navigation}) {
+function Post({post}) {
   const currentUser = useSelector(state => state.user.data.info);
   const checkPost = post.userId === currentUser.id;
+  const navigation = useNavigation();
   const [isBookmark, setIsBookmark] = useState(false);
   const [isHide, setIsHide] = useState(false);
   useEffect(() => {

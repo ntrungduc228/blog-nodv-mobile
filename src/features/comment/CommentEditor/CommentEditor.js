@@ -1,10 +1,13 @@
 // import { Collapse } from "@mui/material";
-import {useState} from 'react';
+
 import {Text, View} from 'react-native';
+
 import CommentEditorFooter from './CommentEditorFooter';
+import CommentEditorInput from './CommentEditorInput';
+import {useState} from 'react';
+
 // import CommentEditorFooter from "./CommentEditorFooter";
 // import CommentEditorHeader from "./CommentEditorHeader";
-import CommentEditorInput from './CommentEditorInput';
 
 const CommentEditor = ({
   focus,

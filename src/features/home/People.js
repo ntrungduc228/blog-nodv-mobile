@@ -1,11 +1,12 @@
 import {StyleSheet, Text, View} from 'react-native';
-import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import {useEffect, useState} from 'react';
+
+import IconAntDesign from 'react-native-vector-icons/AntDesign';
+import PeopleItem from './PeopleItem';
+import {PostLoading} from '../post';
 import {ScrollView} from 'react-native-gesture-handler';
 import {getAllUsersFollowing} from '../../api/userApi';
 import {useSelector} from 'react-redux';
-import PeopleItem from './PeopleItem';
-import {PostLoading} from '../post';
 
 function People({navigation}) {
   const currentUser = useSelector(state => state.user.data.info);

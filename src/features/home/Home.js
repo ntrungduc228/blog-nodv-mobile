@@ -1,12 +1,13 @@
+import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import axiosClient, {axiosClientPrivate} from '../../api/axiosClient.js';
 import {useEffect, useState} from 'react';
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+
 import IconFeather from 'react-native-vector-icons/Feather';
-import {useSelector} from 'react-redux';
 import Post from './Post.js';
-import Styles from './Styles.js';
 import {PostLoading} from '../post/index.js';
+import Styles from './Styles.js';
 import {getOwnTopics} from '../../api/userApi.js';
+import {useSelector} from 'react-redux';
 
 function Home({navigation}) {
   const LIMIT = 6;

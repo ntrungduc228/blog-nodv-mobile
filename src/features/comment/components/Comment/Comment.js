@@ -1,19 +1,20 @@
-import {formatRelative} from 'date-fns';
-import React, {useMemo, useState, memo} from 'react';
+import React, {memo, useMemo, useState} from 'react';
 import {Text, View} from 'react-native';
+
 import {Avatar} from 'react-native-paper';
+import CommentEditor from '../../CommentEditor/CommentEditor';
+import CommentFooter from './CommentFooter';
+import {CommentList} from '../../CommentList/CommentList';
+import CommentMenu from './CommentMenu';
 import Entypo from 'react-native-vector-icons/Entypo';
-import {useMutation} from 'react-query';
-import {useSelector} from 'react-redux';
-import {createComment} from '../../../../api/commentApi';
-import {createNotification} from '../../../../api/notificationApi';
-import {updateCountNotifications} from '../../../../api/userApi';
 import {NotificationType} from '../../../../config/dataType';
 import {callApiCreateNotification} from '../../../../utils/generationNotification';
-import CommentEditor from '../../CommentEditor/CommentEditor';
-import {CommentList} from '../../CommentList/CommentList';
-import CommentFooter from './CommentFooter';
-import CommentMenu from './CommentMenu';
+import {createComment} from '../../../../api/commentApi';
+import {createNotification} from '../../../../api/notificationApi';
+import {formatRelative} from 'date-fns';
+import {updateCountNotifications} from '../../../../api/userApi';
+import {useMutation} from 'react-query';
+import {useSelector} from 'react-redux';
 
 function Comment({comment, post}) {
   const user = useSelector(state => state.user.data.info);
