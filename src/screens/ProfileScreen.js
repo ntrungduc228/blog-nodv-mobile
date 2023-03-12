@@ -12,14 +12,10 @@ import {setProfile} from '../redux/slices/profileSlice';
 
 function ProfileScreen({navigation, route}) {
   const [email, setEmail] = useState(route.params?.email ?? user?.email);
-  // let email = route.params?.email || user?.email;
   const user = useSelector(state => state.user.data.info);
   const profile = useSelector(state => state?.profile?.data);
-  const ownProfile =
-    useSelector(state => state.user.data.info)?.id === profile?.id;
 
   const isFocused = useIsFocused();
-  console.log('route', route.params, email, user?.email, isFocused);
 
   useEffect(() => {
     const eventTab = navigation.addListener('tabPress', e => {
