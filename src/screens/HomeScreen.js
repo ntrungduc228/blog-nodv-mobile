@@ -9,7 +9,7 @@ function HomeScreen({navigation}) {
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen
-        name="Home"
+        name="HomeComponent"
         component={Home}
         options={{
           headerShown: false,

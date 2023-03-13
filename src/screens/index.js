@@ -6,3 +6,4 @@ export * from './ProfileEditScreen';
 export * from './NotFoundScreen';
 export * from './SearchScreen';
 export * from './TopicScreen';
+export * from './FollowScreen';

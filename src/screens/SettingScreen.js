@@ -28,7 +28,7 @@ export function SettingsScreen() {
       <Button
         className="mt-2 mx-2"
         buttonColor=""
-        textColor="#4caf50"
+        textColor="red"
         mode="outlined"
         onPress={handleLogoutBySocial}>
         Sign out

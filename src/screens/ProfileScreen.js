@@ -57,11 +57,15 @@ function ProfileScreen({navigation, route}) {
 
   return (
     <View className="h-full bg-white pt-[20] flex-1">
-      {profile?.isOwnProfile && (
+      {profile?.isOwnProfile ? (
         <TouchableOpacity
           className="flex-row justify-end pr-5"
           onPress={() => navigation.navigate(routesScreen.Settings)}>
           <IconFontAwesome5 name="cog" size={22} regular />
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity className="ml-5" onPress={() => navigation.goBack()}>
+          <IconFontAwesome5 name="arrow-left" size={20} regular />
         </TouchableOpacity>
       )}
 
