@@ -13,11 +13,9 @@ import {getBookmarkByUserId} from './src/api/bookmarkApi';
 import {setBookmark} from './src/redux/slices/bookmarkSlice';
 import {store} from './src/redux/store';
 import useSocialAuth from './src/hooks/useSocialAuth';
-import {setProfile} from './src/redux/slices/profileSlice';
 import {getOwnTopics} from './src/api/userApi';
 import {setTopic} from './src/redux/slices/topicSlice';
-
-// import SocketClient from './src/websocket/SocketClient';
+import Toast from 'react-native-toast-message';
 
 const queryClient = new QueryClient();
 
@@ -75,9 +73,9 @@ function AppScreen() {
 
   return (
     <NavigationContainer>
-      {/* <MainStackNavigator /> */}
       {isLogin ? <MainStackNavigator /> : <AuthStackNavigator />}
       {isLogin && <SocketClient />}
+      <Toast position="top" topOffset={50} onPress={() => Toast.hide()} />
     </NavigationContainer>
   );
 }

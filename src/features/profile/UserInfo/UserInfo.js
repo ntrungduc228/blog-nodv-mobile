@@ -1,18 +1,12 @@
 import {Button, Text} from 'react-native-paper';
 import {Image, View, StyleSheet} from 'react-native';
-import {useState} from 'react';
 import {routesScreen} from '../../../navigations';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import {ButtonFollow} from './ButtonFollow';
 import {FollowUserButton} from '../../user';
-import {ModalTrigger} from '../../../components/ModalTrigger';
-import {FollowerModal, FollowingModal} from '../ProfileTab/components';
 
 export const UserInfo = () => {
-  const [openModalFollower, setOpenModalFollower] = useState(false);
-  const [openModalFollowing, setOpenModalFollowing] = useState(false);
-
   const profile = useSelector(state => state.profile?.data);
   const navigation = useNavigation();
 
@@ -35,28 +29,22 @@ export const UserInfo = () => {
           </Text>
           <View className="flex-row text-black font-semibold text-base mt-1">
             <View className="">
-              <ModalTrigger
-                button={
-                  <Text className="text-red font-semibold text-[15px] text-[#4caf50]">
-                    {profile?.followerId?.length} followers
-                  </Text>
-                }
-                visible={openModalFollower}
-                setVisible={value => setOpenModalFollower(value)}>
-                <FollowerModal />
-              </ModalTrigger>
+              <Text
+                className="text-red font-semibold text-[15px] text-[#4caf50]"
+                onPress={() =>
+                  navigation.navigate(routesScreen.Follow, {type: 'followers'})
+                }>
+                {profile?.followerId?.length} followers
+              </Text>
             </View>
             <View className="">
-              <ModalTrigger
-                button={
-                  <Text className="ml-[30] text-black font-semibold text-[15px] text-[#4caf50]">
-                    {profile?.followingId?.length} following
-                  </Text>
-                }
-                visible={openModalFollowing}
-                setVisible={value => setOpenModalFollowing(value)}>
-                <FollowingModal />
-              </ModalTrigger>
+              <Text
+                className="ml-[30] text-black font-semibold text-[15px] text-[#4caf50]"
+                onPress={() =>
+                  navigation.navigate(routesScreen.Follow, {type: 'following'})
+                }>
+                {profile?.followingId?.length} following
+              </Text>
             </View>
           </View>
         </View>

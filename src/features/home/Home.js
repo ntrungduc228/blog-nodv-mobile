@@ -153,7 +153,7 @@ function Home({navigation}) {
     const elements = [];
     const times = postLength < 1 ? 5 : postLength < 5 ? 3 : 1;
     for (let i = 0; i < times; i++) {
-      elements.push(<PostLoading />);
+      elements.push(<PostLoading key={i} />);
     }
     return elements;
   };
