@@ -1,15 +1,20 @@
+import {useFocusEffect} from '@react-navigation/native';
 import {formatRelative} from 'date-fns';
-import React, {useMemo, useState, memo} from 'react';
+import React, {useMemo, useState, memo, useCallback} from 'react';
 import {Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Avatar} from 'react-native-paper';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {useMutation} from 'react-query';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {createComment, updateCommentApi} from '../../../../api/commentApi';
 import {createNotification} from '../../../../api/notificationApi';
 import {updateCountNotifications} from '../../../../api/userApi';
 import {NotificationType} from '../../../../config/dataType';
+import {
+  setInitialComment,
+  setIsEdit,
+} from '../../../../redux/slices/commentInputSlice';
 import {callApiCreateNotification} from '../../../../utils/generationNotification';
 import CommentEditor from '../../CommentEditor/CommentEditor';
 import {CommentList} from '../../CommentList/CommentList';
@@ -18,14 +23,25 @@ import CommentMenu from './CommentMenu';
 
 function Comment({comment, post}) {
   const user = useSelector(state => state.user.data.info);
+  const dispatch = useDispatch();
   const replyComments = useSelector(
     state => state.comment.commentsByParentId[comment.id],
   );
+  const initialComment = useSelector(
+    state => state.commentInput.initialComment,
+  );
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(setIsEdit(false));
+      dispatch(setInitialComment());
+    }, [dispatch]),
+  );
+  const isEdit = useSelector(state => state.commentInput.isEdit);
   const rootComments = useSelector(state => state.comment.list);
   const [isReply, setIsReply] = useState(false);
   const [isShowReply, setIsShowReply] = useState(false);
   const [isOpenMenu, setIsOpenMenu] = useState(false);
-  const [isEdit, setIsEdit] = useState(false);
+  // const [isEdit, setIsEdit] = useState(false);
   const getCommentUserId = comment => {
     var parentComment = rootComments.find(
       commentParent => comment.replyId === commentParent.id,
@@ -66,17 +82,18 @@ function Comment({comment, post}) {
   const updateCommentById = useMutation(updateCommentApi);
   const handleUpdateComment = comment => {
     updateCommentById.mutate(comment);
-    setIsEdit(false);
     setIsOpenMenu(false);
+    dispatch(setIsEdit(false));
   };
   return (
     <View className="m-3">
-      {isEdit ? (
-        <CommentEditor
-          initialComment={comment}
-          onSubmit={handleUpdateComment}
-        />
+      {initialComment?.id === comment.id && isEdit ? (
+        ''
       ) : (
+        // <CommentEditor
+        //   initialComment={comment}
+        //   onSubmit={handleUpdateComment}
+        // />
         <>
           <View className="flex-row justify-between items-center">
             <View className="flex-row">
@@ -102,10 +119,12 @@ function Comment({comment, post}) {
               </TouchableOpacity>
               {isOpenMenu && (
                 <CommentMenu
-                  isEdit={isEdit}
+                  // isEdit={isEdit}
                   isUser={comment.userId === user.id ? true : false}
                   setIsEdit={() => {
-                    setIsEdit(prev => !prev);
+                    setIsOpenMenu(false);
+                    dispatch(setInitialComment(comment));
+                    dispatch(setIsEdit(true));
                   }}
                   setIsOpenMenu={setIsOpenMenu}
                   commentId={comment.id}

@@ -18,7 +18,6 @@ const commentSlice = createSlice({
     },
 
     updateComment: (state, action) => {
-      console.log('update comment ', action.payload);
       state.list = state.list.map(comment => {
         if (comment.id === action.payload.id) return action.payload;
         return comment;

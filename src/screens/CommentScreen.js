@@ -10,7 +10,7 @@ import {updateCountNotifications} from '../api/userApi';
 import {NotificationType} from '../config/dataType';
 import CommentEditor from '../features/comment/CommentEditor/CommentEditor';
 import CommentList from '../features/comment/CommentList/CommentList';
-import {setIsEdit} from '../redux/slices/commentInputSlice';
+import {setInitialComment, setIsEdit} from '../redux/slices/commentInputSlice';
 import {
   addComment,
   removeComment,
@@ -65,10 +65,15 @@ export function CommentScreen({route}) {
     createNewComment.mutate(comment);
   };
   //edit comment
-  const updateCommentById = useMutation(updateCommentApi);
+  const updateCommentById = useMutation(updateCommentApi, {
+    onSuccess: () => {
+      dispatch(setInitialComment());
+    },
+  });
   const handleUpdateComment = comment => {
     updateCommentById.mutate(comment);
     dispatch(setIsEdit(false));
+
     //setIsOpenMenu(false);
   };
   // choose fuc handle
@@ -153,7 +158,7 @@ export function CommentScreen({route}) {
       </ScrollView>
       <CommentEditor
         initialComment={initialComment}
-        onSubmit={handleCreateComment}
+        onSubmit={handleUpdateComment}
         post={post}
       />
     </View>

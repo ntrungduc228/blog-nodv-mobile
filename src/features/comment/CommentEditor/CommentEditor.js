@@ -1,5 +1,5 @@
 // import { Collapse } from "@mui/material";
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import CommentEditorFooter from './CommentEditorFooter';
 // import CommentEditorFooter from "./CommentEditorFooter";
@@ -7,6 +7,7 @@ import CommentEditorFooter from './CommentEditorFooter';
 import CommentEditorInput from './CommentEditorInput';
 import Feather from 'react-native-vector-icons/Feather';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {useSelector} from 'react-redux';
 
 const CommentEditor = ({
   focus,
@@ -22,6 +23,10 @@ const CommentEditor = ({
     initialComment?.content ? initialComment.content : '',
   );
 
+  useEffect(() => {
+    setInputValue(initialComment?.content ? initialComment?.content : '');
+  }, [initialComment]);
+
   const handleSubmit = () => {
     const comment = {
       id: initialComment?.id,
@@ -33,6 +38,7 @@ const CommentEditor = ({
     setInputValue('');
     onSubmit(comment);
   };
+  console.log('inut', inputValue);
 
   return (
     <View className=" flex-row items-center justify-center w-full h-14 py-4 shadow-[0_2px_8px_rgba(0,0,0,0.12)] border-t border-slate-200 pr-2">
@@ -48,13 +54,13 @@ const CommentEditor = ({
         />
       </View>
       <TouchableOpacity
-        disabled={inputValue.trim() === ''}
+        disabled={!!(inputValue.trim() === '')}
         onPress={handleSubmit}>
         <Feather
           name="send"
           size={24}
           solid="#A09898"
-          color={inputValue.trim() === '' ? 'gray' : 'green'}
+          color={!!(inputValue.trim() === '') ? 'gray' : 'green'}
         />
       </TouchableOpacity>
     </View>
