@@ -1,9 +1,6 @@
-// import { Collapse } from "@mui/material";
-import {useState} from 'react';
-import {Text, View} from 'react-native';
+import {useEffect, useState} from 'react';
+import {View} from 'react-native';
 import CommentEditorFooter from './CommentEditorFooter';
-// import CommentEditorFooter from "./CommentEditorFooter";
-// import CommentEditorHeader from "./CommentEditorHeader";
 import CommentEditorInput from './CommentEditorInput';
 
 const CommentEditor = ({
@@ -19,6 +16,9 @@ const CommentEditor = ({
   const [inputValue, setInputValue] = useState(
     initialComment?.content ? initialComment.content : '',
   );
+  useEffect(() => {
+    setInputValue(initialComment?.content ? initialComment.content : '');
+  }, [initialComment]);
   const handleFocus = () => {
     setIsFocused(true);
   };
@@ -42,9 +42,6 @@ const CommentEditor = ({
 
   return (
     <View className="mx-6 rounded py-4 shadow-[0_2px_8px_rgba(0,0,0,0.12)]">
-      {/* <Collapse orientation="vertical" in={isFocused && !hideHeader}>
-        <CommentEditorHeader />
-      </Collapse> */}
       <View onClick={handleFocus}>
         <CommentEditorInput
           value={inputValue}
@@ -56,7 +53,6 @@ const CommentEditor = ({
           }}
         />
       </View>
-      {/* <Collapse orientation="vertical" in={isFocused}> */}
       {
         <CommentEditorFooter
           onCancel={handleCancel}
@@ -65,7 +61,6 @@ const CommentEditor = ({
           isEdit={isEdit}
         />
       }
-      {/* </Collapse> */}
     </View>
   );
 };

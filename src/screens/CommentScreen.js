@@ -1,10 +1,9 @@
-import React from 'react';
-import {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useMutation, useQuery} from 'react-query';
 import {useDispatch, useSelector} from 'react-redux';
-import {createComment, getComment} from '../api/commentApi';
+import {createComment, getComment, updateCommentApi} from '../api/commentApi';
 import {createNotification} from '../api/notificationApi';
 import {updateCountNotifications} from '../api/userApi';
 import {NotificationType} from '../config/dataType';
@@ -18,15 +17,33 @@ import {
 } from '../redux/slices/commentSlice';
 import {callApiCreateNotification} from '../utils/generationNotification';
 
+const initialComment = {content: ''};
+const commentContext = React.createContext({
+  editorState: 'create',
+  setEditorContent: () => {},
+  editorContent: initialComment.content,
+});
+export const useComment = () => React.useContext(commentContext);
 export function CommentScreen({route}) {
   const post = route.params?.post;
-  const dispatch = useDispatch();
   const socket = useSelector(state => state.socket.data);
   const userId = useSelector(state => state.user?.data?.info?.id);
 
   const rootComments = useSelector(
     state => state.comment.commentsByParentId[null],
   );
+  const dispatch = useDispatch();
+
+  //new
+  const editorStateType = useRef({
+    CREATE: 'create',
+    EDIT: 'edit',
+    REPLY: 'reply',
+  }).current;
+  const [editorState, setEditorState] = React.useState(editorStateType.CREATE);
+  const [editorComment, setEditorComment] = React.useState(initialComment);
+  const isEdit = editorState === editorStateType.EDIT;
+  const [newComment, setNewComment] = React.useState('');
 
   useQuery(['comments', post?.id], () => getComment(post.id), {
     enabled: !!post?.id,
@@ -61,7 +78,58 @@ export function CommentScreen({route}) {
   const handleCreateComment = comment => {
     createNewComment.mutate(comment);
   };
-  const initialComment = {};
+  //edit comment
+  const updateCommentById = useMutation(updateCommentApi);
+  const handleUpdateComment = comment => {
+    updateCommentById.mutate(comment);
+
+    //setIsOpenMenu(false);
+  };
+  //reply cmt
+  const getCommentUserId = comment => {
+    var parentComment = rootComments.find(
+      commentParent => comment.replyId === commentParent.id,
+    );
+    return parentComment.userId;
+  };
+  const createNewReplyComment = useMutation(createComment, {
+    onSuccess: data => {
+      let comment = {...data, commentParentUserId: getCommentUserId(data)};
+      callApiCreateNotification(
+        comment,
+        NotificationType.REPLYCOMMENT,
+        createNewNotificationReplyComment,
+        userId,
+      );
+    },
+  });
+  const createNewNotificationReplyComment = useMutation(createNotification, {
+    onSuccess: data => {
+      const Increase = {
+        isIncrease: true,
+        userId: data.receiverId,
+      };
+      updateUserIncreaseNumOfNotification.mutate(Increase);
+    },
+  });
+  const handleReplyComment = comment => {
+    createNewReplyComment.mutate(comment);
+    //setIsReply(false);
+    //setIsShowReply(true);
+  };
+  // choose fuc handle
+  // const handleSubmit = comment => {
+  //   if (isEdit) {
+  //     handleUpdateComment(comment);
+  //   }
+  //   // else if(isReply){
+
+  //   //  }
+  //   else {
+  //     handleCreateComment(comment);
+  //   }
+  // };
+
   //realtime
   const updateLocalListComment = updatedComment => {
     dispatch(addComment(updatedComment));
@@ -123,18 +191,36 @@ export function CommentScreen({route}) {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [post?.id, socket]);
-
+  const handleSubmit = comment => {
+    switch (editorState) {
+      case editorStateType.CREATE:
+        handleCreateComment(comment);
+      case editorStateType.EDIT:
+        handleUpdateComment(comment);
+      case editorStateType.REPLY:
+        handleReplyComment(comment);
+    }
+    setEditorState(editorStateType.CREATE);
+    setEditorComment(initialComment);
+  };
   return (
-    <View className="bg-white h-full">
-      <ScrollView>
+    <commentContext.Provider
+      value={{
+        editorState,
+        setEditorState,
+        editorComment,
+        setEditorComment,
+      }}>
+      <View className="bg-white h-full">
+        <ScrollView>
+          <CommentList comments={rootComments} isEdit={isEdit} post={post} />
+        </ScrollView>
         <CommentEditor
-          initialComment={initialComment}
-          onSubmit={handleCreateComment}
+          initialComment={editorComment}
+          onSubmit={handleSubmit}
           post={post}
         />
-
-        <CommentList comments={rootComments} userId={userId} post={post} />
-      </ScrollView>
-    </View>
+      </View>
+    </commentContext.Provider>
   );
 }
