@@ -1,5 +1,4 @@
-import React, {useState} from 'react';
-import {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useMutation, useQuery} from 'react-query';
@@ -19,28 +18,44 @@ import {
 } from '../redux/slices/commentSlice';
 import {callApiCreateNotification} from '../utils/generationNotification';
 
+const initialComment = {content: ''};
+const commentContext = React.createContext({
+  editorState: 'create',
+  setEditorContent: () => {},
+  editorContent: initialComment.content,
+});
+export const useComment = () => React.useContext(commentContext);
 export function CommentScreen({route}) {
   const post = route.params?.post;
-  const dispatch = useDispatch();
   const socket = useSelector(state => state.socket.data);
   const userId = useSelector(state => state.user?.data?.info?.id);
 
   const rootComments = useSelector(
     state => state.comment.commentsByParentId[null],
   );
-  const initialComment = useSelector(
-    state => state.commentInput.initialComment,
-  );
+  const dispatch = useDispatch();
+
+  //new
+  const editorStateType = useRef({
+    CREATE: 'create',
+    EDIT: 'edit',
+    REPLY: 'reply',
+  }).current;
+  const [editorState, setEditorState] = React.useState(editorStateType.CREATE);
+  const [editorComment, setEditorComment] = React.useState(initialComment);
+  const isEdit = editorState === editorStateType.EDIT;
+  const [newReplyComment, setNewReplyComment] = React.useState('');
+  const [newUsernameParent, setNewUsernameParent] = React.useState('');
+
   useQuery(['comments', post?.id], () => getComment(post.id), {
     enabled: !!post?.id,
     onSuccess: data => {
-      // console.log('data: ', data);
       dispatch(setComments(data));
     },
   });
   const createNewComment = useMutation(createComment, {
     onSuccess: data => {
-      //     dispatch(addComment(data));
+      // dispatch(addComment(data));
       let comment = {...data, postUserId: post.userId};
       callApiCreateNotification(
         comment,
@@ -66,28 +81,48 @@ export function CommentScreen({route}) {
   };
   //edit comment
   const updateCommentById = useMutation(updateCommentApi, {
-    onSuccess: () => {
-      dispatch(setInitialComment());
+    onSuccess: data => {
+      // dispatch(updateComment(data));
     },
   });
   const handleUpdateComment = comment => {
     updateCommentById.mutate(comment);
-    dispatch(setIsEdit(false));
 
     //setIsOpenMenu(false);
   };
-  // choose fuc handle
-  // const handleSubmit = comment => {
-  //   if (isEdit) {
-  //     handleUpdateComment(comment);
-  //   }
-  //   // else if(isReply){
 
-  //   //  }
-  //   else {
-  //     handleCreateComment(comment);
-  //   }
-  // };
+  //reply cmt
+  const getCommentUserId = comment => {
+    var parentComment = rootComments.find(
+      commentParent => comment.replyId === commentParent.id,
+    );
+    return parentComment.userId;
+  };
+  const createNewReplyComment = useMutation(createComment, {
+    onSuccess: data => {
+      //  dispatch(addComment(data));
+      setNewReplyComment(data);
+      let comment = {...data, commentParentUserId: getCommentUserId(data)};
+      callApiCreateNotification(
+        comment,
+        NotificationType.REPLYCOMMENT,
+        createNewNotificationReplyComment,
+        userId,
+      );
+    },
+  });
+  const createNewNotificationReplyComment = useMutation(createNotification, {
+    onSuccess: data => {
+      const Increase = {
+        isIncrease: true,
+        userId: data.receiverId,
+      };
+      updateUserIncreaseNumOfNotification.mutate(Increase);
+    },
+  });
+  const handleReplyComment = comment => {
+    createNewReplyComment.mutate(comment);
+  };
 
   //realtime
   const updateLocalListComment = updatedComment => {
@@ -150,17 +185,44 @@ export function CommentScreen({route}) {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [post?.id, socket]);
-
+  const handleSubmit = comment => {
+    switch (editorState) {
+      case editorStateType.CREATE:
+        handleCreateComment(comment);
+        break;
+      case editorStateType.EDIT:
+        handleUpdateComment(comment);
+        break;
+      case editorStateType.REPLY:
+        handleReplyComment(comment);
+        break;
+    }
+    setEditorState(editorStateType.CREATE);
+    setEditorComment(initialComment);
+    setNewUsernameParent('');
+  };
   return (
-    <View className="bg-white h-full">
-      <ScrollView>
-        <CommentList comments={rootComments} userId={userId} post={post} />
-      </ScrollView>
-      <CommentEditor
-        initialComment={initialComment}
-        onSubmit={handleUpdateComment}
-        post={post}
-      />
-    </View>
+    <commentContext.Provider
+      value={{
+        editorState,
+        setEditorState,
+        editorComment,
+        setEditorComment,
+        newReplyComment,
+        setNewReplyComment,
+        setNewUsernameParent,
+        newUsernameParent,
+      }}>
+      <View className="bg-white h-full">
+        <ScrollView>
+          <CommentList comments={rootComments} isEdit={isEdit} post={post} />
+        </ScrollView>
+        <CommentEditor
+          initialComment={editorComment}
+          onSubmit={handleSubmit}
+          post={post}
+        />
+      </View>
+    </commentContext.Provider>
   );
 }

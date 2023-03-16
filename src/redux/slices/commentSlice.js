@@ -26,7 +26,6 @@ const commentSlice = createSlice({
     },
     removeComment: (state, action) => {
       state.list = state.list.filter(comment => comment.id !== action.payload);
-      console.log(state.list);
       state.commentsByParentId = commentsByParentId(state.list);
     },
   },

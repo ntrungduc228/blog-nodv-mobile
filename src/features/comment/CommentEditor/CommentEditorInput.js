@@ -1,5 +1,4 @@
 import React, {useEffect, useRef} from 'react';
-import {Text, View} from 'react-native';
 import {TextInput} from 'react-native-paper';
 
 const CommentEditorInput = ({isFocused, onChange, value, onFocus, onBlur}) => {
@@ -17,7 +16,8 @@ const CommentEditorInput = ({isFocused, onChange, value, onFocus, onBlur}) => {
     <TextInput
       onFocus={onFocus}
       onBlur={onBlur}
-      className="bg-white"
+      className="bg-white border-b-1 h-11"
+      underlineColor="#fff"
       activeUnderlineColor="#000"
       ref={inputRef}
       value={value}
