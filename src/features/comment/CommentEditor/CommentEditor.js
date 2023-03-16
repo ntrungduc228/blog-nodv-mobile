@@ -1,34 +1,33 @@
-// import { Collapse } from "@mui/material";
-
-import {Text, View} from 'react-native';
-
-import CommentEditorFooter from './CommentEditorFooter';
+import {useEffect, useState} from 'react';
+import {View} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import CommentEditorInput from './CommentEditorInput';
-import {useState} from 'react';
+import Feather from 'react-native-vector-icons/Feather';
+import {Text} from 'react-native-paper';
+import {useComment} from '../../../screens';
 
-// import CommentEditorFooter from "./CommentEditorFooter";
-// import CommentEditorHeader from "./CommentEditorHeader";
-
-const CommentEditor = ({
-  focus,
-  isEdit,
-  hideHeader,
-  post,
-  initialComment = {},
-  onCancel = () => {},
-  onSubmit,
-}) => {
+const CommentEditor = ({focus, post, initialComment = {}, onSubmit}) => {
+  const {
+    setEditorState,
+    editorState,
+    setEditorComment,
+    setNewReplyComment,
+    newUsernameParent,
+    setNewUsernameParent,
+  } = useComment();
   const [isFocused, setIsFocused] = useState(focus);
   const [inputValue, setInputValue] = useState(
     initialComment?.content ? initialComment.content : '',
   );
-  const handleFocus = () => {
-    setIsFocused(true);
-  };
+  useEffect(() => {
+    setInputValue(initialComment?.content ? initialComment.content : '');
+  }, [initialComment]);
 
   const handleCancel = () => {
-    setIsFocused(false);
-    onCancel();
+    setEditorState('create');
+    setEditorComment({content: ''});
+    setNewReplyComment(null);
+    setNewUsernameParent('');
   };
 
   const handleSubmit = () => {
@@ -42,34 +41,46 @@ const CommentEditor = ({
     setInputValue('');
     onSubmit(comment);
   };
-
   return (
-    <View className="mx-6 rounded py-4 shadow-[0_2px_8px_rgba(0,0,0,0.12)]">
-      {/* <Collapse orientation="vertical" in={isFocused && !hideHeader}>
-        <CommentEditorHeader />
-      </Collapse> */}
-      <View onClick={handleFocus}>
-        <CommentEditorInput
-          value={inputValue}
-          isFocused={isFocused}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          onChange={e => {
-            setInputValue(prev => ({...prev, e}.e));
-          }}
-        />
+    <>
+      {editorState !== 'create' && (
+        <View className="flex-row justify-between items-center bg-slate-200 h-7 px-2">
+          <Text>
+            {editorState === 'edit'
+              ? 'Edit comment'
+              : `Replying to ${newUsernameParent}`}
+          </Text>
+          <TouchableOpacity onPress={handleCancel}>
+            <Feather name="x" size={20} solid="#A09898" color="black" />
+          </TouchableOpacity>
+        </View>
+      )}
+
+      <View className="flex-row items-center justify-center w-full h-14 py-4 shadow-[0_2px_8px_rgba(0,0,0,0.12)] border-t border-slate-200 pr-2">
+        <View className="flex-1">
+          <CommentEditorInput
+            value={inputValue}
+            isFocused={isFocused}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            onChange={e => {
+              setInputValue(prev => ({...prev, e}.e));
+            }}
+          />
+        </View>
+
+        <TouchableOpacity
+          disabled={!!(inputValue.trim() === '')}
+          onPress={handleSubmit}>
+          <Feather
+            name="send"
+            size={24}
+            solid="#A09898"
+            color={!!(inputValue.trim() === '') ? 'gray' : 'green'}
+          />
+        </TouchableOpacity>
       </View>
-      {/* <Collapse orientation="vertical" in={isFocused}> */}
-      {
-        <CommentEditorFooter
-          onCancel={handleCancel}
-          onSubmit={handleSubmit}
-          disabled={inputValue.trim() === ''}
-          isEdit={isEdit}
-        />
-      }
-      {/* </Collapse> */}
-    </View>
+    </>
   );
 };
 
