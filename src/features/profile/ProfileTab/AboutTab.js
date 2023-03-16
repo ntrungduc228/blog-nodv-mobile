@@ -14,8 +14,7 @@ import {useSelector} from 'react-redux';
 export const AboutTab = () => {
   const [showForm, setShowForm] = useState(false);
   const profile = useSelector(state => state?.profile?.data);
-  const user = useSelector(state => state?.user?.data?.info);
-  const classMarginBottom = !showForm ? 'mb-7' : 'mb-0';
+  // const classMarginBottom = !showForm ? 'mb-7' : 'mb-0';
 
   const onPress = () => {
     setShowForm(prev => !prev);
@@ -24,13 +23,21 @@ export const AboutTab = () => {
   return (
     <View className="flex-1 bg-white flex-col justify-between">
       {showForm ? (
-        <AboutForm onPress={onPress} user={user} />
-      ) : !user.bio ? (
-        <AboutStarted onPress={onPress} />
+        <AboutForm onPress={onPress} user={profile} />
+      ) : !profile?.bio ? (
+        profile?.isOwnProfile ? (
+          <AboutStarted onPress={onPress} />
+        ) : (
+          <View />
+        )
       ) : (
-        <AboutDescription onPress={onPress} userBio={user?.bio} />
+        <AboutDescription
+          onPress={onPress}
+          userBio={profile?.bio}
+          isOwnProfile={profile?.isOwnProfile}
+        />
       )}
-      <View
+      {/* <View
         className={`${classMarginBottom} flex flex-row items-center justify-center gap-x-3`}>
         <ModalTrigger
           button={
@@ -49,7 +56,7 @@ export const AboutTab = () => {
           }>
           <FollowingModal />
         </ModalTrigger>
-      </View>
+      </View> */}
     </View>
   );
 };

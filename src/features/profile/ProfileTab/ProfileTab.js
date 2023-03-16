@@ -5,10 +5,13 @@ import {ListsTab} from './ListsTab';
 import React from 'react';
 import {StoryTab} from './StoryTab';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {useSelector} from 'react-redux';
 
 const Tab = createMaterialTopTabNavigator();
 
 export const ProfileTab = () => {
+  const profile = useSelector(state => state?.profile?.data);
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -26,13 +29,15 @@ export const ProfileTab = () => {
           title: 'Stories',
         }}
       />
-      <Tab.Screen
-        name="ListsTab"
-        component={ListsTab}
-        options={{
-          title: 'Lists',
-        }}
-      />
+      {profile?.isOwnProfile && (
+        <Tab.Screen
+          name="ListsTab"
+          component={ListsTab}
+          options={{
+            title: 'Lists',
+          }}
+        />
+      )}
       <Tab.Screen
         name="AboutTab"
         component={AboutTab}

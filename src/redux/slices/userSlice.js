@@ -8,6 +8,7 @@ const initialState = {
     accessToken: null,
     isLogin: false,
     provider: null,
+    topicFollow: [],
   },
   error: undefined,
 };
@@ -22,7 +23,7 @@ const userSlice = createSlice({
       AsyncStorage.mergeItem(
         'user',
         JSON.stringify({
-          info: action.payload,
+          info: state.data.info,
         }),
       );
     },
@@ -32,6 +33,12 @@ const userSlice = createSlice({
         ...info,
         ...action.payload,
       };
+      AsyncStorage.mergeItem(
+        'user',
+        JSON.stringify({
+          info: state.data.info,
+        }),
+      );
     },
     setAccessToken: (state, action) => {
       state.data.accessToken = action.payload.accessToken;

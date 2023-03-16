@@ -118,7 +118,10 @@ const WhoToFollow = () => {
 const User = ({user}) => {
   const navigation = useNavigation();
   const navigationToProfile = () => {
-    navigation.navigate(routesScreen.Profile, {userId: user?.id});
+    navigation.navigate(routesScreen.Profile, {
+      userId: user?.id,
+      email: user?.email,
+    });
   };
   return (
     <View className="items-center rounded-lg bg-gray-50 p-4 w-40">

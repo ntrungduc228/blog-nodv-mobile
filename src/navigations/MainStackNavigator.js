@@ -7,6 +7,7 @@ import {
   SearchScreen,
   SettingsScreen,
   TopicScreen,
+  FollowScreen,
 } from '../screens';
 
 import BottomTabNavigator from './BottomTabNavigator';
@@ -64,6 +65,11 @@ function MainStackNavigator() {
         options={{headerShown: false}}
         name={routesScreen.PostsTopic}
         component={TopicScreen}
+      />
+      <MainStack.Screen
+        options={{headerShown: false}}
+        name={routesScreen.Follow}
+        component={FollowScreen}
       />
 
       <MainStack.Screen name={routesScreen.Comment} component={CommentScreen} />

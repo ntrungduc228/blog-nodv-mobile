@@ -1,13 +1,12 @@
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {formatRelative} from 'date-fns';
-import {useCallback, useEffect, useMemo} from 'react';
+import {useEffect, useMemo} from 'react';
 import {Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Avatar} from 'react-native-paper';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useMutation, useQuery} from 'react-query';
-import {getComment} from '../../api/commentApi.js';
+import {useMutation} from 'react-query';
 import {setNotificationRead} from '../../api/notificationApi.js';
 import {NotificationType} from '../../config/dataType.js';
 import routesScreen from '../../navigations/routesScreen.js';
