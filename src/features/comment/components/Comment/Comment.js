@@ -1,77 +1,38 @@
-import {useIsFocused} from '@react-navigation/native';
-import {formatRelative} from 'date-fns';
-import React, {useMemo, useState} from 'react';
+import {formatRelative, intlFormatDistance} from 'date-fns';
+import React, {useEffect, useMemo, useState} from 'react';
 import {Text, View} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Avatar} from 'react-native-paper';
-import Entypo from 'react-native-vector-icons/Entypo';
-import {useMutation} from 'react-query';
 import {useSelector} from 'react-redux';
-import {createComment, updateCommentApi} from '../../../../api/commentApi';
-import {createNotification} from '../../../../api/notificationApi';
-import {updateCountNotifications} from '../../../../api/userApi';
-import {NotificationType} from '../../../../config/dataType';
 import {useComment} from '../../../../screens';
-import {callApiCreateNotification} from '../../../../utils/generationNotification';
-import CommentEditor from '../../CommentEditor/CommentEditor';
 import {CommentList} from '../../CommentList/CommentList';
 import CommentFooter from './CommentFooter';
 import CommentMenu from './CommentMenu';
 
 function Comment({comment, post, isActiveEdit}) {
-  const {setEditorState, setEditorComment, newComment, setNewComment} =
-    useComment();
+  const {
+    setEditorState,
+    setEditorComment,
+    newReplyComment,
+    setNewReplyComment,
+    setNewUsernameParent,
+  } = useComment();
   const user = useSelector(state => state.user.data.info);
   const replyComments = useSelector(
     state => state.comment.commentsByParentId[comment.id],
   );
-  const rootComments = useSelector(state => state.comment.list);
-  const [isReply, setIsReply] = useState(false);
   const [isShowReply, setIsShowReply] = useState(false);
-  const [isOpenMenu, setIsOpenMenu] = useState(false);
-  // const [isEdit, setIsEdit] = useState(false);
-  const getCommentUserId = comment => {
-    var parentComment = rootComments.find(
-      commentParent => comment.replyId === commentParent.id,
-    );
-    return parentComment.userId;
-  };
+  useEffect(() => {
+    if (!newReplyComment) return;
+    if (newReplyComment?.replyId === comment.id) {
+      setIsShowReply(true);
+      setNewReplyComment(null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [newReplyComment, comment.id]);
+
   const displayTime = useMemo(() => {
     return formatRelative(new Date(comment.createdDate), new Date());
   }, [comment.createdDate]);
-  const createNewReplyComment = useMutation(createComment, {
-    onSuccess: data => {
-      let comment = {...data, commentParentUserId: getCommentUserId(data)};
-      callApiCreateNotification(
-        comment,
-        NotificationType.REPLYCOMMENT,
-        createNewNotificationReplyComment,
-        user.id,
-      );
-    },
-  });
-  const createNewNotificationReplyComment = useMutation(createNotification, {
-    onSuccess: data => {
-      const Increase = {
-        isIncrease: true,
-        userId: data.receiverId,
-      };
-      updateUserIncreaseNumOfNotification.mutate(Increase);
-    },
-  });
-  const updateUserIncreaseNumOfNotification = useMutation(
-    updateCountNotifications,
-  );
-  const handleReply = comment => {
-    createNewReplyComment.mutate(comment);
-    setIsReply(false);
-    setIsShowReply(true);
-  };
-  const updateCommentById = useMutation(updateCommentApi);
-  const handleUpdateComment = comment => {
-    updateCommentById.mutate(comment);
-    setIsOpenMenu(false);
-  };
   return (
     <View className={`${isActiveEdit ? 'bg-slate-100' : ''}  p-3`}>
       <>
@@ -110,26 +71,15 @@ function Comment({comment, post, isActiveEdit}) {
           onReply={() => {
             setEditorComment({replyId: comment.id});
             setEditorState('reply');
+            setNewUsernameParent(comment.user.username);
           }}
           onShowReply={() => setIsShowReply(prev => !prev)}
           isShowReply={isShowReply}
           comment={comment}
         />
       </>
-      {(isShowReply || isReply) && (
+      {isShowReply && (
         <View className="mb-6 ml-3 border-l-2 border-slate-400">
-          {isReply && (
-            <CommentEditor
-              onCancel={() => {
-                setIsReply(false);
-              }}
-              initialComment={{
-                replyId: comment.id,
-              }}
-              onSubmit={handleReply}
-              post={post}
-            />
-          )}
           {isShowReply && replyComments?.length > 0 && (
             <CommentList comments={replyComments} post={post} />
           )}

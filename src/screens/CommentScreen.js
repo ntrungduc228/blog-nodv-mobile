@@ -43,18 +43,18 @@ export function CommentScreen({route}) {
   const [editorState, setEditorState] = React.useState(editorStateType.CREATE);
   const [editorComment, setEditorComment] = React.useState(initialComment);
   const isEdit = editorState === editorStateType.EDIT;
-  const [newComment, setNewComment] = React.useState('');
+  const [newReplyComment, setNewReplyComment] = React.useState('');
+  const [newUsernameParent, setNewUsernameParent] = React.useState('');
 
   useQuery(['comments', post?.id], () => getComment(post.id), {
     enabled: !!post?.id,
     onSuccess: data => {
-      // console.log('data: ', data);
       dispatch(setComments(data));
     },
   });
   const createNewComment = useMutation(createComment, {
     onSuccess: data => {
-      //     dispatch(addComment(data));
+      // dispatch(addComment(data));
       let comment = {...data, postUserId: post.userId};
       callApiCreateNotification(
         comment,
@@ -79,12 +79,17 @@ export function CommentScreen({route}) {
     createNewComment.mutate(comment);
   };
   //edit comment
-  const updateCommentById = useMutation(updateCommentApi);
+  const updateCommentById = useMutation(updateCommentApi, {
+    onSuccess: data => {
+      // dispatch(updateComment(data));
+    },
+  });
   const handleUpdateComment = comment => {
     updateCommentById.mutate(comment);
 
     //setIsOpenMenu(false);
   };
+
   //reply cmt
   const getCommentUserId = comment => {
     var parentComment = rootComments.find(
@@ -94,6 +99,8 @@ export function CommentScreen({route}) {
   };
   const createNewReplyComment = useMutation(createComment, {
     onSuccess: data => {
+      //  dispatch(addComment(data));
+      setNewReplyComment(data);
       let comment = {...data, commentParentUserId: getCommentUserId(data)};
       callApiCreateNotification(
         comment,
@@ -114,21 +121,7 @@ export function CommentScreen({route}) {
   });
   const handleReplyComment = comment => {
     createNewReplyComment.mutate(comment);
-    //setIsReply(false);
-    //setIsShowReply(true);
   };
-  // choose fuc handle
-  // const handleSubmit = comment => {
-  //   if (isEdit) {
-  //     handleUpdateComment(comment);
-  //   }
-  //   // else if(isReply){
-
-  //   //  }
-  //   else {
-  //     handleCreateComment(comment);
-  //   }
-  // };
 
   //realtime
   const updateLocalListComment = updatedComment => {
@@ -195,13 +188,17 @@ export function CommentScreen({route}) {
     switch (editorState) {
       case editorStateType.CREATE:
         handleCreateComment(comment);
+        break;
       case editorStateType.EDIT:
         handleUpdateComment(comment);
+        break;
       case editorStateType.REPLY:
         handleReplyComment(comment);
+        break;
     }
     setEditorState(editorStateType.CREATE);
     setEditorComment(initialComment);
+    setNewUsernameParent('');
   };
   return (
     <commentContext.Provider
@@ -210,6 +207,10 @@ export function CommentScreen({route}) {
         setEditorState,
         editorComment,
         setEditorComment,
+        newReplyComment,
+        setNewReplyComment,
+        setNewUsernameParent,
+        newUsernameParent,
       }}>
       <View className="bg-white h-full">
         <ScrollView>

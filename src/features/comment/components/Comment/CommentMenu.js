@@ -17,6 +17,7 @@ const CommentMenu = ({setIsEdit, isUser, commentId}) => {
   const openMenu = () => setVisible(true);
 
   const closeMenu = () => setVisible(false);
+
   return (
     <>
       {isDelete ? (
@@ -25,7 +26,9 @@ const CommentMenu = ({setIsEdit, isUser, commentId}) => {
             <Dialog
               className="bg-white rounded-lg"
               visible={isDelete}
-              onDismiss={() => {}}>
+              onDismiss={() => {
+                setIsDelete(false);
+              }}>
               <Dialog.Title>Delete comment</Dialog.Title>
               <Dialog.Content>
                 <Text variant="bodyMedium">
