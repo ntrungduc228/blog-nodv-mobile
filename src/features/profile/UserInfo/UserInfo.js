@@ -1,13 +1,14 @@
 import {Button, Text} from 'react-native-paper';
-import {Image, View, StyleSheet} from 'react-native';
-import {useState} from 'react';
-import {routesScreen} from '../../../navigations';
-import {useNavigation} from '@react-navigation/native';
-import {useSelector} from 'react-redux';
+import {FollowerModal, FollowingModal} from '../ProfileTab/components';
+import {Image, StyleSheet, View} from 'react-native';
+
 import {ButtonFollow} from './ButtonFollow';
 import {FollowUserButton} from '../../user';
 import {ModalTrigger} from '../../../components/ModalTrigger';
-import {FollowerModal, FollowingModal} from '../ProfileTab/components';
+import {routesScreen} from '../../../navigations';
+import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
+import {useState} from 'react';
 
 export const UserInfo = () => {
   const [openModalFollower, setOpenModalFollower] = useState(false);
@@ -49,7 +50,7 @@ export const UserInfo = () => {
             <View className="">
               <ModalTrigger
                 button={
-                  <Text className="ml-[30] text-black font-semibold text-[15px] text-[#4caf50]">
+                  <Text className="ml-[30] font-semibold text-[15px] text-[#4caf50]">
                     {profile?.followingId?.length} following
                   </Text>
                 }

@@ -1,16 +1,16 @@
-import {useEffect, useState} from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
+import {useEffect, useState} from 'react';
 
-import {useNavigation} from '@react-navigation/native';
-import {format} from 'date-fns';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import IconFeather from 'react-native-vector-icons/Feather';
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
-import {useSelector} from 'react-redux';
-import {axiosClientPrivate} from '../../api/axiosClient.js';
-import {routesScreen} from '../../navigations';
 import {PostMenu} from '../post/components/PostMenu/PostMenu';
 import Styles from './Styles.js';
+import {axiosClientPrivate} from '../../api/axiosClient.js';
+import {format} from 'date-fns';
+import {routesScreen} from '../../navigations';
+import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
 
 function Post({post}) {
   const currentUser = useSelector(state => state.user.data.info);

@@ -16,6 +16,7 @@ const routesScreen = {
   NotFound: 'NotFound',
   PostsTopic: 'PostsTopic',
   ListsTab: 'ListsTab',
+  Follow: 'Follow',
 };
 
 export default routesScreen;

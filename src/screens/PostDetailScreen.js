@@ -1,21 +1,26 @@
 import {
-  BookmarkButton,
-  LikePostButton,
+  BookmarkIcon,
+  BookmarkPlusIcon,
+  ClapIcon,
+  ClapOutlineIcon,
+} from '../components/icons';
+import {
+  CommentButton,
+  LikePost,
   PostDetailLoading,
   PostMenu,
   PostToolbar,
-  CommentButton,
 } from '../features/post/components';
+import {PostProvider, usePost} from '../features/post/context/PostContext';
 import {SafeAreaView, Text, View} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
-import {useEffect, useMemo} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {useGetPost, useGetRecommendPostsByPostId} from '../features/post/hooks';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {Avatar} from 'react-native-paper';
 import {FollowUserButton} from '../features/user/components';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {IconWrapper} from '../components';
 import {RichEditor} from 'react-native-pell-rich-editor';
 import {Topic} from '../features/topic/components';
 import {format} from 'date-fns';
@@ -24,47 +29,66 @@ import {useQueryClient} from 'react-query';
 import {useSelector} from 'react-redux';
 
 export const PostDetailScreen = ({route}) => {
-  const {id} = route.params;
-  const navigation = useNavigation();
-  const {data = {}, isLoading, isSuccess} = useGetPost(id);
-  const {user: author} = data;
-  const userId = useSelector(state => state.user.data.info.id);
-  const isAuthor = useMemo(() => author?.id === userId, [author, userId]);
+  const {postId} = route.params;
+  const {data = {}, isLoading, isSuccess} = useGetPost(postId);
+  const [post, setPost] = useState(data);
+
+  useEffect(() => {
+    setPost(data);
+  }, [data]);
+
   return (
-    <View className="bg-white h-full">
-      <View className="h-14 flex-row items-center justify-between px-4 border-slate-200 absolute top-0 bg-white w-full z-10">
-        <TouchableOpacity>
-          <AntDesign
-            name="arrowleft"
-            size={24}
-            color="black"
-            onPress={() => navigation.goBack()}
-          />
-        </TouchableOpacity>
-        {!isLoading && (
-          <View className="flex-row gap-2 items-center h-full">
-            <BookmarkButton postId={id} />
-            {isAuthor && <PostMenu postId={id} />}
+    <PostProvider post={post} onUpdatePost={newPost => setPost(newPost)}>
+      <View className="bg-white h-full">
+        <Header isLoading={isLoading} />
+        {isLoading ? (
+          <View className="pt-[68px] px-4 bg-white h-screen">
+            <PostDetailLoading />
           </View>
+        ) : (
+          isSuccess && (
+            <>
+              <MainContent />
+              <RecommendPostList postId={postId} />
+            </>
+          )
         )}
       </View>
-      {isLoading ? (
-        <View className="pt-[68px] px-2 bg-white h-screen">
-          <PostDetailLoading />
-        </View>
-      ) : (
-        isSuccess && (
-          <>
-            <MainContent data={data} isAuthor={isAuthor} />
-            <RecommendPostList postId={id} />
-          </>
-        )
-      )}
-    </View>
+    </PostProvider>
   );
 };
 
-function MainContent({data, isAuthor}) {
+function Header({isLoading}) {
+  const navigation = useNavigation();
+  const {post, updateBookmark} = usePost();
+  return (
+    <View className="h-14 flex-row items-center justify-between px-4 border-slate-200 absolute top-0 bg-white w-full z-10">
+      <TouchableOpacity>
+        <AntDesign
+          name="arrowleft"
+          size={24}
+          color="black"
+          onPress={() => navigation.goBack()}
+        />
+      </TouchableOpacity>
+      {!isLoading && (
+        <View className="flex-row items-center  h-full">
+          <IconWrapper className="mr-6" size={24} onPress={updateBookmark}>
+            {post.isBookmarked ? (
+              <BookmarkIcon className="text-black" />
+            ) : (
+              <BookmarkPlusIcon className="text-gray-500" />
+            )}
+          </IconWrapper>
+          <PostMenu />
+        </View>
+      )}
+    </View>
+  );
+}
+
+function MainContent() {
+  const {post} = usePost();
   const queryClient = useQueryClient();
   const socket = useSelector(state => state.socket.data);
   const {
@@ -75,7 +99,8 @@ function MainContent({data, isAuthor}) {
     topics,
     id,
     userLikeIds = [],
-  } = data;
+    isAuthor,
+  } = post;
   const createdDateFormatted = useMemo(() => {
     if (!createdDate) {
       return null;
@@ -107,23 +132,32 @@ function MainContent({data, isAuthor}) {
   return (
     <SafeAreaView className="flex-1 pt-14">
       <ScrollView>
-        <View className="flex-row items-center mt-4 px-2">
-          <Avatar.Image
-            size={48}
-            source={{
-              uri: author.avatar,
-            }}
-          />
-          <View className="ml-4">
+        <View className="flex-row items-center mt-4 px-4">
+          {author?.avatar ? (
+            <Avatar.Image
+              size={48}
+              source={{
+                uri: author.avatar,
+              }}
+            />
+          ) : (
+            <Avatar.Text
+              size={48}
+              label={author?.username?.charAt(0).toUpperCase()}
+            />
+          )}
+          <View className="ml-4 w-full flex-1">
             <View className="flex-row gap-2 items-center">
-              <Text className="text-xl font-bold">{author.username}</Text>
+              <Text className="font-bold overflow-hidden flex-1">
+                {author?.username}
+              </Text>
               <View>
                 {isAuthor ? (
                   <View className={`h-5 rounded-full px-2 bg-yellow-500`}>
                     <Text className="text-xs text-white mt-0.5">Owner</Text>
                   </View>
                 ) : (
-                  <FollowUserButton followerId={author.id}>
+                  <FollowUserButton followerId={author?.id}>
                     {({handleFollow, followed}) => {
                       return (
                         <TouchableOpacity onPress={handleFollow}>
@@ -147,10 +181,14 @@ function MainContent({data, isAuthor}) {
             </Text>
           </View>
         </View>
-        <RichEditor disabled className="flex-1" initialContentHTML={content} />
+        <RichEditor
+          disabled
+          className="flex-1 mx-1"
+          initialContentHTML={content}
+        />
         <View className="w-[95%] h-[1px] bg-slate-200 mx-auto my-2" />
         <View className="flex-row items-center pb-4 px-2">
-          {topics.map(topic => {
+          {topics?.map(topic => {
             return (
               <View className="p-1" key={topic.id}>
                 <Topic topic={topic} key={topic.id} />
@@ -161,30 +199,25 @@ function MainContent({data, isAuthor}) {
         <View className="h-14" />
       </ScrollView>
       <PostToolbar>
-        <LikePostButton postId={id} userLikeIds={userLikeIds || []}>
+        <LikePost postId={id} userLikeIds={userLikeIds || []}>
           {({liked, handleLike}) => {
             return (
               <PostToolbar.Item
-                onPress={handleLike}
                 icon={
-                  <MaterialCommunityIcons
-                    name="hand-clap"
-                    size={20}
-                    color={liked ? 'green' : 'gray'}
-                  />
+                  <IconWrapper onPress={handleLike}>
+                    {liked ? <ClapIcon /> : <ClapOutlineIcon />}
+                  </IconWrapper>
                 }>
                 {userLikeIds ? userLikeIds.length : 0}
               </PostToolbar.Item>
             );
           }}
-        </LikePostButton>
+        </LikePost>
         <PostToolbar.Divider />
-        <CommentButton post={data} />
-        {/* <PostToolbar.Item
-          icon={<FontAwesome name="comment-o" size={18} color="gray" />}
-        /> */}
+        <PostToolbar.Item>
+          <CommentButton post={post} />
+        </PostToolbar.Item>
       </PostToolbar>
-      {/* <CommentButton /> */}
     </SafeAreaView>
   );
 }

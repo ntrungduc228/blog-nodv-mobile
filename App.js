@@ -1,7 +1,11 @@
 import {AuthStackNavigator, MainStackNavigator} from './src/navigations';
 import {Provider, useDispatch, useSelector} from 'react-redux';
 import {QueryClient, QueryClientProvider, useQuery} from 'react-query';
-import {logout, setAccessToken, setUser} from './src/redux/slices/userSlice';
+import {
+  setAccessToken,
+  setUser,
+  updateUser,
+} from './src/redux/slices/userSlice';
 import {useCallback, useEffect} from 'react';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -9,13 +13,11 @@ import {NavigationContainer} from '@react-navigation/native';
 import {Provider as PaperProvider} from 'react-native-paper';
 import {SocketClient} from './src/websocket';
 import {getAuthInfo} from './src/api/authApi';
-import {getBookmarkByUserId} from './src/api/bookmarkApi';
-import {setBookmark} from './src/redux/slices/bookmarkSlice';
+import {getOwnTopics} from './src/api/userApi';
+import {getPostIdsBookmark} from './src/api/bookmarkApi';
+import {setTopic} from './src/redux/slices/topicSlice';
 import {store} from './src/redux/store';
 import useSocialAuth from './src/hooks/useSocialAuth';
-import {setProfile} from './src/redux/slices/profileSlice';
-import {getOwnTopics} from './src/api/userApi';
-import {setTopic} from './src/redux/slices/topicSlice';
 
 // import SocketClient from './src/websocket/SocketClient';
 
@@ -48,19 +50,18 @@ function AppScreen() {
   useQuery('user', getAuthInfo, {
     enabled: isLogin,
     onSuccess: data => {
-      if (!data?.topics || !data?.topics.length) {
-        // if user has no topics, redirect to topic page
-        // navigate(appRoutes.TOPIC_PICK);
-      }
-      dispatch(setUser(data));
+      dispatch(updateUser({...data}));
     },
   });
-  useQuery(['bookmark', isLogin], getBookmarkByUserId, {
+  useQuery(['bookmark', isLogin], getPostIdsBookmark, {
     enabled: isLogin,
     onSuccess: data => {
-      // fix tam - chua hay vi useQuery van goi api
       if (!bookmark.postIds.length) {
-        dispatch(setBookmark(data));
+        dispatch(
+          updateUser({
+            bookmarkIds: data,
+          }),
+        );
       }
     },
   });
@@ -75,7 +76,6 @@ function AppScreen() {
 
   return (
     <NavigationContainer>
-      {/* <MainStackNavigator /> */}
       {isLogin ? <MainStackNavigator /> : <AuthStackNavigator />}
       {isLogin && <SocketClient />}
     </NavigationContainer>

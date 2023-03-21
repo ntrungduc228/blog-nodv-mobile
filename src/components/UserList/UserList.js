@@ -1,7 +1,8 @@
-import {View, Text, TouchableOpacity, Image, ScrollView} from 'react-native';
-import React from 'react';
 import {Dialog, Portal} from 'react-native-paper';
+import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+
 import {FollowUserButton} from '../../features/user';
+import React from 'react';
 
 export const UserList = ({users}) => {
   return (
@@ -9,7 +10,7 @@ export const UserList = ({users}) => {
     <View className="flex-col gap-4 h-[300]">
       <ScrollView className="">
         {users?.map(user => (
-          <UserComponent user={user} key={user.id}></UserComponent>
+          <UserComponent user={user} key={user.id} />
         ))}
       </ScrollView>
     </View>

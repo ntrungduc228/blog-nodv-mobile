@@ -42,7 +42,6 @@ export const FollowUserButton = ({followerId, children, fullWith, primary}) => {
   );
   const {mutate: followUser} = useFollowUser({
     onSuccess: data => {
-      setFollowed(true);
       handleUpdateLocalFollowing(true);
       callApiCreateNotification(
         data,
@@ -55,15 +54,16 @@ export const FollowUserButton = ({followerId, children, fullWith, primary}) => {
   const {mutate: unFollowUser} = useUnFollowUser({
     onSuccess: () => {
       handleUpdateLocalFollowing(false);
-      setFollowed(false);
     },
   });
   const handleFollow = () => {
     console.log('handleFollow');
     if (followed) {
       unFollowUser(followerId);
+      setFollowed(false);
     } else {
       followUser(followerId);
+      setFollowed(true);
     }
   };
   return children ? (

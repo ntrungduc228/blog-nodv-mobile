@@ -22,7 +22,7 @@ const Item = ({icon, children, onPress}) => {
   return (
     <TouchableOpacity
       onPress={onPress}
-      className="flex-row items-center min-w-[40px]">
+      className="flex-row items-center min-w-[36px]">
       {icon}
       <Text className="text-slate-400 ml-1">{children}</Text>
     </TouchableOpacity>

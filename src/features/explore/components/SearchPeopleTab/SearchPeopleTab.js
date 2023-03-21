@@ -1,23 +1,44 @@
 import {FlatList, RefreshControl} from 'react-native-gesture-handler';
+import React, {useMemo} from 'react';
 import {Text, View} from 'react-native';
 
-import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {UserItem} from '../../../user';
 import {searchUser} from '../../../../api/userApi';
-import {useQuery} from 'react-query';
+import {useInfiniteQuery} from 'react-query';
 import {useSearchScreen} from '../../../../screens';
 
 export const SearchPeopleTab = () => {
   const {searchValue} = useSearchScreen();
+  const storeKey = ['users', searchValue];
   const {
-    data: users,
+    data,
+    fetchNextPage,
+    hasNextPage,
     isLoading,
+    isSuccess,
+    isFetching,
     refetch,
-  } = useQuery(['searchPeople', searchValue], () => searchUser(searchValue), {
-    enabled: searchValue.length > 0,
-    staleTime: 1000 * 60 * 60,
-  });
+  } = useInfiniteQuery(
+    storeKey,
+    ({pageParam}) => searchUser(searchValue, pageParam, 5),
+    {
+      getNextPageParam: lastPage => {
+        const {last, number} = lastPage;
+        return last ? undefined : number + 1;
+      },
+      staleTime: 1000 * 60 * 60,
+    },
+  );
+  const users = useMemo(() => {
+    const allUsers = [];
+    data?.pages.forEach(page => {
+      return page.content.forEach(post =>
+        allUsers.push({...post, page: page.number}),
+      );
+    });
+    return allUsers;
+  }, [data]);
 
   return (
     <SafeAreaView className="bg-white h-full pb-48">
@@ -33,11 +54,19 @@ export const SearchPeopleTab = () => {
         refreshControl={
           <RefreshControl refreshing={isLoading} onRefresh={refetch} />
         }
+        onEndReachedThreshold={0.5}
+        onEndReached={() => {
+          if (hasNextPage) {
+            fetchNextPage();
+          }
+        }}
         ListEmptyComponent={
           <>
-            {!isLoading && (
+            {users.length <= 0 && (
               <View className="flex-1 items-center justify-center mt-10">
-                <Text className="text-gray-500">No posts</Text>
+                <Text className="text-gray-500">
+                  No users found for {searchValue}
+                </Text>
               </View>
             )}
           </>

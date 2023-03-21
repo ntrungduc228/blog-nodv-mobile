@@ -1,21 +1,19 @@
-import {View, Text, TouchableOpacity} from 'react-native';
+import {CommentIcon} from '../../../../components/icons';
+import {IconWrapper} from '../../../../components';
 import React from 'react';
-import {Chip} from 'react-native-paper';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {useNavigation} from '@react-navigation/native';
 import {routesScreen} from '../../../../navigations';
+import {useNavigation} from '@react-navigation/native';
 
 export const CommentButton = ({post}) => {
   const navigation = useNavigation();
   return (
-    <Chip
+    <IconWrapper
       onPress={() =>
         navigation.navigate(routesScreen.Comment, {
           post: post,
         })
-      }
-      className="bg-white">
-      <FontAwesome name="comment-o" size={18} color="gray" />
-    </Chip>
+      }>
+      <CommentIcon />
+    </IconWrapper>
   );
 };

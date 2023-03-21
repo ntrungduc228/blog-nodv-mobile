@@ -2,29 +2,27 @@ import {Button, Dialog, Menu, Portal, Text} from 'react-native-paper';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {View} from 'react-native';
 import {postEditorMode} from '../../../../screens';
-import {useDeletePost} from '../../hooks';
 import {useNavigation} from '@react-navigation/native';
+import {usePost} from '../../context/PostContext';
 import {useState} from 'react';
 
-export const PostMenu = ({postId}) => {
+export const PostMenu = () => {
   const [visible, setVisible] = useState(false);
-
   const openMenu = () => setVisible(true);
+
+  const {post, hidePost, deletePost, publishPost, unPublishPost} = usePost();
+  const {isAuthor, id: postId} = post;
 
   const closeMenu = () => setVisible(false);
   const navigation = useNavigation();
-  const {mutate: deletePost} = useDeletePost({
-    onSuccess: () => {
-      navigation.goBack();
-    },
-  });
   const [isShowDeleteDialog, setIsShowDeleteDialog] = useState(false);
   const showDialog = () => setIsShowDeleteDialog(true);
   const hideDialog = () => setIsShowDeleteDialog(false);
 
   return (
-    <>
+    <View>
       <Menu
         keyboardShouldPersistTaps="always"
         anchorPosition="bottom"
@@ -35,7 +33,7 @@ export const PostMenu = ({postId}) => {
         }}
         onDismiss={closeMenu}
         anchor={
-          <TouchableOpacity onPress={openMenu} className="ml-2">
+          <TouchableOpacity onPress={openMenu}>
             <MaterialCommunityIcons
               name="dots-vertical"
               size={24}
@@ -43,23 +41,34 @@ export const PostMenu = ({postId}) => {
             />
           </TouchableOpacity>
         }>
-        <Menu.Item
-          onPress={() => {
-            closeMenu();
-            navigation.navigate('PostEditor', {
-              mode: postEditorMode.EDIT,
-              postId: postId,
-            });
-          }}
-          title="Edit"
-        />
-        <Menu.Item
-          onPress={() => {
-            closeMenu();
-            showDialog();
-          }}
-          title="Delete"
-        />
+        {isAuthor ? (
+          <>
+            <Menu.Item
+              onPress={() => {
+                closeMenu();
+                navigation.navigate('PostEditor', {
+                  mode: postEditorMode.EDIT,
+                  postId: postId,
+                });
+              }}
+              title="Edit"
+            />
+            {post.isPublish ? (
+              <Menu.Item onPress={unPublishPost} title="Unpublish" />
+            ) : (
+              <Menu.Item onPress={publishPost} title="Publish" />
+            )}
+            <Menu.Item
+              onPress={() => {
+                closeMenu();
+                showDialog();
+              }}
+              title="Delete"
+            />
+          </>
+        ) : (
+          <Menu.Item onPress={hidePost} title="Hide post" />
+        )}
       </Menu>
       <Portal>
         <Dialog
@@ -86,6 +95,6 @@ export const PostMenu = ({postId}) => {
           </Dialog.Actions>
         </Dialog>
       </Portal>
-    </>
+    </View>
   );
 };

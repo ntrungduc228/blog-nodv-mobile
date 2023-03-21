@@ -1,5 +1,7 @@
 import axiosClient, {axiosClientPrivate} from './axiosClient';
 
+import {generateParamsString} from '../utils/generateParamsString';
+
 const url = '/users';
 const userApi = {
   getAllUsers: () => axiosClientPrivate.get(url),
@@ -25,6 +27,23 @@ const userApi = {
     axiosClientPrivate.get(url + `/getUsersNotFollowed?limit=${limit}`),
   getMoreUsersNotFlow: limit =>
     axiosClientPrivate.get(url + `/getUsersNotFollowed?limit=${limit}`),
+  getFollowers: (userId, {page = 0, limit = 5}) => {
+    const params = {
+      page,
+      limit,
+    };
+    const paramsString = generateParamsString(params);
+    return axiosClientPrivate.get(`${url}/${userId}/followers?${paramsString}`);
+  },
+
+  getFollowing: (userId, {page = 0, limit = 5}) => {
+    const params = {
+      page,
+      limit,
+    };
+    const paramsString = generateParamsString(params);
+    return axiosClientPrivate.get(`${url}/${userId}/following?${paramsString}`);
+  },
 };
 export const {
   getAllUsers,
@@ -42,4 +61,6 @@ export const {
   getAllUsersFollowing,
   getMoreUsersNotFlow,
   getUsersNotFollow,
+  getFollowers,
+  getFollowing,
 } = userApi;

@@ -1,4 +1,4 @@
-import {Button, Image, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import {
   followTopic,
   getOwnTopics,
@@ -19,8 +19,10 @@ import {Spinner} from '../../components';
 import {TouchableOpacity} from 'react-native';
 import {getTopics} from '../../api/topicApi';
 import {setTopic} from '../../redux/slices/topicSlice';
+import {useNavigation} from '@react-navigation/native';
 
-function Topic({navigation}) {
+function Topic() {
+  const navigation = useNavigation();
   const {isLogin} = useSelector(state => state.user.data);
   const dispatch = useDispatch();
   const currentUser = useSelector(state => state.user.data.info);
@@ -62,7 +64,7 @@ function Topic({navigation}) {
     setStatus('topic');
     setFilterItem('Topics');
   };
-  const handleClickPeole = () => {
+  const handleClickPeople = () => {
     setStatus('people');
     setFilterItem('People');
   };
@@ -76,8 +78,8 @@ function Topic({navigation}) {
     });
   };
   const peopleRender = () => {
-    return people.map((curPeople, index) => {
-      return <PeopleItem key={index} people={curPeople} status={false} />;
+    return people.map((user, index) => {
+      return <PeopleItem key={index} user={user} />;
     });
   };
   const loadingRender = () => {
@@ -95,7 +97,7 @@ function Topic({navigation}) {
         <TouchableOpacity
           key={index}
           onPress={() =>
-            filter.item === 'Topics' ? handleClickTopic() : handleClickPeole()
+            filter.item === 'Topics' ? handleClickTopic() : handleClickPeople()
           }>
           <View style={[filterItem === filter.item && Styles.borderBottom]}>
             <Text

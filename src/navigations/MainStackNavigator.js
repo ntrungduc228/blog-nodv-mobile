@@ -11,6 +11,7 @@ import {
 
 import BottomTabNavigator from './BottomTabNavigator';
 import NotificationScreen from '../screens/NotificationScreen';
+import Topic from '../features/home/Topic';
 import {createStackNavigator} from '@react-navigation/stack';
 import routesScreen from './routesScreen';
 
@@ -22,8 +23,11 @@ function MainStackNavigator() {
       <MainStack.Screen
         name={routesScreen.BottomTab}
         component={BottomTabNavigator}
-        options={{headerShown: false}}
+        options={{
+          headerShown: false,
+        }}
       />
+
       <MainStack.Screen
         name="Notifications"
         component={NotificationScreen}
@@ -64,6 +68,11 @@ function MainStackNavigator() {
         options={{headerShown: false}}
         name={routesScreen.PostsTopic}
         component={TopicScreen}
+      />
+      <MainStack.Screen
+        options={{headerShown: false}}
+        name={routesScreen.Follow}
+        component={Topic}
       />
 
       <MainStack.Screen name={routesScreen.Comment} component={CommentScreen} />
