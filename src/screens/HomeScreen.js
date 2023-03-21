@@ -51,7 +51,7 @@ export function HomeScreen() {
           startButton={
             <TouchableOpacity
               className="w-12 pl-4 h-12 flex justify-center items-center"
-              onPress={() => navigation.navigate(routesScreen.Follow)}>
+              onPress={() => navigation.navigate(routesScreen.FollowGeneral)}>
               <IconFeather
                 name="plus"
                 size={20}

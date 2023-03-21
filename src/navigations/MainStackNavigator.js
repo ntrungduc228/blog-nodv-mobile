@@ -11,6 +11,8 @@ import {
 } from '../screens';
 
 import BottomTabNavigator from './BottomTabNavigator';
+import {FollowersScreen} from '../screens/FollowersScreen';
+import {FollowingScreen} from '../screens/FollowingScreen';
 import NotificationScreen from '../screens/NotificationScreen';
 import Topic from '../features/home/Topic';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -74,6 +76,21 @@ function MainStackNavigator() {
         options={{headerShown: false}}
         name={routesScreen.Follow}
         component={FollowScreen}
+      />
+      <MainStack.Screen
+        options={{headerShown: false}}
+        name={routesScreen.Followers}
+        component={FollowersScreen}
+      />
+      <MainStack.Screen
+        options={{headerShown: false}}
+        name={routesScreen.Following}
+        component={FollowingScreen}
+      />
+      <MainStack.Screen
+        options={{headerShown: false}}
+        name={routesScreen.FollowGeneral}
+        component={Topic}
       />
 
       <MainStack.Screen name={routesScreen.Comment} component={CommentScreen} />

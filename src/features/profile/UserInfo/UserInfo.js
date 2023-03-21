@@ -32,18 +32,14 @@ export const UserInfo = () => {
             <View className="">
               <Text
                 className="text-red font-semibold text-[15px] text-[#4caf50]"
-                onPress={() =>
-                  navigation.navigate(routesScreen.Follow, {type: 'followers'})
-                }>
+                onPress={() => navigation.navigate(routesScreen.Followers)}>
                 {profile?.followerId?.length} followers
               </Text>
             </View>
             <View className="">
               <Text
-                className="ml-[30] text-black font-semibold text-[15px] text-[#4caf50]"
-                onPress={() =>
-                  navigation.navigate(routesScreen.Follow, {type: 'following'})
-                }>
+                className="ml-[30] font-semibold text-[15px] text-[#4caf50]"
+                onPress={() => navigation.navigate(routesScreen.Following)}>
                 {profile?.followingId?.length} following
               </Text>
             </View>

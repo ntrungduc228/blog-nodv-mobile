@@ -17,6 +17,9 @@ const routesScreen = {
   PostsTopic: 'PostsTopic',
   ListsTab: 'ListsTab',
   Follow: 'Follow',
+  Followers: 'Followers',
+  Following: 'Following',
+  FollowGeneral: 'FollowGeneral',
 };
 
 export default routesScreen;

@@ -1,11 +1,12 @@
-import {View, TouchableOpacity, Text, ScrollView, Image} from 'react-native';
-import IconFontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {useSelector} from 'react-redux';
-import {useQuery} from 'react-query';
-import {getAllUsersFollowing, getAllUsersFollower} from '../api/userApi';
-import {Spinner} from '../components';
+import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {getAllUsersFollower, getAllUsersFollowing} from '../api/userApi';
+
 import {FollowUserButton} from '../features/user';
+import IconFontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {Spinner} from '../components';
 import {routesScreen} from '../navigations';
+import {useQuery} from 'react-query';
+import {useSelector} from 'react-redux';
 
 export const FollowScreen = ({navigation, route}) => {
   const type = route.params?.type;
@@ -67,7 +68,7 @@ const FollowBody = ({data, navigation}) => {
   );
 };
 
-const FollowItem = ({item, navigation}) => {
+export const FollowItem = ({item, navigation}) => {
   return (
     <View className="flex-row justify-between p-4 items-center border-y border-slate-300">
       <TouchableOpacity
