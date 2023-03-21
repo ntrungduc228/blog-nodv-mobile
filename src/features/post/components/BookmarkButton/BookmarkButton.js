@@ -1,12 +1,9 @@
 import {cloneElement, useEffect, useState} from 'react';
-import {
-  updateBookmark,
-  updatePostByIdToBookmark,
-} from '../../../../redux/slices/bookmarkSlice';
 import {useDispatch, useSelector} from 'react-redux';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {updatePostByIdToBookmark} from '../../../../redux/slices/bookmarkSlice';
 import {useBookmarkPost} from '../../hooks/useBookmarkPost';
 
 export const BookmarkButton = ({postId, children}) => {

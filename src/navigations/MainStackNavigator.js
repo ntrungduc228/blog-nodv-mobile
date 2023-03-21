@@ -1,5 +1,6 @@
 import {
   CommentScreen,
+  FollowScreen,
   NotFoundScreen,
   PostDetailScreen,
   PostEditorScreen,
@@ -7,11 +8,11 @@ import {
   SearchScreen,
   SettingsScreen,
   TopicScreen,
-  FollowScreen,
 } from '../screens';
 
 import BottomTabNavigator from './BottomTabNavigator';
 import NotificationScreen from '../screens/NotificationScreen';
+import Topic from '../features/home/Topic';
 import {createStackNavigator} from '@react-navigation/stack';
 import routesScreen from './routesScreen';
 
@@ -23,8 +24,11 @@ function MainStackNavigator() {
       <MainStack.Screen
         name={routesScreen.BottomTab}
         component={BottomTabNavigator}
-        options={{headerShown: false}}
+        options={{
+          headerShown: false,
+        }}
       />
+
       <MainStack.Screen
         name="Notifications"
         component={NotificationScreen}

@@ -1,12 +1,5 @@
-import {
-  View,
-  Text,
-  ScrollView,
-  FlatList,
-  RefreshControl,
-  SafeAreaView,
-} from 'react-native';
-import {PostLoading, Post} from '../post';
+import {FlatList, RefreshControl, SafeAreaView, Text, View} from 'react-native';
+import {Post, PostLoading} from '../post';
 
 export const BookmarkList = ({isLoading, refetch, posts}) => {
   return (

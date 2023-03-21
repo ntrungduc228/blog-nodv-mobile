@@ -3,16 +3,15 @@ import {
   SearchStoriesTab,
   SearchTopicsTab,
 } from '../features/explore/components';
-import {StyleSheet, View} from 'react-native';
-import {createContext, useContext, useState} from 'react';
+import {createContext, useContext, useMemo, useState} from 'react';
 
 import {Button} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Tab} from '../components';
 import {TextInput} from 'react-native-gesture-handler';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-const Tab = createMaterialTopTabNavigator();
 const SearchScreenContext = createContext({
   searchValue: '',
   setSearchValue: () => {},
@@ -25,6 +24,28 @@ export const useSearchScreen = () => {
 export const SearchScreen = () => {
   const navigation = useNavigation();
   const [searchValue, setSearchValue] = useState('');
+  const tabItems = useMemo(
+    () => [
+      {
+        key: 'stories',
+        title: 'Stories',
+        component: SearchStoriesTab,
+      },
+
+      {
+        key: 'people',
+        title: 'People',
+        component: SearchPeopleTab,
+      },
+      {
+        key: 'topics',
+        title: 'Topics',
+        component: SearchTopicsTab,
+      },
+    ],
+    [],
+  );
+
   return (
     <SearchScreenContext.Provider
       value={{
@@ -50,66 +71,8 @@ export const SearchScreen = () => {
             Cancel
           </Button>
         </View>
-        <SearchTab />
+        <Tab tabItems={tabItems} />
       </View>
     </SearchScreenContext.Provider>
   );
 };
-
-const SearchTab = () => {
-  return (
-    <View className="h-full w-full">
-      <Tab.Navigator
-        screenOptions={{
-          tabBarLabelStyle: Styles.tabBarLabel,
-          tabBarItemStyle: Styles.tabBarItemStyle,
-          tabBarStyle: Styles.tabBarStyle,
-          tabBarPressColor: '#d7cbcb',
-          tabBarIndicatorStyle: Styles.tabBarIndicatorStyle,
-          // tabBarGap: 0,
-        }}>
-        <Tab.Screen
-          name="StoriesTab"
-          component={SearchStoriesTab}
-          options={{
-            title: 'Stories',
-          }}
-        />
-        <Tab.Screen
-          name="PeopleTab"
-          component={SearchPeopleTab}
-          options={{
-            title: 'People',
-          }}
-        />
-        <Tab.Screen
-          name="TopicsTab"
-          component={SearchTopicsTab}
-          options={{
-            title: 'Topics',
-          }}
-        />
-      </Tab.Navigator>
-    </View>
-  );
-};
-
-const Styles = StyleSheet.create({
-  tabBarLabel: {
-    fontSize: 13,
-    textTransform: 'none',
-  },
-  tabBarItemStyle: {width: 80},
-  tabBarStyle: {
-    backgroundColor: '#fff',
-    paddingHorizontal: 4,
-    shadowColor: 'transparent',
-    elevation: 0,
-  },
-  tabBarIndicatorStyle: {
-    backgroundColor: '#767373',
-    width: 50,
-    height: 1,
-    marginLeft: 19,
-  },
-});

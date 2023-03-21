@@ -1,10 +1,11 @@
 import {Button, Text} from 'react-native-paper';
-import {Image, View, StyleSheet} from 'react-native';
+import {Image, StyleSheet, View} from 'react-native';
+
+import {ButtonFollow} from './ButtonFollow';
+import {FollowUserButton} from '../../user';
 import {routesScreen} from '../../../navigations';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
-import {ButtonFollow} from './ButtonFollow';
-import {FollowUserButton} from '../../user';
 
 export const UserInfo = () => {
   const profile = useSelector(state => state.profile?.data);

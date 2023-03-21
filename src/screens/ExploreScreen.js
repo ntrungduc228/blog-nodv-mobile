@@ -21,6 +21,9 @@ function ExploreScreen() {
   return (
     <ScrollView>
       <ScreenLayout title="Explore">
+        <ScreenLayout.Header>
+          <ScreenLayout.Title>Explore</ScreenLayout.Title>
+        </ScreenLayout.Header>
         <View className="border-b border-gray-200">
           <View className="mt-2">
             <TouchableOpacity
@@ -164,12 +167,19 @@ function PostItem({index, post}) {
       </View>
       <View className="flex-1">
         <View className="flex-row gap-x-2">
-          <Avatar.Image
-            size={20}
-            source={{
-              uri: post?.user?.avatar,
-            }}
-          />
+          {post.user?.avatar ? (
+            <Avatar.Image
+              size={20}
+              source={{
+                uri: post?.user?.avatar,
+              }}
+            />
+          ) : (
+            <Avatar.Text
+              label={post?.user?.username?.charAt(0).toUpperCase()}
+              size={20}
+            />
+          )}
           <Text>{post?.user?.username}</Text>
         </View>
         <TouchableOpacity

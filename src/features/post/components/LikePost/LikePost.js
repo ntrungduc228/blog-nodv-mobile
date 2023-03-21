@@ -11,7 +11,7 @@ import {useLikePost} from '../../hooks/useLikePost';
 import {useSelector} from 'react-redux';
 import {useUnLikePost} from '../../hooks/useUnlikePost';
 
-export const LikePostButton = ({userLikeIds = [], postId, children}) => {
+export const LikePost = ({userLikeIds = [], postId, children}) => {
   const queryClient = useQueryClient();
   const userId = useSelector(state => state.user.data.info.id);
   const [liked, setLiked] = useState(userLikeIds?.includes(userId));

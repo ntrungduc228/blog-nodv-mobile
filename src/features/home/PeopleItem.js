@@ -1,51 +1,26 @@
-import {StyleSheet, Text, View, Image} from 'react-native';
-import {useState} from 'react';
-import {Chip} from 'react-native-paper';
-import {followUser, unFollowUser} from '../../api/userApi';
+import {StyleSheet, Text, View} from 'react-native';
 
-function PeopleItem({people, status}) {
-  const [statusFollow, setStatusFollow] = useState(status);
-  const handleFollowUser = async people => {
-    console.log(people);
-    setStatusFollow(!statusFollow);
-    if (statusFollow === true) {
-      await unFollowUser(people.id);
-    } else {
-      await followUser(people.id);
-    }
-  };
+import {Avatar} from 'react-native-paper';
+import {FollowUserButton} from '../user';
 
+function PeopleItem({user}) {
   return (
     <View style={Styles.topics}>
-      <Image
-        source={{
-          uri: people.avatar
-            ? people.avatar
-            : 'https://icons.iconarchive.com/icons/papirus-team/papirus-status/512/avatar-default-icon.png',
-          method: 'POST',
-          headers: {
-            Pragma: 'no-cache',
-          },
-          body: 'Your Body goes here',
-        }}
-        style={Styles.imageProfile}
-      />
-      <View style={Styles.infoUser}>
-        <Text style={Styles.textTopic}>{people.username}</Text>
-        <Text>{people.bio}</Text>
+      {user?.avatar ? (
+        <Avatar.Image
+          size={40}
+          source={{
+            uri: user?.avatar,
+          }}
+        />
+      ) : (
+        <Avatar.Icon size={40} icon="account" />
+      )}
+      <View style={Styles.infoUser} className="ml-4">
+        <Text style={Styles.textTopic}>{user.username}</Text>
+        <Text>{user.bio}</Text>
       </View>
-      <Chip
-        style={statusFollow ? Styles.chipFollowing : ''}
-        textStyle={{
-          color: statusFollow ? '#1A8917' : '#fff',
-        }}
-        mode={'outlined'}
-        onPress={() => handleFollowUser(people)}
-        className={`rounded-full  h-8 ${
-          statusFollow ? ' bg-slate-500' : 'bg-green-600'
-        }`}>
-        {statusFollow ? 'Following' : 'Follow'}
-      </Chip>
+      <FollowUserButton followerId={user?.id} primary />
     </View>
   );
 }
