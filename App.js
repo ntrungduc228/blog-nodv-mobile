@@ -36,7 +36,6 @@ function AppScreen() {
 
     if (!userInfo?.hasOwnProperty('accessToken')) {
       handleLogoutBySocial();
-      // dispatch(logout());
       return;
     }
     dispatch(setAccessToken(userInfo));
