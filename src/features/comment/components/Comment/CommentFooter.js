@@ -15,6 +15,12 @@ import {updateCountNotifications} from '../../../../api/userApi';
 import {NotificationType} from '../../../../config/dataType';
 import {updateComment} from '../../../../redux/slices/commentSlice';
 import {callApiCreateNotification} from '../../../../utils/generationNotification';
+import {
+  ClapIcon,
+  ClapOutlineIcon,
+  CommentIcon,
+} from '../../../../components/icons';
+import {IconWrapper} from '../../../../components';
 
 function CommentFooter({
   onReply,
@@ -66,29 +72,37 @@ function CommentFooter({
       unlikeCommentMutation.mutate(comment.id);
     }
   };
-  const deleteCommentById = useMutation(deleteComment);
-  const handleDeleteComment = comment => {
-    deleteCommentById.mutate(comment.id);
-  };
-  return (
-    <View className="flex-row justify-between -z-10">
-      <View className="flex-row justify-between">
-        <TouchableOpacity className="flex-row" onPress={handleLike}>
-          <MaterialCommunityIcons
-            name="hand-clap"
-            size={20}
-            color={isLiked ? `green` : `black`}
-          />
-          <Text className="text-base pr-3">
-            {' '}
-            {comment?.userLikeIds ? comment.userLikeIds.length : 0}
-          </Text>
-        </TouchableOpacity>
 
-        <Text className="pl-3 text-base" onPress={onShowReply}>
-          <FontAwesome name="comment-o" size={20} color="black" />{' '}
-          {isShowReply ? `Hide Reply` : numReplyComments + ` Reply`}
+  return (
+    <View className="flex-row justify-between">
+      <View className="flex-row justify-between">
+        <IconWrapper size={24} onPress={handleLike}>
+          {isLiked ? <ClapIcon /> : <ClapOutlineIcon />}
+        </IconWrapper>
+        <Text className="text-base pr-3">
+          {' '}
+          {comment?.userLikeIds ? comment.userLikeIds.length : 0}
         </Text>
+
+        {/* </TouchableOpacity> */}
+        <View className="flex-row">
+          <IconWrapper
+            size={24}
+            onPress={() => {
+              numReplyComments > 0 ? onShowReply() : {};
+            }}>
+            <CommentIcon />
+          </IconWrapper>
+          <Text
+            className="text-base"
+            onPress={() => {
+              numReplyComments > 0 ? onShowReply() : {};
+            }}>
+            {/* <FontAwesome name="comment-o" size={20} color="black" />{' '} */}
+
+            {isShowReply ? `Hide Reply` : numReplyComments + ` Reply`}
+          </Text>
+        </View>
       </View>
       <TouchableOpacity className="text-base" onPress={onReply} onP>
         <Text>Reply</Text>

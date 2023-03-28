@@ -1,4 +1,4 @@
-import {formatRelative, intlFormatDistance} from 'date-fns';
+import {formatRelative} from 'date-fns';
 import React, {useEffect, useMemo, useState} from 'react';
 import {Text, View} from 'react-native';
 import {Avatar} from 'react-native-paper';
