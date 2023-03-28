@@ -130,6 +130,7 @@ export function CommentScreen({route}) {
   };
   const handleReceiveCommentSocket = payload => {
     const comment = JSON.parse(payload.body);
+    console.log(comment);
     updateLocalListComment(comment);
   };
   const updateLocalComment = updatedComment => {
@@ -161,6 +162,8 @@ export function CommentScreen({route}) {
 
     if (socket) {
       socket.subscribe(topic, handleReceiveCommentSocket, {id: topic});
+      console.log('subscribing to ', post?.id);
+
       socket.subscribe(update, handleReceiveUpdateCommentSocket, {
         id: update,
       });
@@ -176,6 +179,7 @@ export function CommentScreen({route}) {
     }
     return () => {
       if (socket) {
+        console.log('unsubscribing from ');
         socket.unsubscribe(topic);
         socket.unsubscribe(update);
         socket.unsubscribe(deleteComment);
