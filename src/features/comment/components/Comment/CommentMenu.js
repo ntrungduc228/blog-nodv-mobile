@@ -4,9 +4,11 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Button, Dialog, Menu, Portal} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useMutation} from 'react-query';
-import {deleteComment} from '../../../../api/commentApi';
+import {deleteComment, reportComment} from '../../../../api/commentApi';
+import useToast from '../../../../hooks/useToast';
 
 const CommentMenu = ({setIsEdit, isUser, commentId}) => {
+  const {showToast} = useToast();
   const [isDelete, setIsDelete] = useState(false);
   const deleteCommentById = useMutation(deleteComment);
   const handleDeleteComment = () => {
@@ -17,6 +19,11 @@ const CommentMenu = ({setIsEdit, isUser, commentId}) => {
   const openMenu = () => setVisible(true);
 
   const closeMenu = () => setVisible(false);
+
+  const handleReportComment = async () => {
+    await reportComment(commentId, 3);
+    showToast('success', 'Report successfully');
+  };
 
   return (
     <>
@@ -98,7 +105,9 @@ const CommentMenu = ({setIsEdit, isUser, commentId}) => {
             <Menu.Item
               className="py-1"
               leadingIcon="flag-variant-outline"
-              onPress={() => {}}
+              onPress={() => {
+                handleReportComment();
+              }}
               title="Report"
             />
           )}

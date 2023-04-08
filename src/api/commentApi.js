@@ -9,6 +9,8 @@ const commentApi = {
   deleteComment: id => axiosClientPrivate.delete(`${url}/${id}`),
   updateCommentApi: comment =>
     axiosClientPrivate.patch(`${url}/${comment.id}`, comment),
+  reportComment: (id, type) =>
+    axiosClientPrivate.post(`${url}/report/${id}?type=${type}`),
 };
 export const {
   getComment,
@@ -17,5 +19,6 @@ export const {
   unlikeComment,
   deleteComment,
   updateCommentApi,
+  reportComment,
 } = commentApi;
 export default commentApi;
