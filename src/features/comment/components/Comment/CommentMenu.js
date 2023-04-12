@@ -21,7 +21,7 @@ const CommentMenu = ({setIsEdit, isUser, commentId}) => {
   const closeMenu = () => setVisible(false);
 
   const handleReportComment = async () => {
-    await reportComment(commentId, 3);
+    await reportComment(commentId, 'Spam');
     showToast('success', 'Report successfully');
   };
 

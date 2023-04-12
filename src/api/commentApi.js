@@ -9,8 +9,10 @@ const commentApi = {
   deleteComment: id => axiosClientPrivate.delete(`${url}/${id}`),
   updateCommentApi: comment =>
     axiosClientPrivate.patch(`${url}/${comment.id}`, comment),
-  reportComment: (id, type) =>
-    axiosClientPrivate.post(`${url}/report/${id}?type=${type}`),
+  reportComment: (id, contentReport) =>
+    axiosClientPrivate.post(
+      `reporting/report/${id}?contentReport=${contentReport}&type=COMMENT`,
+    ),
 };
 export const {
   getComment,
