@@ -20,6 +20,10 @@ const routesScreen = {
   Followers: 'Followers',
   Following: 'Following',
   FollowGeneral: 'FollowGeneral',
+  Login: 'Login',
+  SignUp: 'SignUp',
+  Verify: 'Verify',
+  PasswordReset: 'PasswordReset',
 };
 
 export default routesScreen;

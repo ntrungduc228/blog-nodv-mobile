@@ -7,3 +7,7 @@ export * from './NotFoundScreen';
 export * from './SearchScreen';
 export * from './TopicScreen';
 export * from './FollowScreen';
+export * from './LoginScreen';
+export * from './SignUpScreen';
+export * from './OTPScreen';
+export * from './ForgotPasswordScreen';
