@@ -5,8 +5,8 @@ import {FormLogin} from '../features/auth';
 
 export const LoginScreen = () => {
   return (
-    <View className="p-5 h-full bg-white">
-      <ScrollView className="p-5" contentContainerStyle={{flexGrow: 1}}>
+    <ScrollView className="" contentContainerStyle={{flexGrow: 1}}>
+      <View className="h-full p-5 bg-white">
         <View className="my-[60px] h-[100px] flex-row justify-center">
           <Image
             className=" h-[100px] w-[220px]"
@@ -17,7 +17,7 @@ export const LoginScreen = () => {
         <View className="">
           <FormLogin />
         </View>
-      </ScrollView>
-    </View>
+      </View>
+    </ScrollView>
   );
 };
