@@ -1,17 +1,19 @@
-import {View, Text, TextInput, TouchableOpacity} from 'react-native';
-import React from 'react';
-import IconFontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {Button, ActivityIndicator} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
-import {routesScreen} from '../../navigations';
-import {Formik} from 'formik';
 import * as Yup from 'yup';
+
+import {ActivityIndicator, Button} from 'react-native-paper';
+import {Text, TextInput, TouchableOpacity, View} from 'react-native';
+
+import {Formik} from 'formik';
+import IconFontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import React from 'react';
 import {login} from '../../api/authApi';
-import {useMutation} from 'react-query';
-import {useDispatch} from 'react-redux';
+import {routesScreen} from '../../navigations';
 import {setAccessToken} from '../../redux/slices/userSlice';
-import useToast from '../../hooks/useToast';
+import {useDispatch} from 'react-redux';
+import {useMutation} from 'react-query';
+import {useNavigation} from '@react-navigation/native';
 import useSocialAuth from '../../hooks/useSocialAuth';
+import useToast from '../../hooks/useToast';
 
 export const FormLogin = () => {
   const navigation = useNavigation();
@@ -38,7 +40,7 @@ export const FormLogin = () => {
     },
     onError: error => {
       showToast('error', error?.message);
-      if (error?.message == 'Please verify your account') {
+      if (error?.message === 'Please verify your account') {
         navigation.navigate(routesScreen.Verify, {key: 'otp'});
       }
     },
@@ -121,6 +123,7 @@ export const FormLogin = () => {
             </View>
             <View className="mt-7">
               <Button
+                loading={loginMutation?.isLoading}
                 // eslint-disable-next-line react/no-unstable-nested-components
                 icon={() => (
                   <>
@@ -132,9 +135,7 @@ export const FormLogin = () => {
                   </>
                 )}
                 mode="contained"
-                className={`h-[50px] justify-center ${
-                  loginMutation?.isLoading ? 'opacity-50' : 'opacity-100'
-                }`}
+                className={`h-[50px] justify-center !rounded-full`}
                 onPress={handleSubmit}
                 disabled={loginMutation?.isLoading}>
                 Login
@@ -158,7 +159,7 @@ export const FormLogin = () => {
             <IconFontAwesome5 name="google" size={15} color="#db4a39" solid />
           )}
           mode="outlined"
-          className="h-[50px] justify-center"
+          className="h-[50px] justify-center rounded-full"
           onPress={handleLoginByGoogle}>
           <Text className="text-black ml-18"> Login with Google</Text>
         </Button>
