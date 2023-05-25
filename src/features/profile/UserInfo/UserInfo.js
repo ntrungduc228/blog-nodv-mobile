@@ -1,5 +1,5 @@
 import {Button, Text} from 'react-native-paper';
-import {Image, StyleSheet, View} from 'react-native';
+import {Image, View} from 'react-native';
 
 import {ButtonFollow} from './ButtonFollow';
 import {FollowUserButton} from '../../user';
@@ -31,14 +31,14 @@ export const UserInfo = () => {
           <View className="flex-row text-black font-semibold text-base mt-1">
             <View className="">
               <Text
-                className="text-red font-semibold text-[15px] text-[#4caf50]"
+                className="font-bold text-gray-700 text-base"
                 onPress={() => navigation.navigate(routesScreen.Followers)}>
                 {profile?.followerId?.length} followers
               </Text>
             </View>
             <View className="">
               <Text
-                className="ml-[30] font-semibold text-[15px] text-[#4caf50]"
+                className="ml-[16] font-bold text-gray-700 text-base"
                 onPress={() => navigation.navigate(routesScreen.Following)}>
                 {profile?.followingId?.length} following
               </Text>
@@ -46,14 +46,13 @@ export const UserInfo = () => {
           </View>
         </View>
       </View>
-      <View className="mt-10">
+      <View className="mt-6">
         {profile?.isOwnProfile ? (
           <Button
-            style={{borderColor: '#000'}}
-            className="rounded-full mx-10"
+            className="rounded-full mx-0 text-white bg-black"
             mode="outlined"
             onPress={() => navigation.navigate(routesScreen.ProfileEdit)}
-            textColor="#0f172a">
+            textColor="#fff">
             Edit your profile
           </Button>
         ) : (
@@ -68,11 +67,3 @@ export const UserInfo = () => {
     </View>
   );
 };
-
-const Styles = StyleSheet.create({
-  avatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 100,
-  },
-});
