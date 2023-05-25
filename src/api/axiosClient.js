@@ -120,12 +120,12 @@ axiosClient.interceptors.response.use(
     return response?.data;
   },
   function (error) {
-    console.log('error axios ', error, error?.response);
-    console.log('keys axios ', Object.key(error));
+    // console.log('error axios ', error, error?.response);
+    // console.log('keys axios ', Object.key(error));
     if (error.response.data.status === 404) {
       // window.location.href = '/404';
     }
-    return Promise.reject(error?.response.data);
+    return Promise.reject(error?.response?.data);
   },
 );
 
