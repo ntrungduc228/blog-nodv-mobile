@@ -15,6 +15,8 @@ import {FollowersScreen} from '../screens/FollowersScreen';
 import {FollowingScreen} from '../screens/FollowingScreen';
 import NotificationScreen from '../screens/NotificationScreen';
 import Topic from '../features/home/Topic';
+import People from '../features/home/People';
+import TopicYouFollow from '../features/home/TopicYouFollow';
 import {createStackNavigator} from '@react-navigation/stack';
 import routesScreen from './routesScreen';
 
@@ -92,7 +94,21 @@ function MainStackNavigator() {
         name={routesScreen.FollowGeneral}
         component={Topic}
       />
-
+      <MainStack.Screen
+        options={{headerShown: false}}
+        name="Topic you follow"
+        component={TopicYouFollow}
+      />
+      <MainStack.Screen
+        options={{headerShown: false}}
+        name="Customize your interests"
+        component={Topic}
+      />
+      <MainStack.Screen
+        options={{headerShown: false}}
+        name="People you follow"
+        component={People}
+      />
       <MainStack.Screen name={routesScreen.Comment} component={CommentScreen} />
     </MainStack.Navigator>
   );

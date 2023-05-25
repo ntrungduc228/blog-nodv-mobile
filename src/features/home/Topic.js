@@ -187,7 +187,7 @@ function TopicItem({topic, curUser}) {
         <Chip
           style={isTopic ? Styles.chipFollowing : ''}
           textStyle={{
-            color: '#fff',
+            color: isTopic ? 'black' : 'white',
           }}
           mode={'outlined'}
           onPress={() => handleFollowTopic(topic)}
