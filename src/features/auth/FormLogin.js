@@ -17,6 +17,7 @@ export const FormLogin = () => {
   const navigation = useNavigation();
   const {showToast} = useToast();
   const {handleLoginByGoogle} = useSocialAuth();
+  const dispatch = useDispatch();
 
   const SubmittedForm = Yup.object().shape({
     email: Yup.string()
@@ -28,6 +29,11 @@ export const FormLogin = () => {
   const loginMutation = useMutation(login, {
     onSuccess: data => {
       console.log('data ', data);
+
+      if (data?.accessToken) {
+        dispatch(setAccessToken({accessToken: data.accessToken, provider: ''}));
+        showToast('success', 'Welcome to home');
+      }
       // navigation.navigate(routesScreen.Verify);
     },
     onError: error => {
