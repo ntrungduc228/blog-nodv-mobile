@@ -1,12 +1,13 @@
-import {formatRelative} from 'date-fns';
+import {Image, Text, View} from 'react-native';
 import React, {useEffect, useMemo, useState} from 'react';
-import {Text, View} from 'react-native';
+
 import {Avatar} from 'react-native-paper';
-import {useDispatch, useSelector} from 'react-redux';
-import {useComment} from '../../../../screens';
-import {CommentList} from '../../CommentList/CommentList';
 import CommentFooter from './CommentFooter';
+import {CommentList} from '../../CommentList/CommentList';
 import CommentMenu from './CommentMenu';
+import {formatRelative} from 'date-fns';
+import {useComment} from '../../../../screens';
+import {useSelector} from 'react-redux';
 
 function Comment({comment, post, isActiveEdit}) {
   const {
@@ -17,13 +18,14 @@ function Comment({comment, post, isActiveEdit}) {
     setNewUsernameParent,
   } = useComment();
   const user = useSelector(state => state.user.data.info);
-  const dispatch = useDispatch();
   const replyComments = useSelector(
     state => state.comment.commentsByParentId[comment.id],
   );
   const [isShowReply, setIsShowReply] = useState(false);
   useEffect(() => {
-    if (!newReplyComment) return;
+    if (!newReplyComment) {
+      return;
+    }
     if (newReplyComment?.replyId === comment.id) {
       setIsShowReply(true);
       setNewReplyComment(null);
@@ -34,6 +36,7 @@ function Comment({comment, post, isActiveEdit}) {
   const displayTime = useMemo(() => {
     return formatRelative(new Date(comment.createdDate), new Date());
   }, [comment.createdDate]);
+
   return (
     <View className={`${isActiveEdit ? 'bg-slate-100' : ''}  p-3`}>
       <>
@@ -66,6 +69,13 @@ function Comment({comment, post, isActiveEdit}) {
         </View>
         <View className="-z-10">
           <Text className="text-lg text-black my-6">{comment.content}</Text>
+          {comment.image && (
+            <Image
+              className="bg-gray-100 h-10 rounded-lg mb-4"
+              source={{uri: comment.image}}
+              style={{width: 200, height: 200}}
+            />
+          )}
         </View>
         <CommentFooter
           numReplyComments={replyComments?.length}

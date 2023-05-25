@@ -6,7 +6,6 @@ import {
   useUpdatePost,
 } from '../features/post';
 import {Text, TouchableOpacity, View} from 'react-native';
-import {Topic, TopicInput} from '../features/topic';
 import {
   extractFirstImgFrommHtml,
   extractHtmlToArrayPlaintext,
@@ -16,6 +15,7 @@ import {useRef, useState} from 'react';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {Spinner} from '../components';
+import {TopicInput} from '../features/topic';
 import {useNavigation} from '@react-navigation/native';
 
 export const postEditorMode = {
@@ -104,7 +104,7 @@ const Header = ({
           />
         </TouchableOpacity>
         <TouchableOpacity onPress={showPublishForm}>
-          <Text className="text-emerald-700 text-xl">
+          <Text className="text-white text-base p-1 px-3 rounded-full bg-black">
             {mode === postEditorMode.CREATE ? 'Publish' : 'Update'}
           </Text>
         </TouchableOpacity>
