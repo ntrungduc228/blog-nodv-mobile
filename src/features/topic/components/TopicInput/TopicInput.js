@@ -53,12 +53,13 @@ export const TopicInput = forwardRef(({onChange, defaultTopics = []}, ref) => {
   return (
     <View className="w-full">
       <Searchbar
-        className="h-10 bg-slate-100"
+        className=" bg-slate-100"
         elevation={0}
         placeholder="Search"
         placeholderTextColor={'gray'}
         onChangeText={setQuery}
         value={query}
+        style={{}}
       />
       <View className="flex flex-wrap flex-row mt-1 rounded py-1">
         {topicsSelected.map(topic => (

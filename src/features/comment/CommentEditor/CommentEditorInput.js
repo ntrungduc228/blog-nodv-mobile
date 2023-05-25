@@ -1,12 +1,14 @@
 import React, {useEffect, useRef} from 'react';
+
 import {TextInput} from 'react-native-paper';
 
 const CommentEditorInput = ({isFocused, onChange, value, onFocus, onBlur}) => {
   const inputRef = useRef();
   useEffect(() => {
     if (inputRef?.current) {
-      if (isFocused) inputRef.current.rows = 4;
-      else {
+      if (isFocused) {
+        inputRef.current.rows = 4;
+      } else {
         inputRef.current.rows = 1;
         inputRef.current.value = '';
       }
@@ -16,7 +18,7 @@ const CommentEditorInput = ({isFocused, onChange, value, onFocus, onBlur}) => {
     <TextInput
       onFocus={onFocus}
       onBlur={onBlur}
-      className="bg-white border-b-1 h-11"
+      className="bg-white h-11"
       underlineColor="#fff"
       activeUnderlineColor="#000"
       ref={inputRef}

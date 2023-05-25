@@ -88,6 +88,11 @@ const postApi = {
     return response.data;
   },
   bookmarkPost: id => axiosClientPrivate.patch(`${url}/${id}/bookmark`, null),
+  reportPost: ({id, content}) =>
+    axiosClientPrivate.post(`${url}/${id}/report`, {
+      objectId: id,
+      content: [content],
+    }),
 };
 
 export const {
@@ -108,6 +113,7 @@ export const {
   getListPostHided,
   getPostsRecommend,
   getPostsByFollowing,
+  reportPost,
 } = postApi;
 
 export default postApi;

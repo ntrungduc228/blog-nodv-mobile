@@ -1,9 +1,12 @@
 import {Button, Dialog, Menu, Portal, Text} from 'react-native-paper';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Toast} from 'react-native-toast-message/lib/src/Toast';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {View} from 'react-native';
 import {postEditorMode} from '../../../../screens';
+import {reportPost} from '../../../../api/postApi';
+import {useMutation} from 'react-query';
 import {useNavigation} from '@react-navigation/native';
 import {usePost} from '../../context/PostContext';
 import {useState} from 'react';
@@ -20,6 +23,18 @@ export const PostMenu = () => {
   const [isShowDeleteDialog, setIsShowDeleteDialog] = useState(false);
   const showDialog = () => setIsShowDeleteDialog(true);
   const hideDialog = () => setIsShowDeleteDialog(false);
+  const {mutate: report} = useMutation(reportPost, {
+    onSuccess: () => {
+      // show succes message
+      Toast.show({
+        type: 'success',
+        text1: 'Reported post',
+        visibilityTime: 5000,
+        position: 'bottom',
+        bottomOffset: 70,
+      });
+    },
+  });
 
   return (
     <View>
@@ -67,7 +82,16 @@ export const PostMenu = () => {
             />
           </>
         ) : (
-          <Menu.Item onPress={hidePost} title="Hide post" />
+          <>
+            <Menu.Item onPress={hidePost} title="Hide post" />
+            <Menu.Item
+              onPress={() => {
+                closeMenu();
+                report({id: postId, content: 'SPAM'});
+              }}
+              title="Report post"
+            />
+          </>
         )}
       </Menu>
       <Portal>
