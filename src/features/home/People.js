@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useEffect, useState} from 'react';
 
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
@@ -42,18 +42,16 @@ function People({navigation}) {
 
   return (
     <View style={Styles.container}>
-      <View style={Styles.containerSite}>
-        <IconAntDesign
-          name="arrowleft"
-          size={20}
-          color="#000"
+      <View className="h-14 px-6 flex flex-row items-center">
+        <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Customize your interests');
+            navigation.goBack();
           }}>
-          {' '}
-          Following
-        </IconAntDesign>
+          <IconAntDesign name="arrowleft" size={20} color="#000" />
+        </TouchableOpacity>
+        <Text className="font-bold ml-6 text-lg text-gray-800">Following</Text>
       </View>
+
       <ScrollView>
         {peopleFollowing.length > 0
           ? peopleRender()
