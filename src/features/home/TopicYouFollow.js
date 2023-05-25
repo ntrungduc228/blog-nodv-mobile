@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useEffect, useState} from 'react';
 
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
@@ -22,11 +22,6 @@ function TopicYouFollow({navigation}) {
     fetchData();
   }, []);
 
-  const topicListRender = () => {
-    return isFollowTopic.map((topic, index) => {
-      return <TopicItem key={index} topic={topic} />;
-    });
-  };
   const loadingRender = () => {
     const elements = [];
     const times = 5;
@@ -37,21 +32,22 @@ function TopicYouFollow({navigation}) {
   };
   return (
     <View style={Styles.container}>
-      <View style={Styles.containerSite}>
-        <IconAntDesign
-          name="arrowleft"
-          size={20}
-          color="#000"
+      <View className="h-14 px-6 flex flex-row items-center">
+        <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Customize your interests');
+            navigation.goBack();
           }}>
-          {' '}
+          <IconAntDesign name="arrowleft" size={20} color="#000" />
+        </TouchableOpacity>
+        <Text className="font-bold ml-6 text-lg text-gray-800">
           Topic you follow
-        </IconAntDesign>
+        </Text>
       </View>
       <ScrollView>
         {isFollowTopic.length > 0
-          ? topicListRender()
+          ? isFollowTopic.map((topic, index) => (
+              <TopicItem key={index} topic={topic} />
+            ))
           : !isLoading && (
               <View>
                 <Text className="text-center text-lg">

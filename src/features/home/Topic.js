@@ -116,14 +116,12 @@ function Topic() {
   return (
     <View style={Styles.container}>
       <View className="h-14 px-6 flex flex-row items-center">
-        <IconAntDesign
-          name="arrowleft"
-          size={20}
-          color="#000"
+        <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Home');
-          }}
-        />
+            navigation.goBack();
+          }}>
+          <IconAntDesign name="arrowleft" size={20} color="#000" />
+        </TouchableOpacity>
         <Text className="font-bold ml-6 text-lg text-gray-800">
           Customize your interests
         </Text>
