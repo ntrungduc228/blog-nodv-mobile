@@ -8,7 +8,7 @@ import {
 import {setUser, updateUser} from '../../redux/slices/userSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import {useEffect, useState} from 'react';
-import {useMutation, useQuery} from 'react-query';
+import {useMutation, useQuery, useQueryClient} from 'react-query';
 
 import {Chip} from 'react-native-paper';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
@@ -115,17 +115,16 @@ function Topic() {
 
   return (
     <View style={Styles.container}>
-      <View style={Styles.containerSite}>
+      <View className="h-14 px-6 flex flex-row items-center">
         <IconAntDesign
           name="arrowleft"
           size={20}
           color="#000"
           onPress={() => {
             navigation.navigate('Home');
-          }}>
-          {' '}
-          Customize your interests
-        </IconAntDesign>
+          }}
+        />
+        <Text className="font-bold ml-6 text-lg">Customize your interests</Text>
       </View>
 
       <View style={Styles.header}>{filterRender()}</View>
@@ -167,10 +166,11 @@ function TopicItem({topic, curUser}) {
   const [isTopic, setIsTopic] = useState(
     currentUser.topics ? currentUser.topics.includes(topic.id) : false,
   );
+  const queryClient = useQueryClient();
   const addTopicsMutation = useMutation(followTopic, {
     onSuccess: data => {
       dispatch(updateUser(data));
-      // navigate(appRoutes.HOME);
+      queryClient.invalidateQueries('user-topic');
     },
   });
 
@@ -186,13 +186,11 @@ function TopicItem({topic, curUser}) {
         <Text style={Styles.textTopic}>{topic.name}</Text>
         <Chip
           style={isTopic ? Styles.chipFollowing : ''}
-          textStyle={{
-            color: '#fff',
-          }}
+          textStyle={isTopic ? '#fff' : ' #000'}
           mode={'outlined'}
           onPress={() => handleFollowTopic(topic)}
           className={`rounded-full  h-8 ${
-            isTopic ? ' bg-slate-500' : 'bg-green-600'
+            isTopic ? ' bg-white text-black' : 'bg-green-600 !text-white'
           }`}>
           {isTopic ? 'Following' : 'Follow'}
         </Chip>
@@ -214,11 +212,7 @@ const Styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  containerSite: {
-    paddingTop: 75,
-    paddingVertical: 50,
-    paddingHorizontal: 30,
-  },
+
   header: {
     flexDirection: 'row',
     paddingLeft: 10,
