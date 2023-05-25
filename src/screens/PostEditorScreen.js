@@ -5,7 +5,7 @@ import {
   useGetPost,
   useUpdatePost,
 } from '../features/post';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {Text, ToastAndroid, TouchableOpacity, View} from 'react-native';
 import {
   extractFirstImgFrommHtml,
   extractHtmlToArrayPlaintext,
@@ -55,7 +55,12 @@ export const PostEditorScreen = ({route}) => {
   const editorRef = useRef(null);
   return (
     <View className="flex-1 bg-white">
-      <Header onPublish={handlePublish} defaultTopics={topics} mode={mode} />
+      <Header
+        onPublish={handlePublish}
+        defaultTopics={topics}
+        mode={mode}
+        editorRef={editorRef}
+      />
       <Editor ref={editorRef} initialContentHTML={content} />
       {(isCreatingPost || isUpdatingPost) && (
         <View className="absolute inset-0 justify-center items-center">
@@ -70,11 +75,21 @@ const Header = ({
   mode = postEditorMode.CREATE,
   onPublish,
   defaultTopics = [],
+  editorRef,
 }) => {
   const navigation = useNavigation();
   const [isShowPublishForm, setIsShowPublishForm] = useState();
   const [isShowAddTopic, setIsShowAddTopic] = useState();
   const showPublishForm = () => {
+    const contentHtml = editorRef.current.getContent();
+    if (!contentHtml) {
+      ToastAndroid.showWithGravity(
+        'Please enter content',
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
+      return;
+    }
     setIsShowPublishForm(true);
   };
   const hidePublishForm = () => setIsShowPublishForm(false);

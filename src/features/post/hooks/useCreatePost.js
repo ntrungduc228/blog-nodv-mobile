@@ -13,7 +13,7 @@ export const useCreatePost = (
   return useMutation(createPost, {
     onSuccess: data => {
       onSuccess && onSuccess(data);
-      navigate.navigate('PostDetail', {id: data.id});
+      navigate.navigate('PostDetail', {postId: data.id});
     },
     onError: error => {
       onError && onError(error);

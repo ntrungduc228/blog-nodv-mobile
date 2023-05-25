@@ -6,7 +6,7 @@ export const useUpdatePost = () => {
   const navigation = useNavigation();
   return useMutation(data => updatePost(data), {
     onSuccess: (_, variable) => {
-      navigation.navigate('PostDetail', {id: variable.id});
+      navigation.navigate('PostDetail', {postId: variable.id});
     },
     onError: error => {
       console.log('error from useUpdatePost', error);

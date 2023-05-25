@@ -16,7 +16,7 @@ function People({navigation}) {
   async function fetchData() {
     setIsLoading(true);
     const peopleIsFollowing = await getAllUsersFollowing(currentUser.id);
-    setPeopleFollowing(peopleIsFollowing);
+    setPeopleFollowing(peopleIsFollowing.content);
     setIsLoading(false);
   }
 
@@ -26,8 +26,8 @@ function People({navigation}) {
   }, []);
 
   const peopleRender = () => {
-    return peopleFollowing.map((topic, index) => {
-      return <PeopleItem key={index} people={topic} status={true} />;
+    return peopleFollowing.map((people, index) => {
+      return <PeopleItem key={index} user={people} status={true} />;
     });
   };
 

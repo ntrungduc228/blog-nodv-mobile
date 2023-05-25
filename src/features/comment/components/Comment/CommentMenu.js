@@ -102,14 +102,34 @@ const CommentMenu = ({setIsEdit, isUser, commentId}) => {
               />
             </Menu>
           ) : (
-            <Menu.Item
-              className="py-1"
-              leadingIcon="flag-variant-outline"
-              onPress={() => {
-                handleReportComment();
+            <Menu
+              keyboardShouldPersistTaps="always"
+              anchorPosition="bottom"
+              visible={visible}
+              contentStyle={{
+                backgroundColor: '#fff',
+                width: 200,
               }}
-              title="Report"
-            />
+              onDismiss={closeMenu}
+              anchor={
+                <TouchableOpacity onPress={openMenu} className="ml-2">
+                  <MaterialCommunityIcons
+                    name="dots-vertical"
+                    size={24}
+                    color="black"
+                  />
+                </TouchableOpacity>
+              }>
+              <Menu.Item
+                className="py-1"
+                leadingIcon="flag-variant-outline"
+                onPress={() => {
+                  handleReportComment();
+                  closeMenu();
+                }}
+                title="Report"
+              />
+            </Menu>
           )}
         </View>
       )}

@@ -32,13 +32,17 @@ export const PostDetailScreen = ({route}) => {
   const {postId} = route.params;
   const {data = {}, isLoading, isSuccess} = useGetPost(postId);
   const [post, setPost] = useState(data);
+  const navigation = useNavigation();
 
   useEffect(() => {
     setPost(data);
   }, [data]);
 
   return (
-    <PostProvider post={post} onUpdatePost={newPost => setPost(newPost)}>
+    <PostProvider
+      post={post}
+      onUpdatePost={newPost => setPost(newPost)}
+      onDeletePost={() => navigation.goBack()}>
       <View className="bg-white h-full">
         <Header isLoading={isLoading} />
         {isLoading ? (

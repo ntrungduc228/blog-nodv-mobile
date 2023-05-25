@@ -124,7 +124,9 @@ function Topic() {
             navigation.navigate('Home');
           }}
         />
-        <Text className="font-bold ml-6 text-lg">Customize your interests</Text>
+        <Text className="font-bold ml-6 text-lg text-gray-800">
+          Customize your interests
+        </Text>
       </View>
 
       <View style={Styles.header}>{filterRender()}</View>
@@ -186,7 +188,9 @@ function TopicItem({topic, curUser}) {
         <Text style={Styles.textTopic}>{topic.name}</Text>
         <Chip
           style={isTopic ? Styles.chipFollowing : ''}
-          textStyle={isTopic ? '#fff' : ' #000'}
+          textStyle={{
+            color: isTopic ? 'black' : 'white',
+          }}
           mode={'outlined'}
           onPress={() => handleFollowTopic(topic)}
           className={`rounded-full  h-8 ${
