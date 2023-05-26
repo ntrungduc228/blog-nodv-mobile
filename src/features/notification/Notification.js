@@ -35,6 +35,12 @@ function Notification({notification}) {
           <MaterialCommunityIcons name="hand-clap" size={16} color="black" />
         );
         break;
+      case NotificationType.POST:
+        res.message = 'post a new story';
+        res.icon = (
+          <MaterialCommunityIcons name="post" size={16} color="black" />
+        );
+        break;
       case NotificationType.COMMENT:
         res.message = 'comment on your post';
         res.icon = <FontAwesome name="comments" size={16} color="black" />;
