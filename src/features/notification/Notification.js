@@ -1,15 +1,16 @@
-import {useNavigation} from '@react-navigation/native';
-import {formatRelative} from 'date-fns';
-import {useEffect, useMemo} from 'react';
 import {Text, View} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {useEffect, useMemo} from 'react';
+
 import {Avatar} from 'react-native-paper';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useMutation} from 'react-query';
-import {setNotificationRead} from '../../api/notificationApi.js';
 import {NotificationType} from '../../config/dataType.js';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {formatRelative} from 'date-fns';
 import routesScreen from '../../navigations/routesScreen.js';
+import {setNotificationRead} from '../../api/notificationApi.js';
+import {useMutation} from 'react-query';
+import {useNavigation} from '@react-navigation/native';
 
 function Notification({notification}) {
   // const {data = {}, isLoading, refetch} = useQuery('comment', getComment, {});
@@ -53,6 +54,10 @@ function Notification({notification}) {
         res.icon = <FontAwesome name="comments" size={16} color="black" />;
         break;
       case NotificationType.WARNINGPOST:
+        res.message = 'your post violates our community standards';
+        res.icon = <FontAwesome name="comments" size={16} color="black" />;
+        break;
+      case NotificationType.BLOCK_POST:
         res.message = 'your post violates our community standards';
         res.icon = <FontAwesome name="comments" size={16} color="black" />;
         break;
