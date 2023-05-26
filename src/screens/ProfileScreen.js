@@ -9,14 +9,13 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getUserProfile} from '../api/userApi';
 import {routesScreen} from '../navigations';
 import {setProfile} from '../redux/slices/profileSlice';
+import {Text} from 'react-native-svg';
 
 function ProfileScreen({navigation, route}) {
   const [email, setEmail] = useState(route.params?.email ?? user?.email);
   const user = useSelector(state => state.user.data.info);
   const profile = useSelector(state => state?.profile?.data);
-
   const isFocused = useIsFocused();
-
   useEffect(() => {
     const eventTab = navigation.addListener('tabPress', e => {
       return eventTab;
@@ -68,7 +67,6 @@ function ProfileScreen({navigation, route}) {
           <IconFontAwesome5 name="arrow-left" size={20} regular />
         </TouchableOpacity>
       )}
-
       <View>
         <UserInfo />
       </View>
