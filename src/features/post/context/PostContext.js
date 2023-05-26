@@ -8,6 +8,7 @@ import {
 } from '../../../api/postApi';
 import {useDispatch, useSelector} from 'react-redux';
 
+import Toast from 'react-native-toast-message';
 import {updatePostToBookmark} from '../../../api/bookmarkApi';
 import {updateUser} from '../../../redux/slices/userSlice';
 import {useMemo} from 'react';
@@ -54,6 +55,13 @@ export const PostProvider = ({
   const deletePostMutation = useMutation(deletePost, {
     onSuccess: () => {
       onDeletePost(post);
+      Toast.show({
+        type: 'success',
+        text1: 'Deleted post',
+        visibilityTime: 5000,
+        position: 'bottom',
+        bottomOffset: 70,
+      });
     },
   });
 
