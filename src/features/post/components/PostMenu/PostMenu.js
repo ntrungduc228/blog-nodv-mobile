@@ -61,10 +61,14 @@ export const PostMenu = () => {
             <Menu.Item
               onPress={() => {
                 closeMenu();
-                navigation.navigate('PostEditor', {
-                  mode: postEditorMode.EDIT,
-                  postId: postId,
-                });
+                navigation.navigate(
+                  'PostEditor',
+                  {
+                    mode: postEditorMode.EDIT,
+                    postId: postId,
+                  },
+                  {replace: true},
+                );
               }}
               title="Edit"
             />
