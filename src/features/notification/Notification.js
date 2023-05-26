@@ -48,6 +48,14 @@ function Notification({notification}) {
           <MaterialCommunityIcons name="hand-clap" size={16} color="black" />
         );
         break;
+      case NotificationType.WARNINGCOMMENT:
+        res.message = 'your comment violates our community standards';
+        res.icon = <FontAwesome name="comments" size={16} color="black" />;
+        break;
+      case NotificationType.WARNINGPOST:
+        res.message = 'your post violates our community standards';
+        res.icon = <FontAwesome name="comments" size={16} color="black" />;
+        break;
 
       default:
         res = 'notification';
@@ -67,7 +75,7 @@ function Notification({notification}) {
       : '';
     const result = notification.link.match(/\/(\w+)$/)[1];
     notification.link.includes('posts')
-      ? navigation.navigate(routesScreen.PostDetail, {id: result})
+      ? navigation.navigate(routesScreen.PostDetail, {postId: result})
       : navigation.navigate(routesScreen.Profile, {email: result});
   };
   return (

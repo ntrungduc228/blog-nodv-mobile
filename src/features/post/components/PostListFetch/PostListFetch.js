@@ -1,8 +1,8 @@
 import {FlatList, RefreshControl} from 'react-native-gesture-handler';
 import {Text, View} from 'react-native';
-import {useCallback, useMemo} from 'react';
+import {useCallback, useMemo, useEffect} from 'react';
 import {useInfiniteQuery, useQueryClient} from 'react-query';
-
+import {useSelector} from 'react-redux';
 import {Post} from '../Post';
 import {PostLoading} from '../PostLoading';
 import {PostProvider} from '../../context/PostContext';
@@ -28,6 +28,7 @@ export const PostListFetch = ({
   }, [filter]);
 
   const storeKey = [queryKey, accurateFilter];
+  const user = useSelector(state => state.user.data.info);
 
   const {
     data,
@@ -103,6 +104,11 @@ export const PostListFetch = ({
       };
     });
   };
+
+  useEffect(() => {
+    refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   useFocusEffect(
     useCallback(() => {
