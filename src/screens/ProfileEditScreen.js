@@ -9,6 +9,7 @@ import {useMutation} from 'react-query';
 import {updateUserProfile} from '../api/userApi';
 import {Spinner} from '../components';
 import useToast from '../hooks/useToast';
+import {setProfile} from '../redux/slices/profileSlice';
 
 export const ProfileEditScreen = ({navigation}) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -21,6 +22,8 @@ export const ProfileEditScreen = ({navigation}) => {
     mutationFn: updateUserProfile,
     onSuccess: data => {
       dispatch(setUser(data));
+      dispatch(setProfile({...data, isOwnProfile: true}));
+
       // toast.success('Update profile successfully');
       showToast('success', 'Profile updated successfully');
       console.log('update profile successfully');

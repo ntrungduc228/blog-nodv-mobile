@@ -5,4 +5,7 @@ export const NotificationType = {
   POST: 'POST', // don;t do this
   REPLYCOMMENT: 'REPLYCOMMENT',
   LIKECOMMENT: 'LIKECOMMENT', // done
+  WARNINGPOST: 'WARNINGPOST',
+  WARNINGCOMMENT: 'WARNINGCOMMENT',
+  BLOCK_POST: 'BLOCK_POST',
 };

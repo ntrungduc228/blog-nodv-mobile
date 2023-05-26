@@ -41,15 +41,17 @@ export const ProfileForm = ({
   }, [isSubmitted, submitForm, setIsSubmitted]);
 
   const submitForm = useCallback(async () => {
+    let data = userInfo;
     if (uriAvatar !== initialValue.avatar) {
       const url = await uploadImage(uriAvatar);
-      setUserInfo(prev => ({...prev, avatar: url}));
+      data.avatar = url;
+      //setUserInfo(prev => ({...prev, avatar: url}));
     }
     setIsSubmitted(false);
-    onSubmit(userInfo);
+    onSubmit(data);
   }, [
     // handleSubmit,
-    setUserInfo,
+    // setUserInfo,
     uriAvatar,
     onSubmit,
     setIsSubmitted,
