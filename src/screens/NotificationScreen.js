@@ -1,11 +1,12 @@
-import {View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
-import {useQuery} from 'react-query';
-import {getNotifications} from '../api/notificationApi';
-
 import {useCallback, useState} from 'react';
+
 import Notification from '../features/notification/Notification';
+import {ScrollView} from 'react-native-gesture-handler';
+import {Spinner} from '../components';
+import {View} from 'react-native';
+import {getNotifications} from '../api/notificationApi';
 import {useFocusEffect} from '@react-navigation/native';
+import {useQuery} from 'react-query';
 
 function NotificationScreen() {
   const {
@@ -22,6 +23,14 @@ function NotificationScreen() {
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []),
   );
+
+  if (isLoading) {
+    return (
+      <View className="justify-center items-center h-screen">
+        <Spinner />
+      </View>
+    );
+  }
 
   return (
     <ScrollView>
