@@ -1,15 +1,14 @@
-import {TouchableOpacity, View} from 'react-native';
 import {ProfileTab, UserInfo} from '../features/profile';
-
-import {useIsFocused} from '@react-navigation/native';
-import {useEffect, useState} from 'react';
-import IconFontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {useQuery} from 'react-query';
+import {TouchableOpacity, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
+import {useEffect, useState} from 'react';
+
+import IconFontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {getUserProfile} from '../api/userApi';
 import {routesScreen} from '../navigations';
 import {setProfile} from '../redux/slices/profileSlice';
-import {Text} from 'react-native-svg';
+import {useIsFocused} from '@react-navigation/native';
+import {useQuery} from 'react-query';
 
 function ProfileScreen({navigation, route}) {
   const [email, setEmail] = useState(route.params?.email ?? user?.email);

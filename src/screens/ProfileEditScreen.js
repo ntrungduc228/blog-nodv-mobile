@@ -1,15 +1,16 @@
-import {View, Text, TouchableOpacity} from 'react-native';
 import React, {useState} from 'react';
-import IconFontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {Button} from 'react-native-paper';
-import {ProfileForm} from '../features/profile';
+import {Text, TouchableOpacity, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {setUser} from '../redux/slices/userSlice';
-import {useMutation} from 'react-query';
-import {updateUserProfile} from '../api/userApi';
+
+import {Button} from 'react-native-paper';
+import IconFontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {ProfileForm} from '../features/profile';
 import {Spinner} from '../components';
-import useToast from '../hooks/useToast';
 import {setProfile} from '../redux/slices/profileSlice';
+import {setUser} from '../redux/slices/userSlice';
+import {updateUserProfile} from '../api/userApi';
+import {useMutation} from 'react-query';
+import useToast from '../hooks/useToast';
 
 export const ProfileEditScreen = ({navigation}) => {
   const [isSubmitted, setIsSubmitted] = useState(false);

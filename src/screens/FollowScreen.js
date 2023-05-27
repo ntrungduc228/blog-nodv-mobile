@@ -5,6 +5,7 @@ import {FollowUserButton} from '../features/user';
 import IconFontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {Spinner} from '../components';
 import {routesScreen} from '../navigations';
+import {useNavigation} from '@react-navigation/native';
 import {useQuery} from 'react-query';
 import {useSelector} from 'react-redux';
 
@@ -68,7 +69,9 @@ const FollowBody = ({data, navigation}) => {
   );
 };
 
-export const FollowItem = ({item, navigation}) => {
+export const FollowItem = ({item}) => {
+  const navigation = useNavigation();
+
   return (
     <View className="flex-row justify-between p-4 items-center border-y border-slate-300">
       <TouchableOpacity
