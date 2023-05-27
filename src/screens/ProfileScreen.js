@@ -1,9 +1,10 @@
 import {ProfileTab, UserInfo} from '../features/profile';
-import {TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {useEffect, useState} from 'react';
 
 import IconFontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {Spinner} from '../components';
 import {getUserProfile} from '../api/userApi';
 import {routesScreen} from '../navigations';
 import {setProfile} from '../redux/slices/profileSlice';
@@ -46,12 +47,24 @@ function ProfileScreen({navigation, route}) {
 
   const dispatch = useDispatch();
 
-  useQuery(['profile', email], () => getUserProfile(email), {
-    enabled: !!email,
-    onSuccess: data => {
-      dispatch(setProfile({...data, isOwnProfile: user?.id === data?.id}));
+  const {isLoading} = useQuery(
+    ['profile', email],
+    () => getUserProfile(email),
+    {
+      enabled: !!email,
+      onSuccess: data => {
+        dispatch(setProfile({...data, isOwnProfile: user?.id === data?.id}));
+      },
     },
-  });
+  );
+
+  if (isLoading) {
+    return (
+      <View className="justify-center items-center h-screen">
+        <Spinner />
+      </View>
+    );
+  }
 
   return (
     <View className="h-full bg-white pt-[20] flex-1">
