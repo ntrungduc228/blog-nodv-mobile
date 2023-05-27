@@ -184,7 +184,7 @@ function PostItem({index, post}) {
         </View>
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate(routesScreen.PostDetail, {id: post.id})
+            navigation.navigate(routesScreen.PostDetail, {postId: post.id})
           }>
           <View className="my-1">
             <Text className="text-base text-black font-bold">{post.title}</Text>
